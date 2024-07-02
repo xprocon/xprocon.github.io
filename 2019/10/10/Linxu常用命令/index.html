@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="这里是 @Procon普光 的个人博客，与你一起发现更大的世界">
+    <meta name="keywords" content="普光, Procon普光, 博客, 个人网站, 互联网, Java , 后端">
+    <meta name="theme-color" content="#000000">
+
+    <!-- Open Graph -->
+    <meta property="og:title"
+        content="Linux常用命令 - Procon's Tech Life Blog">
+    
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="常用Linux命令
+">
+    
+    <meta property="article:published_time" content=" 2019-10-10T12:00:00Z">
+    
+    
+    <meta property="article:author" content="Procon">
+    
+    
+    <meta property="article:tag" content="linux">
+    
+    <meta property="article:tag" content="学习">
+    
+    
+    <meta property="og:image" content="https://blog.procon.cchttps://procon-note.oss-cn-guangzhou.aliyuncs.com/typora/avatar_m.jpg">
+    <meta property="og:url" content="https://blog.procon.cc/2019/10/10/Linxu%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
+    <meta property="og:site_name" content="Procon's Tech Life Blog">
+
+    <title>Linux常用命令 - Procon's Tech Life Blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://blog.procon.cc/2019/10/10/Linxu%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href=" /css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href=" /css/hux-blog.min.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"
+        type="text/css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+
+    <!-- Google AdSense -->
+    <script data-ad-client="ca-pub-6487568398225121" async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top invert">
+    
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Procon's Tech Life Blog</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div id="huxblog_navbar">
+                <div class="navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="/">Home</a>
+                        </li>
+                        
+                        
+                        
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                        
+                        
+                        <li>
+                            <a href="/archive/">Archive</a>
+                        </li>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <li class="search-icon">
+                            <a href="javascript:void(0)">
+                                <i class="fa fa-search"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <script>
+        // Drop Bootstarp low-performance Navbar
+        // Use customize navbar with high-quality material design animation
+        // in high-perf jank-free CSS3 implementation
+        var $body = document.body;
+        var $toggle = document.querySelector('.navbar-toggle');
+        var $navbar = document.querySelector('#huxblog_navbar');
+        var $collapse = document.querySelector('.navbar-collapse');
+
+        var __HuxNav__ = {
+            close: function () {
+                $navbar.className = " ";
+                // wait until animation end.
+                setTimeout(function () {
+                    // prevent frequently toggle
+                    if ($navbar.className.indexOf('in') < 0) {
+                        $collapse.style.height = "0px"
+                    }
+                }, 400)
+            },
+            open: function () {
+                $collapse.style.height = "auto"
+                $navbar.className += " in";
+            }
+        }
+
+        // Bind Event
+        $toggle.addEventListener('click', function (e) {
+            if ($navbar.className.indexOf('in') > 0) {
+                __HuxNav__.close()
+            } else {
+                __HuxNav__.open()
+            }
+        })
+
+        /**
+         * Since Fastclick is used to delegate 'touchstart' globally
+         * to hack 300ms delay in iOS by performing a fake 'click',
+         * Using 'e.stopPropagation' to stop 'touchstart' event from 
+         * $toggle/$collapse will break global delegation.
+         * 
+         * Instead, we use a 'e.target' filter to prevent handler
+         * added to document close HuxNav.  
+         *
+         * Also, we use 'click' instead of 'touchstart' as compromise
+         */
+        document.addEventListener('click', function (e) {
+            if (e.target == $toggle) return;
+            if (e.target.className == 'icon-bar') return;
+            __HuxNav__.close();
+        })
+    </script>
+    <!-- Search -->
+<div class="search-page">
+  <div class="search-icon-close-container">
+    <span class="search-icon-close">
+      <i class="fa fa-chevron-down"></i>
+    </span>
+  </div>
+  <div class="search-main container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <form></form>
+        <input type="text" id="search-input" placeholder="$ grep...">
+        </form>
+        <div id="search-results" class="mini-post-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/home-bg-geek.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+
+
+
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/home-bg-geek.jpg');
+        background: ;
+    }
+
+    
+</style>
+
+
+
+
+<header class="intro-header style-text" >
+
+    <div class="header-mask"></div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/archive/?tag=linux" title="linux">linux</a>
+                        
+                        <a class="tag" href="/archive/?tag=%E5%AD%A6%E4%B9%A0" title="学习">学习</a>
+                        
+                    </div>
+                    <h1>Linux常用命令</h1>
+                    
+                    <h2 class="subheading"></h2>
+                    <span class="meta">Posted by Procon on October 10, 2019</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+
+
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<h1 id="常用linux命令">常用Linux命令</h1>
+
+<h2 id="查看linux系统信息">查看Linux系统信息</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="rouge-code"><pre><span class="nb">arch</span>      <span class="c">#显示机器的处理器架构(1)</span>
+<span class="nb">uname</span> <span class="nt">-m</span>  <span class="c">#显示机器的处理器架构(2)</span>
+<span class="nb">uname</span> <span class="nt">-r</span>  <span class="c">#显示正在使用的内核版本</span>
+dmidecode <span class="nt">-q</span>          <span class="c">#显示硬件系统部件 - (SMBIOS / DMI)</span>
+hdparm <span class="nt">-i</span> /dev/hda    <span class="c">#罗列一个磁盘的架构特性</span>
+hdparm <span class="nt">-tT</span> /dev/sda   <span class="c">#在磁盘上执行测试性读取操作</span>
+<span class="nb">cat</span> /proc/cpuinfo     <span class="c">#显示CPU info的信息</span>
+<span class="nb">cat</span> /proc/interrupts  <span class="c">#显示中断</span>
+<span class="nb">cat</span> /proc/meminfo     <span class="c">#校验内存使用</span>
+<span class="nb">cat</span> /proc/swaps       <span class="c">#显示哪些swap被使用</span>
+<span class="nb">cat</span> /proc/version     <span class="c">#显示内核的版本</span>
+<span class="nb">cat</span> /proc/net/dev     <span class="c">#显示网络适配器及统计</span>
+<span class="nb">cat</span> /proc/mounts      <span class="c">#显示已加载的文件系统</span>
+lspci <span class="nt">-tv</span>   <span class="c">#罗列PCI设备</span>
+lsusb <span class="nt">-tv</span>   <span class="c">#显示USB设备</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="date-显示系统日期">date 显示系统日期</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>cal 2007              <span class="c">#显示2007年的日历表</span>
+<span class="nb">date </span>041217002007.00   <span class="c">#设置日期和时间 - 月日时分年.秒</span>
+clock <span class="nt">-w</span>              <span class="c">#将时间修改保存到 BIOS</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="关机关机重启登出-">关机(关机、重启、登出 )</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre>shutdown <span class="nt">-h</span> now    <span class="c">#关闭系统(1)</span>
+init 0            <span class="c">#关闭系统(2)</span>
+telinit 0         <span class="c">#关闭系统(3)</span>
+shutdown <span class="nt">-h</span> hours:minutes &amp;   <span class="c">#按预定时间关闭系统</span>
+shutdown <span class="nt">-c</span>       <span class="c">#取消按预定时间关闭系统</span>
+shutdown <span class="nt">-r</span> now   <span class="c">#重启(1)</span>
+reboot   <span class="c">#重启(2)</span>
+<span class="nb">logout</span>   <span class="c">#注销</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="文件和目录">文件和目录</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+</pre></td><td class="rouge-code"><pre><span class="nb">cd</span> /home    <span class="c">#进入 '/ home' 目录'</span>
+<span class="nb">cd</span> ..       <span class="c">#返回上一级目录</span>
+<span class="nb">cd</span> ../..    <span class="c">#返回上两级目录</span>
+<span class="nb">cd</span>          <span class="c">#进入个人的主目录</span>
+<span class="nb">cd</span> ~user1   <span class="c">#进入个人的主目录</span>
+<span class="nb">cd</span> -       <span class="c">#返回上次所在的目录</span>
+<span class="nb">pwd</span>        <span class="c">#显示工作路径</span>
+
+<span class="nb">ls</span>      <span class="c">#查看目录中的文件</span>
+<span class="nb">ls</span> <span class="nt">-F</span>   <span class="c">#查看目录中的文件</span>
+<span class="nb">ls</span> <span class="nt">-l</span>   <span class="c">#显示文件和目录的详细资料</span>
+<span class="nb">ls</span> <span class="nt">-a</span>   <span class="c">#显示隐藏文件</span>
+<span class="nb">ls</span> <span class="k">*</span><span class="o">[</span>0-9]<span class="k">*</span>   <span class="c">#显示包含数字的文件名和目录名</span>
+tree         <span class="c">#显示文件和目录由根目录开始的树形结构(1)</span>
+lstree       <span class="c">#显示文件和目录由根目录开始的树形结构(2)</span>
+
+<span class="nb">mkdir </span>dir1         <span class="c">#创建一个叫做 'dir1' 的目录'</span>
+<span class="nb">mkdir </span>dir1 dir2    <span class="c">#同时创建两个目录</span>
+<span class="nb">mkdir</span> <span class="nt">-p</span> /tmp/dir1/dir2   <span class="c">#创建一个目录树</span>
+<span class="nb">rm</span> <span class="nt">-f</span> file1    <span class="c">#删除一个叫做 'file1' 的文件'</span>
+<span class="nb">rmdir </span>dir1     <span class="c">#删除一个叫做 'dir1' 的目录'</span>
+<span class="nb">rm</span> <span class="nt">-rf</span> dir1    <span class="c">#删除一个叫做 'dir1' 的目录并同时删除其内容</span>
+<span class="nb">rm</span> <span class="nt">-rf</span> dir1 dir2    <span class="c">#同时删除两个目录及它们的内容</span>
+<span class="nb">mv </span>dir1 new_dir     <span class="c">#重命名/移动 一个目录</span>
+
+<span class="nb">cp </span>file1 file2     <span class="c">#复制一个文件</span>
+<span class="nb">cp dir</span>/<span class="k">*</span> <span class="nb">.</span>         <span class="c">#复制一个目录下的所有文件到当前工作目录</span>
+<span class="nb">cp</span> <span class="nt">-a</span> /tmp/dir1 <span class="nb">.</span>   <span class="c">#复制一个目录到当前工作目录</span>
+<span class="nb">cp</span> <span class="nt">-a</span> dir1 dir2     <span class="c">#复制一个目录</span>
+
+<span class="nb">ln</span> <span class="nt">-s</span> file1 lnk1  <span class="c">#创建一个指向文件或目录的软链接</span>
+<span class="nb">ln </span>file1 lnk1     <span class="c">#创建一个指向文件或目录的物理链接</span>
+
+<span class="nb">touch</span> <span class="nt">-t</span> 0712250000 file1   <span class="c">#修改一个文件或目录的时间戳 - (YYMMDDhhmm)</span>
+file file1 outputs the mime <span class="nb">type </span>of the file as text
+iconv <span class="nt">-l</span>   <span class="c">#列出已知的编码</span>
+
+iconv <span class="nt">-f</span> fromEncoding <span class="nt">-t</span> toEncoding inputFile <span class="o">&gt;</span> outputFile creates a new from the given input file by assuming it is encoded <span class="k">in </span>fromEncoding and converting it to toEncoding.
+
+find <span class="nb">.</span> <span class="nt">-maxdepth</span> 1 <span class="nt">-name</span> <span class="k">*</span>.jpg <span class="nt">-print</span> <span class="nt">-exec</span> convert <span class="s2">"{}"</span> <span class="nt">-resize</span> 80x60 <span class="s2">"thumbs/{}"</span> <span class="se">\;</span> batch resize files <span class="k">in </span>the current directory and send them to a thumbnails directory <span class="o">(</span>requires convert from Imagemagick<span class="o">)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="文件搜索">文件搜索</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre>find / <span class="nt">-name</span> file1     <span class="c">#从 '/' 开始进入根文件系统搜索文件和目录</span>
+find / <span class="nt">-user</span> user1     <span class="c">#搜索属于用户 'user1' 的文件和目录</span>
+find /home/user1 <span class="nt">-name</span> <span class="se">\*</span>.bin        <span class="c">#在目录 '/ home/user1' 中搜索带有'.bin' 结尾的文件</span>
+find /usr/bin <span class="nt">-type</span> f <span class="nt">-atime</span> +100    <span class="c">#搜索在过去100天内未被使用过的执行文件</span>
+find /usr/bin <span class="nt">-type</span> f <span class="nt">-mtime</span> <span class="nt">-10</span>     <span class="c">#搜索在10天内被创建或者修改过的文件</span>
+find / <span class="nt">-name</span> <span class="se">\*</span>.rpm <span class="nt">-exec</span> <span class="nb">chmod </span>755 <span class="s1">'{}'</span> <span class="se">\;</span>      <span class="c">#搜索以 '.rpm' 结尾的文件并定义其权限</span>
+find / <span class="nt">-xdev</span> <span class="nt">-name</span> <span class="se">\*</span>.rpm        <span class="c">#搜索以 '.rpm' 结尾的文件，忽略光驱、捷盘等可移动设备</span>
+locate <span class="se">\*</span>.ps       <span class="c">#寻找以 '.ps' 结尾的文件 - 先运行 'updatedb' 命令</span>
+whereis halt       <span class="c">#显示一个二进制文件、源码或man的位置</span>
+which halt         <span class="c">#显示一个二进制文件或可执行文件的完整路径</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="挂载文件系统">挂载文件系统</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="rouge-code"><pre>mount /dev/hda2 /mnt/hda2    <span class="c">#挂载一个叫做hda2的盘 - 确定目录 '/ mnt/hda2' 已经存在</span>
+umount /dev/hda2            <span class="c">#卸载一个叫做hda2的盘 - 先从挂载点 '/ mnt/hda2' 退出</span>
+fuser <span class="nt">-km</span> /mnt/hda2         <span class="c">#当设备繁忙时强制卸载</span>
+umount <span class="nt">-n</span> /mnt/hda2         <span class="c">#运行卸载操作而不写入 /etc/mtab 文件- 当文件为只读或当磁盘写满时非常有用</span>
+mount /dev/fd0 /mnt/floppy        <span class="c">#挂载一个软盘</span>
+mount /dev/cdrom /mnt/cdrom       <span class="c">#挂载一个cdrom或dvdrom</span>
+mount /dev/hdc /mnt/cdrecorder    <span class="c">#挂载一个cdrw或dvdrom</span>
+mount /dev/hdb /mnt/cdrecorder    <span class="c">#挂载一个cdrw或dvdrom</span>
+mount <span class="nt">-o</span> loop file.iso /mnt/cdrom    <span class="c">#挂载一个文件或ISO镜像文件</span>
+mount <span class="nt">-t</span> vfat /dev/hda5 /mnt/hda5    <span class="c">#挂载一个Windows FAT32文件系统</span>
+mount /dev/sda1 /mnt/usbdisk         <span class="c">#挂载一个usb 捷盘或闪存设备</span>
+mount <span class="nt">-t</span> smbfs <span class="nt">-o</span> <span class="nv">username</span><span class="o">=</span>user,password<span class="o">=</span>pass //WinClient/share /mnt/share      <span class="c">#挂载一个windows网络共享</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="磁盘空间相关">磁盘空间相关</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre><span class="nb">df</span> <span class="nt">-h</span>           <span class="c">#显示已经挂载的分区列表</span>
+<span class="nb">ls</span> <span class="nt">-lSr</span> |more    <span class="c">#以尺寸大小排列文件和目录</span>
+<span class="nb">du</span> <span class="nt">-sh</span> dir1      <span class="c">#估算目录 'dir1' 已经使用的磁盘空间'</span>
+<span class="nb">du</span> <span class="nt">-sk</span> <span class="k">*</span> | <span class="nb">sort</span> <span class="nt">-rn</span>     <span class="c">#以容量大小为依据依次显示文件和目录的大小</span>
+rpm <span class="nt">-q</span> <span class="nt">-a</span> <span class="nt">--qf</span> <span class="s1">'%10{SIZE}t%{NAME}n'</span> | <span class="nb">sort</span> <span class="nt">-k1</span>,1n 
+<span class="c">#以大小为依据依次显示已安装的rpm包所使用的空间 (fedora, redhat类系统)</span>
+dpkg-query <span class="nt">-W</span> <span class="nt">-f</span><span class="o">=</span><span class="s1">'${Installed-Size;10}t${Package}n'</span> | <span class="nb">sort</span> <span class="nt">-k1</span>,1n 
+<span class="c">#以大小为依据显示已安装的deb包所使用的空间 (ubuntu, debian类系统)</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="用户和群组">用户和群组</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="rouge-code"><pre>groupadd group_name   <span class="c">#创建一个新用户组</span>
+groupdel group_name   <span class="c">#删除一个用户组</span>
+groupmod <span class="nt">-n</span> new_group_name old_group_name   <span class="c">#重命名一个用户组</span>
+useradd <span class="nt">-c</span> <span class="s2">"Name Surname "</span> <span class="nt">-g</span> admin <span class="nt">-d</span> /home/user1 <span class="nt">-s</span> /bin/bash user1     <span class="c">#创建一个属于 "admin" 用户组的用户</span>
+useradd user1      <span class="c">#创建一个新用户</span>
+userdel <span class="nt">-r</span> user1   <span class="c">#删除一个用户 ( '-r' 排除主目录)</span>
+usermod <span class="nt">-c</span> <span class="s2">"User FTP"</span> <span class="nt">-g</span> system <span class="nt">-d</span> /ftp/user1 <span class="nt">-s</span> /bin/nologin user1   <span class="c">#修改用户属性</span>
+
+passwd         <span class="c">#修改口令</span>
+passwd user1   <span class="c">#修改一个用户的口令 (只允许root执行)</span>
+chage <span class="nt">-E</span> 2005-12-31 user1    <span class="c">#设置用户口令的失效期限</span>
+pwck     <span class="c">#检查 '/etc/passwd' 的文件格式和语法修正以及存在的用户</span>
+grpck    <span class="c">#检查 '/etc/passwd' 的文件格式和语法修正以及存在的群组</span>
+newgrp group_name     <span class="c">#登陆进一个新的群组以改变新创建文件的预设群组</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="文件权限">文件权限</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+</pre></td><td class="rouge-code"><pre>使用 <span class="s2">"+"</span> 设置权限，使用 <span class="s2">"-"</span> 用于取消
+
+<span class="nb">ls</span> <span class="nt">-lh</span>    <span class="c">#显示权限</span>
+<span class="nb">ls</span> /tmp | <span class="nb">pr</span> <span class="nt">-T5</span> <span class="nt">-W</span><span class="nv">$COLUMNS</span>   <span class="c">#将终端划分成5栏显示</span>
+<span class="nb">chmod </span>ugo+rwx directory1      <span class="c">#设置目录的所有人(u)、群组(g)以及其他人(o)以读（r ）、写(w)和执行(x)的权限</span>
+<span class="nb">chmod </span>go-rwx directory1      <span class="c">#删除群组(g)与其他人(o)对目录的读写执行权限</span>
+<span class="nb">chown </span>user1 file1            <span class="c">#改变一个文件的所有人属性</span>
+<span class="nb">chown</span> <span class="nt">-R</span> user1 directory1    <span class="c">#改变一个目录的所有人属性并同时改变改目录下所有文件的属性</span>
+<span class="nb">chgrp </span>group1 file1          <span class="c">#改变文件的群组</span>
+<span class="nb">chown </span>user1:group1 file1     <span class="c">#改变一个文件的所有人和群组属性</span>
+find / <span class="nt">-perm</span> <span class="nt">-u</span>+s           <span class="c">#罗列一个系统中所有使用了SUID控制的文件</span>
+<span class="nb">chmod </span>u+s /bin/file1        <span class="c">#设置一个二进制文件的 SUID 位 - 运行该文件的用户也被赋予和所有者同样的权限</span>
+<span class="nb">chmod </span>u-s /bin/file1        <span class="c">#禁用一个二进制文件的 SUID位</span>
+<span class="nb">chmod </span>g+s /home/public      <span class="c">#设置一个目录的SGID 位 - 类似SUID ，不过这是针对目录的</span>
+<span class="nb">chmod </span>g-s /home/public      <span class="c">#禁用一个目录的 SGID 位</span>
+<span class="nb">chmod </span>o+t /home/public      <span class="c">#设置一个文件的 STIKY 位 - 只允许合法所有人删除文件</span>
+<span class="nb">chmod </span>o-t /home/public      <span class="c">#禁用一个目录的 STIKY 位</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="文件的特殊属性">文件的特殊属性</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre>- 使用 <span class="s2">"+"</span> 设置权限，使用 <span class="s2">"-"</span> 用于取消
+
+chattr +a file1   <span class="c">#只允许以追加方式读写文件</span>
+chattr +c file1   <span class="c">#允许这个文件能被内核自动压缩/解压</span>
+chattr +d file1   <span class="c">#在进行文件系统备份时，dump程序将忽略这个文件</span>
+chattr +i file1   <span class="c">#设置成不可变的文件，不能被删除、修改、重命名或者链接</span>
+chattr +s file1   <span class="c">#允许一个文件被安全地删除</span>
+chattr +S file1   <span class="c">#一旦应用程序对这个文件执行了写操作，使系统立刻把修改的结果写到磁盘</span>
+chattr +u file1   <span class="c">#若文件被删除，系统会允许你在以后恢复这个被删除的文件</span>
+lsattr           <span class="c">#显示特殊的属性</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="打包和压缩文件">打包和压缩文件</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+</pre></td><td class="rouge-code"><pre>bunzip2 file1.bz2   <span class="c">#解压一个叫做 'file1.bz2'的文件</span>
+bzip2 file1         <span class="c">#压缩一个叫做 'file1' 的文件</span>
+<span class="nb">gunzip </span>file1.gz     <span class="c">#解压一个叫做 'file1.gz'的文件</span>
+<span class="nb">gzip </span>file1          <span class="c">#压缩一个叫做 'file1'的文件</span>
+<span class="nb">gzip</span> <span class="nt">-9</span> file1       <span class="c">#最大程度压缩</span>
+
+rar a file1.rar test_file          <span class="c">#创建一个叫做 'file1.rar' 的包</span>
+rar a file1.rar file1 file2 dir1   <span class="c">#同时压缩 'file1', 'file2' 以及目录 'dir1'</span>
+rar x file1.rar     <span class="c">#解压rar包</span>
+unrar x file1.rar   <span class="c">#解压rar包</span>
+
+<span class="nb">tar</span> <span class="nt">-cvf</span> archive.tar file1   <span class="c">#创建一个非压缩的 tarball</span>
+<span class="nb">tar</span> <span class="nt">-cvf</span> archive.tar file1 file2 dir1  <span class="c">#创建一个包含了 'file1', 'file2' 以及 'dir1'的档案文件</span>
+<span class="nb">tar</span> <span class="nt">-tf</span> archive.tar    <span class="c">#显示一个包中的内容</span>
+<span class="nb">tar</span> <span class="nt">-xvf</span> archive.tar   <span class="c">#释放一个包</span>
+<span class="nb">tar</span> <span class="nt">-xvf</span> archive.tar <span class="nt">-C</span> /tmp     <span class="c">#将压缩包释放到 /tmp目录下</span>
+<span class="nb">tar</span> <span class="nt">-cvfj</span> archive.tar.bz2 dir1   <span class="c">#创建一个bzip2格式的压缩包</span>
+<span class="nb">tar</span> <span class="nt">-jxvf</span> archive.tar.bz2        <span class="c">#解压一个bzip2格式的压缩包</span>
+<span class="nb">tar</span> <span class="nt">-cvfz</span> archive.tar.gz dir1    <span class="c">#创建一个gzip格式的压缩包</span>
+<span class="nb">tar</span> <span class="nt">-zxvf</span> archive.tar.gz         <span class="c">#解压一个gzip格式的压缩包</span>
+
+zip file1.zip file1    <span class="c">#创建一个zip格式的压缩包</span>
+zip <span class="nt">-r</span> file1.zip file1 file2 dir1    <span class="c">#将几个文件和目录同时压缩成一个zip格式的压缩包</span>
+unzip file1.zip    <span class="c">#解压一个zip格式压缩包</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="查看文件内容">查看文件内容</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="nb">cat </span>file1      <span class="c">#从第一个字节开始正向查看文件的内容</span>
+<span class="nb">tac </span>file1      <span class="c">#从最后一行开始反向查看一个文件的内容</span>
+more file1     <span class="c">#查看一个长文件的内容</span>
+less file1     <span class="c">#类似于 'more' 命令，但是它允许在文件中和正向操作一样的反向操作</span>
+<span class="nb">head</span> <span class="nt">-2</span> file1    <span class="c">#查看一个文件的前两行</span>
+<span class="nb">tail</span> <span class="nt">-2</span> file1    <span class="c">#查看一个文件的最后两行</span>
+<span class="nb">tail</span> <span class="nt">-f</span> /var/log/messages     <span class="c">#实时查看被添加到一个文件中的内容</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="文本处理">文本处理</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+</pre></td><td class="rouge-code"><pre><span class="nb">cat </span>file1 file2 ... | <span class="nb">command</span> &lt;<span class="o">&gt;</span> file1_in.txt_or_file1_out.txt general syntax <span class="k">for </span>text manipulation using PIPE, STDIN and STDOUT
+
+<span class="nb">cat </span>file1 | <span class="nb">command</span><span class="o">(</span> <span class="nb">sed</span>, <span class="nb">grep</span>, <span class="nb">awk</span>, <span class="nb">grep</span>, etc...<span class="o">)</span> <span class="o">&gt;</span> result.txt 
+<span class="c">#合并一个文件的详细说明文本，并将简介写入一个新文件中</span>
+<span class="nb">cat </span>file1 | <span class="nb">command</span><span class="o">(</span> <span class="nb">sed</span>, <span class="nb">grep</span>, <span class="nb">awk</span>, <span class="nb">grep</span>, etc...<span class="o">)</span> <span class="o">&gt;&gt;</span> result.txt 
+<span class="c">#合并一个文件的详细说明文本，并将简介写入一个已有的文件中</span>
+
+<span class="nb">grep </span>Aug /var/log/messages     <span class="c">#在文件 '/var/log/messages'中查找关键词"Aug"</span>
+<span class="nb">grep</span> ^Aug /var/log/messages    <span class="c">#在文件 '/var/log/messages'中查找以"Aug"开始的词汇</span>
+<span class="nb">grep</span> <span class="o">[</span>0-9] /var/log/messages   <span class="c">#选择 '/var/log/messages' 文件中所有包含数字的行</span>
+<span class="nb">grep </span>Aug <span class="nt">-R</span> /var/log/<span class="k">*</span>         <span class="c">#在目录 '/var/log' 及随后的目录中搜索字符串"Aug"</span>
+
+<span class="nb">sed</span> <span class="s1">'s/stringa1/stringa2/g'</span> example.txt 
+<span class="c">#将example.txt文件中的 "string1" 替换成 "string2"</span>
+<span class="nb">sed</span> <span class="s1">'/^$/d'</span> example.txt           <span class="c">#从example.txt文件中删除所有空白行</span>
+<span class="nb">sed</span> <span class="s1">'/ *#/d; /^$/d'</span> example.txt   <span class="c">#从example.txt文件中删除所有注释和空白行</span>
+<span class="nb">echo</span> <span class="s1">'esempio'</span> | <span class="nb">tr</span> <span class="s1">'[:lower:]'</span> <span class="s1">'[:upper:]'</span>    <span class="c">#合并上下单元格内容</span>
+<span class="nb">sed</span> <span class="nt">-e</span> <span class="s1">'1d'</span> result.txt          <span class="c">#从文件example.txt 中排除第一行</span>
+<span class="nb">sed</span> <span class="nt">-n</span> <span class="s1">'/stringa1/p'</span>            <span class="c">#查看只包含词汇 "string1"的行</span>
+<span class="nb">sed</span> <span class="nt">-e</span> <span class="s1">'s/ *$//'</span> example.txt    <span class="c">#删除每一行最后的空白字符</span>
+<span class="nb">sed</span> <span class="nt">-e</span> <span class="s1">'s/stringa1//g'</span> example.txt  
+<span class="c">#从文档中只删除词汇 "string1" 并保留剩余全部</span>
+<span class="nb">sed</span> <span class="nt">-n</span> <span class="s1">'1,5p;5q'</span> example.txt     <span class="c">#查看从第一行到第5行内容</span>
+<span class="nb">sed</span> <span class="nt">-n</span> <span class="s1">'5p;5q'</span> example.txt       <span class="c">#查看第5行</span>
+<span class="nb">sed</span> <span class="nt">-e</span> <span class="s1">'s/00*/0/g'</span> example.txt   <span class="c">#用单个零替换多个零</span>
+
+<span class="nb">cat</span> <span class="nt">-n</span> file1       <span class="c">#标示文件的行数</span>
+<span class="nb">cat </span>example.txt | <span class="nb">awk</span> <span class="s1">'NR%2==1'</span>      <span class="c">#删除example.txt文件中的所有偶数行</span>
+<span class="nb">echo </span>a b c | <span class="nb">awk</span> <span class="s1">'{print $1}'</span>        <span class="c">#查看一行第一栏</span>
+<span class="nb">echo </span>a b c | <span class="nb">awk</span> <span class="s1">'{print $1,$3}'</span>     <span class="c">#查看一行的第一和第三栏</span>
+<span class="nb">paste </span>file1 file2           <span class="c">#合并两个文件或两栏的内容</span>
+<span class="nb">paste</span> <span class="nt">-d</span> <span class="s1">'+'</span> file1 file2    <span class="c">#合并两个文件或两栏的内容，中间用"+"区分</span>
+
+<span class="nb">sort </span>file1 file2              <span class="c">#排序两个文件的内容</span>
+<span class="nb">sort </span>file1 file2 | <span class="nb">uniq</span>       <span class="c">#取出两个文件的并集(重复的行只保留一份)</span>
+<span class="nb">sort </span>file1 file2 | <span class="nb">uniq</span> <span class="nt">-u</span>    <span class="c">#删除交集，留下其他的行</span>
+<span class="nb">sort </span>file1 file2 | <span class="nb">uniq</span> <span class="nt">-d</span>    <span class="c">#取出两个文件的交集(只留下同时存在于两个文件中的文件)</span>
+
+<span class="nb">comm</span> <span class="nt">-1</span> file1 file2    <span class="c">#比较两个文件的内容只删除 'file1' 所包含的内容</span>
+<span class="nb">comm</span> <span class="nt">-2</span> file1 file2    <span class="c">#比较两个文件的内容只删除 'file2' 所包含的内容</span>
+<span class="nb">comm</span> <span class="nt">-3</span> file1 file2    <span class="c">#比较两个文件的内容只删除两个文件共有的部分</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="网络---以太网和wifi无线">网络 - （以太网和WIFI无线）</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre></td><td class="rouge-code"><pre>ifconfig eth0    <span class="c">#显示一个以太网卡的配置</span>
+ifup eth0        <span class="c">#启用一个 'eth0' 网络设备</span>
+ifdown eth0      <span class="c">#禁用一个 'eth0' 网络设备</span>
+ifconfig eth0 192.168.1.1 netmask 255.255.255.0     <span class="c">#控制IP地址</span>
+ifconfig eth0 promisc     <span class="c">#设置 'eth0' 成混杂模式以嗅探数据包 (sniffing)</span>
+dhclient eth0            <span class="c">#以dhcp模式启用 'eth0'</span>
+
+route <span class="nt">-n</span>    <span class="c">#查看路由表</span>
+route add <span class="nt">-net</span> 0/0 gw IP_Gateway    <span class="c">#配置默认网关</span>
+route add <span class="nt">-net</span> 192.168.0.0 netmask 255.255.0.0 gw 192.168.1.1 
+<span class="c">#配置静态路由到达网络'192.168.0.0/16'</span>
+route del 0/0 gw IP_gateway        <span class="c">#删除静态路由</span>
+
+<span class="nb">hostname</span> <span class="c">#查看机器名</span>
+host www.example.com       <span class="c">#把一个主机名解析到一个网际地址或把一个网际地址解析到一个主机名。</span>
+nslookup www.example.com   <span class="c">#用于查询DNS的记录，查看域名解析是否正常，在网络故障的时候用来诊断网络问题。</span>
+ip <span class="nb">link </span>show            <span class="c">#查看网卡信息</span>
+mii-tool                <span class="c">#用于查看、管理介质的网络接口的状态</span>
+ethtool                 <span class="c">#用于查询和设置网卡配置</span>
+netstat <span class="nt">-tupl</span>           <span class="c">#用于显示TCP/UDP的状态信息</span>
+tcpdump tcp port 80     <span class="c">#显示所有http协议的流量</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="rpm包fedora-redhat及类似系统">RPM包（Fedora, Redhat及类似系统）</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+</pre></td><td class="rouge-code"><pre>rpm <span class="nt">-ivh</span> package.rpm    <span class="c">#安装一个rpm包</span>
+rpm <span class="nt">-ivh</span> <span class="nt">--nodeeps</span> package.rpm   <span class="c">#安装一个rpm包而忽略依赖关系警告</span>
+rpm <span class="nt">-U</span> package.rpm        <span class="c">#更新一个rpm包但不改变其配置文件</span>
+rpm <span class="nt">-F</span> package.rpm        <span class="c">#更新一个确定已经安装的rpm包</span>
+rpm <span class="nt">-e</span> package_name.rpm   <span class="c">#删除一个rpm包</span>
+rpm <span class="nt">-qa</span>      <span class="c">#显示系统中所有已经安装的rpm包</span>
+rpm <span class="nt">-qa</span> | <span class="nb">grep </span>httpd    <span class="c">#显示所有名称中包含 "httpd" 字样的rpm包</span>
+rpm <span class="nt">-qi</span> package_name    <span class="c">#获取一个已安装包的特殊信息</span>
+rpm <span class="nt">-qg</span> <span class="s2">"System Environment/Daemons"</span>     <span class="c">#显示一个组件的rpm包</span>
+rpm <span class="nt">-ql</span> package_name       <span class="c">#显示一个已经安装的rpm包提供的文件列表</span>
+rpm <span class="nt">-qc</span> package_name       <span class="c">#显示一个已经安装的rpm包提供的配置文件列表</span>
+rpm <span class="nt">-q</span> package_name <span class="nt">--whatrequires</span>     <span class="c">#显示与一个rpm包存在依赖关系的列表</span>
+rpm <span class="nt">-q</span> package_name <span class="nt">--whatprovides</span>    <span class="c">#显示一个rpm包所占的体积</span>
+rpm <span class="nt">-q</span> package_name <span class="nt">--scripts</span>         <span class="c">#显示在安装/删除期间所执行的脚本l</span>
+rpm <span class="nt">-q</span> package_name <span class="nt">--changelog</span>       <span class="c">#显示一个rpm包的修改历史</span>
+rpm <span class="nt">-qf</span> /etc/httpd/conf/httpd.conf    <span class="c">#确认所给的文件由哪个rpm包所提供</span>
+rpm <span class="nt">-qp</span> package.rpm <span class="nt">-l</span>    <span class="c">#显示由一个尚未安装的rpm包提供的文件列表</span>
+rpm <span class="nt">--import</span> /media/cdrom/RPM-GPG-KEY    <span class="c">#导入公钥数字证书</span>
+rpm <span class="nt">--checksig</span> package.rpm      <span class="c">#确认一个rpm包的完整性</span>
+rpm <span class="nt">-qa</span> gpg-pubkey      <span class="c">#确认已安装的所有rpm包的完整性</span>
+rpm <span class="nt">-V</span> package_name     <span class="c">#检查文件尺寸、 许可、类型、所有者、群组、MD5检查以及最后修改时间</span>
+rpm <span class="nt">-Va</span>                 <span class="c">#检查系统中所有已安装的rpm包- 小心使用</span>
+rpm <span class="nt">-Vp</span> package.rpm     <span class="c">#确认一个rpm包还未安装</span>
+rpm2cpio package.rpm | cpio <span class="nt">--extract</span> <span class="nt">--make-directories</span> <span class="k">*</span>bin<span class="k">*</span>   <span class="c">#从一个rpm包运行可执行文件</span>
+rpm <span class="nt">-ivh</span> /usr/src/redhat/RPMS/<span class="sb">`</span><span class="nb">arch</span><span class="sb">`</span>/package.rpm    <span class="c">#从一个rpm源码安装一个构建好的包</span>
+rpmbuild <span class="nt">--rebuild</span> package_name.src.rpm       <span class="c">#从一个rpm源码构建一个 rpm 包</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="yumfedora-redhat及类似系统">YUM（Fedora, RedHat及类似系统）</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre>yum <span class="nb">install </span>package_name             <span class="c">#下载并安装一个rpm包</span>
+yum localinstall package_name.rpm    <span class="c">#将安装一个rpm包，使用你自己的软件仓库为你解决所有依赖关系</span>
+yum update package_name.rpm    <span class="c">#更新当前系统中所有安装的rpm包</span>
+yum update package_name        <span class="c">#更新一个rpm包</span>
+yum remove package_name        <span class="c">#删除一个rpm包</span>
+yum list                   <span class="c">#列出当前系统中安装的所有包</span>
+yum search package_name     <span class="c">#在rpm仓库中搜寻软件包</span>
+yum clean packages          <span class="c">#清理rpm缓存删除下载的包</span>
+yum clean headers           <span class="c">#删除所有头文件</span>
+yum clean all                <span class="c">#删除所有缓存的包和头文件</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="deb包-debian-ubuntu及类似系统">DEB包 (Debian, Ubuntu及类似系统)</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre>dpkg <span class="nt">-i</span> package.deb     <span class="c">#安装/更新一个 deb 包</span>
+dpkg <span class="nt">-r</span> package_name    <span class="c">#从系统删除一个 deb 包</span>
+dpkg <span class="nt">-l</span>                 <span class="c">#显示系统中所有已经安装的 deb 包</span>
+dpkg <span class="nt">-l</span> | <span class="nb">grep </span>httpd    <span class="c">#显示所有名称中包含 "httpd" 字样的deb包</span>
+dpkg <span class="nt">-s</span> package_name    <span class="c">#获得已经安装在系统中一个特殊包的信息</span>
+dpkg <span class="nt">-L</span> package_name    <span class="c">#显示系统中已经安装的一个deb包所提供的文件列表</span>
+dpkg <span class="nt">--contents</span> package.deb    <span class="c">#显示尚未安装的一个包所提供的文件列表</span>
+dpkg <span class="nt">-S</span> /bin/ping              <span class="c">#确认所给的文件由哪个deb包提供</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="apt软件工具-debian-ubuntu及类似系统">APT软件工具 (Debian, Ubuntu及类似系统)</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre>apt-get <span class="nb">install </span>package_name      <span class="c">#安装/更新一个 deb 包</span>
+apt-cdrom <span class="nb">install </span>package_name    <span class="c">#从光盘安装/更新一个 deb 包</span>
+apt-get update      <span class="c">#升级列表中的软件包</span>
+apt-get upgrade     <span class="c">#升级所有已安装的软件</span>
+apt-get remove package_name     <span class="c">#从系统删除一个deb包</span>
+apt-get check     <span class="c">#确认依赖的软件仓库正确</span>
+apt-get clean     <span class="c">#从下载的软件包中清理缓存</span>
+apt-cache search searched-package    <span class="c">#返回包含所要搜索字符串的软件包名称</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="字符设置和文件格式转换">字符设置和文件格式转换</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre>dos2unix filedos.txt fileunix.txt      <span class="c">#将一个文本文件的格式从MSDOS转换成UNIX</span>
+unix2dos fileunix.txt filedos.txt      <span class="c">#将一个文本文件的格式从UNIX转换成MSDOS</span>
+recode ..HTML &lt; page.txt <span class="o">&gt;</span> page.html   <span class="c">#将一个文本文件转换成html</span>
+recode <span class="nt">-l</span> | more                       <span class="c">#显示所有允许的转换格式</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="文件系统分析">文件系统分析</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre>badblocks <span class="nt">-v</span> /dev/hda1    <span class="c">#检查磁盘hda1上的坏磁块</span>
+fsck /dev/hda1            <span class="c">#修复/检查hda1磁盘上linux文件系统的完整性</span>
+fsck.ext2 /dev/hda1       <span class="c">#修复/检查hda1磁盘上ext2文件系统的完整性</span>
+e2fsck /dev/hda1          <span class="c">#修复/检查hda1磁盘上ext2文件系统的完整性</span>
+e2fsck <span class="nt">-j</span> /dev/hda1       <span class="c">#修复/检查hda1磁盘上ext3文件系统的完整性</span>
+fsck.ext3 /dev/hda1       <span class="c">#修复/检查hda1磁盘上ext3文件系统的完整性</span>
+fsck.vfat /dev/hda1       <span class="c">#修复/检查hda1磁盘上fat文件系统的完整性</span>
+fsck.msdos /dev/hda1      <span class="c">#修复/检查hda1磁盘上dos文件系统的完整性</span>
+dosfsck /dev/hda1         <span class="c">#修复/检查hda1磁盘上dos文件系统的完整性</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="初始化一个文件系统">初始化一个文件系统</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre>mkfs /dev/hda1        <span class="c">#在hda1分区创建一个文件系统</span>
+mke2fs /dev/hda1      <span class="c">#在hda1分区创建一个linux ext2的文件系统</span>
+mke2fs <span class="nt">-j</span> /dev/hda1   <span class="c">#在hda1分区创建一个linux ext3(日志型)的文件系统</span>
+mkfs <span class="nt">-t</span> vfat 32 <span class="nt">-F</span> /dev/hda1   <span class="c">#创建一个 FAT32 文件系统</span>
+fdformat <span class="nt">-n</span> /dev/fd0           <span class="c">#格式化一个软盘</span>
+mkswap /dev/hda3               <span class="c">#创建一个swap文件系统</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="swap文件系统">SWAP文件系统</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>mkswap /dev/hda3             <span class="c">#创建一个swap文件系统</span>
+swapon /dev/hda3             <span class="c">#启用一个新的swap文件系统</span>
+swapon /dev/hda2 /dev/hdb3   <span class="c">#启用两个swap分区</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="备份">备份</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+</pre></td><td class="rouge-code"><pre>dump <span class="nt">-0aj</span> <span class="nt">-f</span> /tmp/home0.bak /home    <span class="c">#制作一个 '/home' 目录的完整备份</span>
+dump <span class="nt">-1aj</span> <span class="nt">-f</span> /tmp/home0.bak /home    <span class="c">#制作一个 '/home' 目录的交互式备份</span>
+restore <span class="nt">-if</span> /tmp/home0.bak          <span class="c">#还原一个交互式备份</span>
+
+rsync <span class="nt">-rogpav</span> <span class="nt">--delete</span> /home /tmp    <span class="c">#同步两边的目录</span>
+rsync <span class="nt">-rogpav</span> <span class="nt">-e</span> ssh <span class="nt">--delete</span> /home ip_address:/tmp           <span class="c">#通过SSH通道rsync</span>
+rsync <span class="nt">-az</span> <span class="nt">-e</span> ssh <span class="nt">--delete</span> ip_addr:/home/public /home/local    <span class="c">#通过ssh和压缩将一个远程目录同步到本地目录</span>
+rsync <span class="nt">-az</span> <span class="nt">-e</span> ssh <span class="nt">--delete</span> /home/local ip_addr:/home/public    <span class="c">#通过ssh和压缩将本地目录同步到远程目录</span>
+
+<span class="nb">dd </span><span class="nv">bs</span><span class="o">=</span>1M <span class="k">if</span><span class="o">=</span>/dev/hda | <span class="nb">gzip</span> | ssh user@ip_addr <span class="s1">'dd of=hda.gz'</span>  
+<span class="c">#通过ssh在远程主机上执行一次备份本地磁盘的操作</span>
+<span class="nb">dd </span><span class="k">if</span><span class="o">=</span>/dev/sda <span class="nv">of</span><span class="o">=</span>/tmp/file1 
+<span class="c">#备份磁盘内容到一个文件</span>
+<span class="nb">tar</span> <span class="nt">-Puf</span> backup.tar /home/user 执行一次对 <span class="s1">'/home/user'</span> 
+<span class="c">#目录的交互式备份操作</span>
+<span class="o">(</span> <span class="nb">cd</span> /tmp/local/ <span class="o">&amp;&amp;</span> <span class="nb">tar </span>c <span class="nb">.</span> <span class="o">)</span> | ssh <span class="nt">-C</span> user@ip_addr <span class="s1">'cd /home/share/ &amp;&amp; tar x -p'</span> 
+<span class="c">#通过ssh在远程目录中复制一个目录内容</span>
+<span class="o">(</span> <span class="nb">tar </span>c /home <span class="o">)</span> | ssh <span class="nt">-C</span> user@ip_addr <span class="s1">'cd /home/backup-home &amp;&amp; tar x -p'</span> 
+<span class="c">#通过ssh在远程目录中复制一个本地目录</span>
+<span class="nb">tar </span>cf - <span class="nb">.</span> | <span class="o">(</span><span class="nb">cd</span> /tmp/backup <span class="p">;</span> <span class="nb">tar </span>xf - <span class="o">)</span> 
+<span class="c">#本地将一个目录复制到另一个地方，保留原有权限及链接</span>
+
+find /home/user1 <span class="nt">-name</span> <span class="s1">'*.txt'</span> | xargs <span class="nb">cp</span> <span class="nt">-av</span> <span class="nt">--target-directory</span><span class="o">=</span>/home/backup/ <span class="nt">--parents</span> 
+<span class="c">#从一个目录查找并复制所有以 '.txt' 结尾的文件到另一个目录</span>
+find /var/log <span class="nt">-name</span> <span class="s1">'*.log'</span> | <span class="nb">tar </span>cv <span class="nt">--files-from</span><span class="o">=</span>- | bzip2 <span class="o">&gt;</span> log.tar.bz2 
+<span class="c">#查找所有以 '.log' 结尾的文件并做成一个bzip包</span>
+
+<span class="nb">dd </span><span class="k">if</span><span class="o">=</span>/dev/hda <span class="nv">of</span><span class="o">=</span>/dev/fd0 <span class="nv">bs</span><span class="o">=</span>512 <span class="nv">count</span><span class="o">=</span>1 
+<span class="c">#做一个将 MBR (Master Boot Record)内容复制到软盘的动作</span>
+<span class="nb">dd </span><span class="k">if</span><span class="o">=</span>/dev/fd0 <span class="nv">of</span><span class="o">=</span>/dev/hda <span class="nv">bs</span><span class="o">=</span>512 <span class="nv">count</span><span class="o">=</span>1 
+<span class="c">#从已经保存到软盘的备份中恢复MBR内容</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="光盘">光盘</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="rouge-code"><pre>cdrecord <span class="nt">-v</span> <span class="nv">gracetime</span><span class="o">=</span>2 <span class="nv">dev</span><span class="o">=</span>/dev/cdrom <span class="nt">-eject</span> <span class="nv">blank</span><span class="o">=</span>fast <span class="nt">-force</span> 
+<span class="c">#清空一个可复写的光盘内容</span>
+
+mkisofs /dev/cdrom <span class="o">&gt;</span> cd.iso             <span class="c">#在磁盘上创建一个光盘的iso镜像文件</span>
+mkisofs /dev/cdrom | <span class="nb">gzip</span> <span class="o">&gt;</span> cd_iso.gz    <span class="c">#在磁盘上创建一个压缩了的光盘iso镜像文件</span>
+mkisofs <span class="nt">-J</span> <span class="nt">-allow-leading-dots</span> <span class="nt">-R</span> <span class="nt">-V</span> <span class="s2">"Label CD"</span> <span class="nt">-iso-level</span> 4 <span class="nt">-o</span> ./cd.iso data_cd 
+<span class="c">#创建一个目录的iso镜像文件</span>
+cdrecord <span class="nt">-v</span> <span class="nv">dev</span><span class="o">=</span>/dev/cdrom cd.iso               <span class="c">#刻录一个ISO镜像文件</span>
+<span class="nb">gzip</span> <span class="nt">-dc</span> cd_iso.gz | cdrecord <span class="nv">dev</span><span class="o">=</span>/dev/cdrom -  <span class="c">#刻录一个压缩了的ISO镜像文件</span>
+mount <span class="nt">-o</span> loop cd.iso /mnt/iso                  <span class="c">#挂载一个ISO镜像文件</span>
+
+cd-paranoia <span class="nt">-B</span>             <span class="c">#从一个CD光盘转录音轨到 wav 文件中</span>
+cd-paranoia <span class="nt">--</span> <span class="s2">"-3"</span>        <span class="c">#从一个CD光盘转录音轨到 wav 文件中（参数-3）</span>
+cdrecord <span class="nt">--scanbus</span>         <span class="c">#扫描总线以识别scsi通道</span>
+<span class="nb">dd </span><span class="k">if</span><span class="o">=</span>/dev/hdc | <span class="nb">md5sum</span>    <span class="c">#校验一个设备的md5sum编码，例如一张 CD</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+
+
+                <hr style="visibility: hidden;">
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/10/09/Linux%E8%BF%9E%E6%8E%A5mysql%E5%91%BD%E4%BB%A4/" data-toggle="tooltip" data-placement="top" title="Linux连接mysql命令">
+                        Previous<br>
+                        <span>Linux连接mysql命令</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2019/10/11/Linux%E9%80%9F%E6%9F%A5%E6%89%8B%E5%86%8C/" data-toggle="tooltip" data-placement="top" title="Linux速查手册">
+                        Next<br>
+                        <span>Linux速查手册</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <hr style="visibility: hidden;">
+
+                <!-- Gitalk 评论 start  -->
+                
+                <!-- Link Gitalk 的支持文件  -->
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+                <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+                <div id="gitalk-container"></div>
+                <script type="text/javascript">
+                    var gitalk = new Gitalk({
+
+                        // gitalk的主要参数
+                        clientID: '2542452a44c3a8034a35',
+                        clientSecret: '3119b189eb567a7a89c2440917078889d1689226',
+                        repo: 'xprocon.github.io',
+                        owner: 'xprocon',
+                        admin: ['xprocon'],
+                        id: 'post',
+                        distractionFreeMode: true,  //是否启用评论全屏遮罩.
+                        createIssueManually: true, //如果当前页面没有相应的 isssue ，且登录的用户属于 admin，则会自动创建 issue。如果设置为 true，则显示一个初始化页面，创建 issue 需要点击 init 按钮。
+                        perPage: 15 //每页多少个评论
+                    });
+                    gitalk.render('gitalk-container');
+                </script>
+                
+                <!-- Gitalk end -->
+
+                
+
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+
+<section>
+    
+        <hr class="hidden-sm hidden-xs">
+    
+    <h5><a href="/archive/">FEATURED TAGS</a></h5>
+    <div class="tags">
+        
+        
+        
+        
+        
+        
+                <a data-sort="0042" 
+                    href="/archive/?tag=Java"
+                    title="Java"
+                    rel="6">Java</a>
+        
+                <a data-sort="0032" 
+                    href="/archive/?tag=linux"
+                    title="linux"
+                    rel="16">linux</a>
+        
+                <a data-sort="0035" 
+                    href="/archive/?tag=%E8%BF%90%E7%BB%B4"
+                    title="运维"
+                    rel="13">运维</a>
+        
+                <a data-sort="0036" 
+                    href="/archive/?tag=%E5%AD%A6%E4%B9%A0"
+                    title="学习"
+                    rel="12">学习</a>
+        
+                <a data-sort="0037" 
+                    href="/archive/?tag=java"
+                    title="java"
+                    rel="11">java</a>
+        
+                <a data-sort="0039" 
+                    href="/archive/?tag=centos"
+                    title="centos"
+                    rel="9">centos</a>
+        
+                <a data-sort="0043" 
+                    href="/archive/?tag=%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"
+                    title="开发环境"
+                    rel="5">开发环境</a>
+        
+                <a data-sort="0043" 
+                    href="/archive/?tag=nginx"
+                    title="nginx"
+                    rel="5">nginx</a>
+        
+                <a data-sort="0044" 
+                    href="/archive/?tag=%E5%AE%B9%E5%99%A8%E5%8C%96"
+                    title="容器化"
+                    rel="4">容器化</a>
+        
+                <a data-sort="0044" 
+                    href="/archive/?tag=git"
+                    title="git"
+                    rel="4">git</a>
+        
+                <a data-sort="0044" 
+                    href="/archive/?tag=spring"
+                    title="spring"
+                    rel="4">spring</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=%E4%BA%91%E5%8E%9F%E7%94%9F"
+                    title="云原生"
+                    rel="3">云原生</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=%E5%9F%BA%E7%A1%80"
+                    title="基础"
+                    rel="3">基础</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=jetbrains"
+                    title="jetbrains"
+                    rel="3">jetbrains</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=python"
+                    title="python"
+                    rel="3">python</a>
+    </div>
+</section>
+
+
+                <!-- Friends Blog -->
+                
+<hr>
+<h5>FRIENDS</h5>
+<ul class="list-inline">
+  
+  <li><a href="https://www.baidu.com/">百度（baidu）</a></li>
+  
+  <li><a href="http://10.175.194.215:8080/">IT工具箱（ittools）</a></li>
+  
+  <li><a href="https://www.emojiall.com/zh-hans">emoji（emoji搜索）</a></li>
+  
+  <li><a href="https://www.v2ex.com/">v2ex（v2ex论坛）</a></li>
+  
+  <li><a href="https://www.reddit.com/r/China_irl/">reddit（流浪防区）</a></li>
+  
+</ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<!-- add support for mathjax by voleking-->
+
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'right',
+          // icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- SNS Link -->
+                
+
+
+<ul class="list-inline text-center">
+
+
+  
+  
+  <li>
+    <a href="https://twitter.com/xprocon">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+  <li>
+    <a target="_blank" href="https://www.zhihu.com/people/procon">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa  fa-stack-1x fa-inverse">知</i>
+      </span>
+    </a>
+  </li>
+  
+  
+  <li>
+    <a target="_blank" href="http://weibo.com/huangpuguang1ni">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+  
+  <li>
+    <a target="_blank" href="https://github.com/xprocon">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+</ul>
+
+                <p class="copyright text-muted">
+                    Copyright &copy; Procon's Tech Life Blog 2024
+                    <br>
+                    Powered by <a href="https://blog.procon.cc">Procon Blog</a>
+<!--                    <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="100px"-->
+<!--                        height="20px"-->
+<!--                        src="https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true">-->
+<!--                    </iframe>-->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Simple Jekyll Search -->
+<script src="/js/simple-jekyll-search.min.js"></script>
+
+<!-- Service Worker -->
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+        var d = document, t = 'script',
+            o = d.createElement(t),
+            s = d.getElementsByTagName(t)[0];
+        o.src = u;
+        if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+        s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+
+
+
+
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function () {
+        var $nav = document.querySelector("nav");
+        if ($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog(selector) {
+
+        // interop with multilangual 
+        if ('' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector), a, n, t, l, i, c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#" + $(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="' + i + '" rel="nofollow">' + t + '</a>');
+            l = $('<li class="' + n + '_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function (e) {
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<!-- Multi-Lingual -->
+
+
+<!-- Simple Jekyll Search -->
+<script>
+    // https://stackoverflow.com/questions/1912501/unescape-html-entities-in-javascript
+    function htmlDecode(input) {
+        var e = document.createElement('textarea');
+        e.innerHTML = input;
+        // handle case of empty input
+        return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+    }
+
+    SimpleJekyllSearch({
+        searchInput: document.getElementById('search-input'),
+        resultsContainer: document.getElementById('search-results'),
+        json: '/search.json',
+        searchResultTemplate: '<div class="post-preview item"><a href="{url}"><h2 class="post-title">{title}</h2><h3 class="post-subtitle">{subtitle}</h3><hr></a></div>',
+        noResultsText: 'No results',
+        limit: 50,
+        fuzzy: false,
+        // a hack to get escaped subtitle unescaped. for some reason, 
+        // post.subtitle w/o escape filter nuke entire search.
+        templateMiddleware: function (prop, value, template) {
+            if (prop === 'subtitle' || prop === 'title') {
+                if (value.indexOf("code")) {
+                    return htmlDecode(value);
+                } else {
+                    return value;
+                }
+            }
+        }
+    });
+
+    $(document).ready(function () {
+        var $searchPage = $('.search-page');
+        var $searchOpen = $('.search-icon');
+        var $searchClose = $('.search-icon-close');
+        var $searchInput = $('#search-input');
+        var $body = $('body');
+
+        $searchOpen.on('click', function (e) {
+            e.preventDefault();
+            $searchPage.toggleClass('search-active');
+            var prevClasses = $body.attr('class') || '';
+            setTimeout(function () {
+                $body.addClass('no-scroll');
+            }, 400)
+
+            if ($searchPage.hasClass('search-active')) {
+                $searchClose.on('click', function (e) {
+                    e.preventDefault();
+                    $searchPage.removeClass('search-active');
+                    $body.attr('class', prevClasses);  // from closure 
+                });
+                $searchInput.focus();
+            }
+        });
+    });
+</script>
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

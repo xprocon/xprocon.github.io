@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="这里是 @Procon普光 的个人博客，与你一起发现更大的世界">
+    <meta name="keywords" content="普光, Procon普光, 博客, 个人网站, 互联网, Java , 后端">
+    <meta name="theme-color" content="#000000">
+
+    <!-- Open Graph -->
+    <meta property="og:title"
+        content="jvm指令 - Procon's Tech Life Blog">
+    
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="1. 栈和局部变量操作
+">
+    
+    <meta property="article:published_time" content=" 2019-07-04T12:00:00Z">
+    
+    
+    <meta property="article:author" content="Procon">
+    
+    
+    <meta property="article:tag" content="java">
+    
+    <meta property="article:tag" content="jvm">
+    
+    <meta property="article:tag" content="学习">
+    
+    <meta property="article:tag" content="基础">
+    
+    
+    <meta property="og:image" content="https://blog.procon.cchttps://procon-note.oss-cn-guangzhou.aliyuncs.com/typora/avatar_m.jpg">
+    <meta property="og:url" content="https://blog.procon.cc/2019/07/04/Java%E4%B9%8Bjvm%E6%8C%87%E4%BB%A4%E6%89%8B%E5%86%8C/">
+    <meta property="og:site_name" content="Procon's Tech Life Blog">
+
+    <title>jvm指令 - Procon's Tech Life Blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://blog.procon.cc/2019/07/04/Java%E4%B9%8Bjvm%E6%8C%87%E4%BB%A4%E6%89%8B%E5%86%8C/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href=" /css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href=" /css/hux-blog.min.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"
+        type="text/css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+
+    <!-- Google AdSense -->
+    <script data-ad-client="ca-pub-6487568398225121" async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Procon's Tech Life Blog</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div id="huxblog_navbar">
+                <div class="navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="/">Home</a>
+                        </li>
+                        
+                        
+                        
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                        
+                        
+                        <li>
+                            <a href="/archive/">Archive</a>
+                        </li>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <li class="search-icon">
+                            <a href="javascript:void(0)">
+                                <i class="fa fa-search"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <script>
+        // Drop Bootstarp low-performance Navbar
+        // Use customize navbar with high-quality material design animation
+        // in high-perf jank-free CSS3 implementation
+        var $body = document.body;
+        var $toggle = document.querySelector('.navbar-toggle');
+        var $navbar = document.querySelector('#huxblog_navbar');
+        var $collapse = document.querySelector('.navbar-collapse');
+
+        var __HuxNav__ = {
+            close: function () {
+                $navbar.className = " ";
+                // wait until animation end.
+                setTimeout(function () {
+                    // prevent frequently toggle
+                    if ($navbar.className.indexOf('in') < 0) {
+                        $collapse.style.height = "0px"
+                    }
+                }, 400)
+            },
+            open: function () {
+                $collapse.style.height = "auto"
+                $navbar.className += " in";
+            }
+        }
+
+        // Bind Event
+        $toggle.addEventListener('click', function (e) {
+            if ($navbar.className.indexOf('in') > 0) {
+                __HuxNav__.close()
+            } else {
+                __HuxNav__.open()
+            }
+        })
+
+        /**
+         * Since Fastclick is used to delegate 'touchstart' globally
+         * to hack 300ms delay in iOS by performing a fake 'click',
+         * Using 'e.stopPropagation' to stop 'touchstart' event from 
+         * $toggle/$collapse will break global delegation.
+         * 
+         * Instead, we use a 'e.target' filter to prevent handler
+         * added to document close HuxNav.  
+         *
+         * Also, we use 'click' instead of 'touchstart' as compromise
+         */
+        document.addEventListener('click', function (e) {
+            if (e.target == $toggle) return;
+            if (e.target.className == 'icon-bar') return;
+            __HuxNav__.close();
+        })
+    </script>
+    <!-- Search -->
+<div class="search-page">
+  <div class="search-icon-close-container">
+    <span class="search-icon-close">
+      <i class="fa fa-chevron-down"></i>
+    </span>
+  </div>
+  <div class="search-main container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <form></form>
+        <input type="text" id="search-input" placeholder="$ grep...">
+        </form>
+        <div id="search-results" class="mini-post-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/home-bg-o.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+
+
+
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/home-bg-o.jpg');
+        background: ;
+    }
+
+    
+</style>
+
+
+
+
+<header class="intro-header" >
+
+    <div class="header-mask"></div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/archive/?tag=java" title="java">java</a>
+                        
+                        <a class="tag" href="/archive/?tag=jvm" title="jvm">jvm</a>
+                        
+                        <a class="tag" href="/archive/?tag=%E5%AD%A6%E4%B9%A0" title="学习">学习</a>
+                        
+                        <a class="tag" href="/archive/?tag=%E5%9F%BA%E7%A1%80" title="基础">基础</a>
+                        
+                    </div>
+                    <h1>jvm指令</h1>
+                    
+                    <h2 class="subheading">jvm常见的一些指令操作</h2>
+                    <span class="meta">Posted by Procon on July 4, 2019</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+
+
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<h1 id="1-栈和局部变量操作">1. 栈和局部变量操作</h1>
+
+<h2 id="11-将常量压入栈的指令">1.1 将常量压入栈的指令</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></td><td class="rouge-code"><pre>aconst_null 将null对象引用压入栈
+iconst_m1 将int类型常量-1压入栈
+iconst_0 将int类型常量0压入栈
+iconst_1 将int类型常量1压入栈
+iconst_2 将int类型常量2压入栈
+iconst_3 将int类型常量3压入栈
+iconst_4 将int类型常量4压入栈
+iconst_5 将int类型常量5压入栈
+lconst_0 将long类型常量0压入栈
+lconst_1 将long类型常量1压入栈
+fconst_0 将float类型常量0压入栈
+fconst_1 将float类型常量1压入栈
+dconst_0 将double类型常量0压入栈
+dconst_1 将double类型常量1压入栈
+bipush 将一个8位带符号整数压入栈
+sipush 将16位带符号整数压入栈
+ldc 把常量池中的项压入栈
+ldc_w 把常量池中的项压入栈（使用宽索引）
+ldc2_w 把常量池中long类型或者double类型的项压入栈（使用宽索引）
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="12-从栈中的局部变量中装载值的指令">1.2 从栈中的局部变量中装载值的指令</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+</pre></td><td class="rouge-code"><pre>iload 从局部变量中装载int类型值
+lload 从局部变量中装载long类型值
+fload 从局部变量中装载float类型值
+dload 从局部变量中装载double类型值
+aload 从局部变量中装载引用类型值（refernce）
+iload_0 从局部变量0中装载int类型值
+iload_1 从局部变量1中装载int类型值
+iload_2 从局部变量2中装载int类型值
+iload_3 从局部变量3中装载int类型值
+lload_0 从局部变量0中装载long类型值
+lload_1 从局部变量1中装载long类型值
+lload_2 从局部变量2中装载long类型值
+lload_3 从局部变量3中装载long类型值
+fload_0 从局部变量0中装载float类型值
+fload_1 从局部变量1中装载float类型值
+fload_2 从局部变量2中装载float类型值
+fload_3 从局部变量3中装载float类型值
+dload_0 从局部变量0中装载double类型值
+dload_1 从局部变量1中装载double类型值
+dload_2 从局部变量2中装载double类型值
+dload_3 从局部变量3中装载double类型值
+aload_0 从局部变量0中装载引用类型值
+aload_1 从局部变量1中装载引用类型值
+aload_2 从局部变量2中装载引用类型值
+aload_3 从局部变量3中装载引用类型值
+iaload 从数组中装载int类型值
+laload 从数组中装载long类型值
+faload 从数组中装载float类型值
+daload 从数组中装载double类型值
+aaload 从数组中装载引用类型值
+baload 从数组中装载byte类型或boolean类型值
+caload 从数组中装载char类型值
+saload 从数组中装载short类型值
+</pre></td></tr></tbody></table></code></pre></div></div>
+<h2 id="13-将栈中的值存入局部变量的指令">1.3 将栈中的值存入局部变量的指令</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+</pre></td><td class="rouge-code"><pre>istore 将int类型值存入局部变量
+lstore 将long类型值存入局部变量
+fstore 将float类型值存入局部变量
+dstore 将double类型值存入局部变量
+astore 将将引用类型或returnAddress类型值存入局部变量
+istore_0 将int类型值存入局部变量0
+istore_1 将int类型值存入局部变量1
+istore_2 将int类型值存入局部变量2
+istore_3 将int类型值存入局部变量3
+lstore_0 将long类型值存入局部变量0
+lstore_1 将long类型值存入局部变量1
+lstore_2 将long类型值存入局部变量2
+lstore_3 将long类型值存入局部变量3
+fstore_0 将float类型值存入局部变量0
+fstore_1 将float类型值存入局部变量1
+fstore_2 将float类型值存入局部变量2
+fstore_3 将float类型值存入局部变量3
+dstore_0 将double类型值存入局部变量0
+dstore_1 将double类型值存入局部变量1
+dstore_2 将double类型值存入局部变量2
+dstore_3 将double类型值存入局部变量3
+astore_0 将引用类型或returnAddress类型值存入局部变量0
+astore_1 将引用类型或returnAddress类型值存入局部变量1
+astore_2 将引用类型或returnAddress类型值存入局部变量2
+astore_3 将引用类型或returnAddress类型值存入局部变量3
+iastore 将int类型值存入数组中
+lastore 将long类型值存入数组中
+fastore 将float类型值存入数组中
+dastore 将double类型值存入数组中
+aastore 将引用类型值存入数组中
+bastore 将byte类型或者boolean类型值存入数组中
+castore 将char类型值存入数组中
+sastore 将short类型值存入数组中
+wide指令
+wide 使用附加字节扩展局部变量索引
+</pre></td></tr></tbody></table></code></pre></div></div>
+<h2 id="14-通用无类型栈操作">1.4 通用(无类型）栈操作</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre>nop 不做任何操作
+pop 弹出栈顶端一个字长的内容
+pop2 弹出栈顶端两个字长的内容
+dup 复制栈顶部一个字长内容
+dup_x1 复制栈顶部一个字长的内容，然后将复制内容及原来弹出的两个字长的内容压入栈
+dup_x2 复制栈顶部一个字长的内容，然后将复制内容及原来弹出的三个字长的内容压入栈
+dup2 复制栈顶部两个字长内容
+dup2_x1 复制栈顶部两个字长的内容，然后将复制内容及原来弹出的三个字长的内容压入栈
+dup2_x2 复制栈顶部两个字长的内容，然后将复制内容及原来弹出的四个字长的内容压入栈
+swap 交换栈顶部两个字长内容
+</pre></td></tr></tbody></table></code></pre></div></div>
+<h1 id="2-类型转换">2. 类型转换</h1>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="rouge-code"><pre>i2l 把int类型的数据转化为long类型
+i2f 把int类型的数据转化为float类型
+i2d 把int类型的数据转化为double类型
+l2i 把long类型的数据转化为int类型
+l2f 把long类型的数据转化为float类型
+l2d 把long类型的数据转化为double类型
+f2i 把float类型的数据转化为int类型
+f2l 把float类型的数据转化为long类型
+f2d 把float类型的数据转化为double类型
+d2i 把double类型的数据转化为int类型
+d2l 把double类型的数据转化为long类型
+d2f 把double类型的数据转化为float类型
+i2b 把int类型的数据转化为byte类型
+i2c 把int类型的数据转化为char类型
+i2s 把int类型的数据转化为short类型
+</pre></td></tr></tbody></table></code></pre></div></div>
+<h1 id="3-整数运算">3. 整数运算</h1>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre>iadd 执行int类型的加法
+ladd 执行long类型的加法
+isub 执行int类型的减法
+lsub 执行long类型的减法
+imul 执行int类型的乘法
+lmul 执行long类型的乘法
+idiv 执行int类型的除法
+ldiv 执行long类型的除法
+irem 计算int类型除法的余数
+lrem 计算long类型除法的余数
+ineg 对一个int类型值进行取反操作
+lneg 对一个long类型值进行取反操作
+iinc 把一个常量值加到一个int类型的局部变量上
+</pre></td></tr></tbody></table></code></pre></div></div>
+<h1 id="4-逻辑运算">4. 逻辑运算</h1>
+
+<h2 id="41-移位操作">4.1 移位操作</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre>ishl 执行int类型的向左移位操作
+lshl 执行long类型的向左移位操作
+ishr 执行int类型的向右移位操作
+lshr 执行long类型的向右移位操作
+iushr 执行int类型的向右逻辑移位操作
+lushr 执行long类型的向右逻辑移位操作
+</pre></td></tr></tbody></table></code></pre></div></div>
+<h2 id="42-按位布尔运算">4.2 按位布尔运算</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre>iand 对int类型值进行“逻辑与”操作
+land 对long类型值进行“逻辑与”操作
+ior 对int类型值进行“逻辑或”操作
+lor 对long类型值进行“逻辑或”操作
+ixor 对int类型值进行“逻辑异或”操作
+lxor 对long类型值进行“逻辑异或”操作
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="43-浮点运算">4.3 浮点运算</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="rouge-code"><pre>fadd 执行float类型的加法
+dadd 执行double类型的加法
+fsub 执行float类型的减法
+dsub 执行double类型的减法
+fmul 执行float类型的乘法
+dmul 执行double类型的乘法
+fdiv 执行float类型的除法
+ddiv 执行double类型的除法
+frem 计算float类型除法的余数
+drem 计算double类型除法的余数
+fneg 将一个float类型的数值取反
+dneg 将一个double类型的数值取反
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h1 id="5-对象和数组">5. 对象和数组</h1>
+
+<h2 id="51-对象操作指令">5.1 对象操作指令</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre>new 创建一个新对象
+checkcast 确定对象为所给定的类型
+getfield 从对象中获取字段
+putfield 设置对象中字段的值
+getstatic 从类中获取静态字段
+putstatic 设置类中静态字段的值
+instanceof 判断对象是否为给定的类型
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="52-数组操作指令">5.2 数组操作指令</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre>newarray 分配数据成员类型为基本上数据类型的新数组
+anewarray 分配数据成员类型为引用类型的新数组
+arraylength 获取数组长度
+multianewarray 分配新的多维数组
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h1 id="6-控制流">6. 控制流</h1>
+
+<h2 id="61-条件分支指令">6.1 条件分支指令</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="rouge-code"><pre>ifeq 如果等于0，则跳转
+ifne 如果不等于0，则跳转
+iflt 如果小于0，则跳转
+ifge 如果大于等于0，则跳转
+ifgt 如果大于0，则跳转
+ifle 如果小于等于0，则跳转
+if_icmpcq 如果两个int值相等，则跳转
+if_icmpne 如果两个int类型值不相等，则跳转
+if_icmplt 如果一个int类型值小于另外一个int类型值，则跳转
+if_icmpge 如果一个int类型值大于或者等于另外一个int类型值，则跳转
+if_icmpgt 如果一个int类型值大于另外一个int类型值，则跳转
+if_icmple 如果一个int类型值小于或者等于另外一个int类型值，则跳转
+ifnull 如果等于null，则跳转
+ifnonnull 如果不等于null，则跳转
+if_acmpeq 如果两个对象引用相等，则跳转
+if_acmpnc 如果两个对象引用不相等，则跳转
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="62-比较指令">6.2 比较指令</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre>lcmp 比较long类型值
+fcmpl 比较float类型值（当遇到NaN时，返回-1）
+fcmpg 比较float类型值（当遇到NaN时，返回1）
+dcmpl 比较double类型值（当遇到NaN时，返回-1）
+dcmpg 比较double类型值（当遇到NaN时，返回1）
+</pre></td></tr></tbody></table></code></pre></div></div>
+<h2 id="63-无条件转移指令">6.3 无条件转移指令</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre>goto 无条件跳转
+goto_w 无条件跳转（宽索引）
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="64-表跳转指令">6.4 表跳转指令</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre>tableswitch 通过索引访问跳转表，并跳转
+lookupswitch 通过键值匹配访问跳转表，并执行跳转操作
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="65-异常">6.5 异常</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre>athrow 抛出异常或错误
+finally子句
+jsr 跳转到子例程
+jsr_w 跳转到子例程（宽索引）
+rct 从子例程返回
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h1 id="7-方法调用与返回">7. 方法调用与返回</h1>
+
+<h2 id="71-方法调用指令">7.1 方法调用指令</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre>invokcvirtual 运行时按照对象的类来调用实例方法
+invokespecial 根据编译时类型来调用实例方法
+invokestatic 调用类（静态）方法
+invokcinterface 调用接口方法
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="72-方法返回指令">7.2 方法返回指令</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre>ireturn 从方法中返回int类型的数据
+lreturn 从方法中返回long类型的数据
+freturn 从方法中返回float类型的数据
+dreturn 从方法中返回double类型的数据
+areturn 从方法中返回引用类型的数据
+return 从方法中返回，返回值为void
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="73-线程同步">7.3 线程同步</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre>montiorenter 进入并获取对象监视器
+monitorexit 释放并退出对象监视器
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h1 id="8-jvm指令助记符">8. JVM指令助记符</h1>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+</pre></td><td class="rouge-code"><pre>变量到操作数栈：iload,iload_,lload,lload_,fload,fload_,dload,dload_,aload,aload_
+操作数栈到变量：istore,istore_,lstore,lstore_,fstore,fstore_,dstore,dstor_,astore,astore_
+常数到操作数栈：bipush,sipush,ldc,ldc_w,ldc2_w,aconst_null,iconst_ml,iconst_,lconst_,fconst_,dconst_
+加：iadd,ladd,fadd,dadd
+减：isub,lsub,fsub,dsub
+乘：imul,lmul,fmul,dmul
+除：idiv,ldiv,fdiv,ddiv
+余数：irem,lrem,frem,drem
+取负：ineg,lneg,fneg,dneg
+移位：ishl,lshr,iushr,lshl,lshr,lushr
+按位或：ior,lor
+按位与：iand,land
+按位异或：ixor,lxor
+类型转换：i2l,i2f,i2d,l2f,l2d,f2d(放宽数值转换)
+i2b,i2c,i2s,l2i,f2i,f2l,d2i,d2l,d2f(缩窄数值转换)
+创建类实便：new
+创建新数组：newarray,anewarray,multianwarray
+访问类的域和类实例域：getfield,putfield,getstatic,putstatic
+把数据装载到操作数栈：baload,caload,saload,iaload,laload,faload,daload,aaload
+从操作数栈存存储到数组：bastore,castore,sastore,iastore,lastore,fastore,dastore,aastore
+获取数组长度：arraylength
+检相类实例或数组属性：instanceof,checkcast
+操作数栈管理：pop,pop2,dup,dup2,dup_xl,dup2_xl,dup_x2,dup2_x2,swap
+有条件转移: ifeq,iflt,ifle,ifne,ifgt,ifge,ifnull,ifnonnull,if_icmpeq,if_icmpene,if_icmplt,if_icmpgt,if_icmple,if_icmpge,if_acmpeq,if_acmpne,lcmp,fcmpl,fcmpg,dcmpl,dcmpg
+复合条件转移：tableswitch,lookupswitch
+无条件转移：goto,goto_w,jsr,jsr_w,ret
+调度对象的实便方法：invokevirtual
+调用由接口实现的方法：invokeinterface
+调用需要特殊处理的实例方法：invokespecial
+调用命名类中的静态方法：invokestatic
+方法返回：ireturn,lreturn,freturn,dreturn,areturn,return
+异常：athrow
+finally关键字的实现使用：jsr,jsr_w,ret
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+
+                <hr style="visibility: hidden;">
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/06/08/Java%E4%B9%8Bjvm%E8%99%9A%E6%8B%9F%E6%9C%BA/" data-toggle="tooltip" data-placement="top" title="Java虚拟机">
+                        Previous<br>
+                        <span>Java虚拟机</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2019/09/02/Linux%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" data-toggle="tooltip" data-placement="top" title="Linux基础知识">
+                        Next<br>
+                        <span>Linux基础知识</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <hr style="visibility: hidden;">
+
+                <!-- Gitalk 评论 start  -->
+                
+                <!-- Link Gitalk 的支持文件  -->
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+                <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+                <div id="gitalk-container"></div>
+                <script type="text/javascript">
+                    var gitalk = new Gitalk({
+
+                        // gitalk的主要参数
+                        clientID: '2542452a44c3a8034a35',
+                        clientSecret: '3119b189eb567a7a89c2440917078889d1689226',
+                        repo: 'xprocon.github.io',
+                        owner: 'xprocon',
+                        admin: ['xprocon'],
+                        id: 'post',
+                        distractionFreeMode: true,  //是否启用评论全屏遮罩.
+                        createIssueManually: true, //如果当前页面没有相应的 isssue ，且登录的用户属于 admin，则会自动创建 issue。如果设置为 true，则显示一个初始化页面，创建 issue 需要点击 init 按钮。
+                        perPage: 15 //每页多少个评论
+                    });
+                    gitalk.render('gitalk-container');
+                </script>
+                
+                <!-- Gitalk end -->
+
+                
+
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+
+<section>
+    
+        <hr class="hidden-sm hidden-xs">
+    
+    <h5><a href="/archive/">FEATURED TAGS</a></h5>
+    <div class="tags">
+        
+        
+        
+        
+        
+        
+                <a data-sort="0042" 
+                    href="/archive/?tag=Java"
+                    title="Java"
+                    rel="6">Java</a>
+        
+                <a data-sort="0032" 
+                    href="/archive/?tag=linux"
+                    title="linux"
+                    rel="16">linux</a>
+        
+                <a data-sort="0035" 
+                    href="/archive/?tag=%E8%BF%90%E7%BB%B4"
+                    title="运维"
+                    rel="13">运维</a>
+        
+                <a data-sort="0036" 
+                    href="/archive/?tag=%E5%AD%A6%E4%B9%A0"
+                    title="学习"
+                    rel="12">学习</a>
+        
+                <a data-sort="0037" 
+                    href="/archive/?tag=java"
+                    title="java"
+                    rel="11">java</a>
+        
+                <a data-sort="0039" 
+                    href="/archive/?tag=centos"
+                    title="centos"
+                    rel="9">centos</a>
+        
+                <a data-sort="0043" 
+                    href="/archive/?tag=%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"
+                    title="开发环境"
+                    rel="5">开发环境</a>
+        
+                <a data-sort="0043" 
+                    href="/archive/?tag=nginx"
+                    title="nginx"
+                    rel="5">nginx</a>
+        
+                <a data-sort="0044" 
+                    href="/archive/?tag=%E5%AE%B9%E5%99%A8%E5%8C%96"
+                    title="容器化"
+                    rel="4">容器化</a>
+        
+                <a data-sort="0044" 
+                    href="/archive/?tag=git"
+                    title="git"
+                    rel="4">git</a>
+        
+                <a data-sort="0044" 
+                    href="/archive/?tag=spring"
+                    title="spring"
+                    rel="4">spring</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=%E4%BA%91%E5%8E%9F%E7%94%9F"
+                    title="云原生"
+                    rel="3">云原生</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=%E5%9F%BA%E7%A1%80"
+                    title="基础"
+                    rel="3">基础</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=jetbrains"
+                    title="jetbrains"
+                    rel="3">jetbrains</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=python"
+                    title="python"
+                    rel="3">python</a>
+    </div>
+</section>
+
+
+                <!-- Friends Blog -->
+                
+<hr>
+<h5>FRIENDS</h5>
+<ul class="list-inline">
+  
+  <li><a href="https://www.baidu.com/">百度（baidu）</a></li>
+  
+  <li><a href="http://10.175.194.215:8080/">IT工具箱（ittools）</a></li>
+  
+  <li><a href="https://www.emojiall.com/zh-hans">emoji（emoji搜索）</a></li>
+  
+  <li><a href="https://www.v2ex.com/">v2ex（v2ex论坛）</a></li>
+  
+  <li><a href="https://www.reddit.com/r/China_irl/">reddit（流浪防区）</a></li>
+  
+</ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<!-- add support for mathjax by voleking-->
+
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'right',
+          // icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- SNS Link -->
+                
+
+
+<ul class="list-inline text-center">
+
+
+  
+  
+  <li>
+    <a href="https://twitter.com/xprocon">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+  <li>
+    <a target="_blank" href="https://www.zhihu.com/people/procon">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa  fa-stack-1x fa-inverse">知</i>
+      </span>
+    </a>
+  </li>
+  
+  
+  <li>
+    <a target="_blank" href="http://weibo.com/huangpuguang1ni">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+  
+  <li>
+    <a target="_blank" href="https://github.com/xprocon">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+</ul>
+
+                <p class="copyright text-muted">
+                    Copyright &copy; Procon's Tech Life Blog 2024
+                    <br>
+                    Powered by <a href="https://blog.procon.cc">Procon Blog</a>
+<!--                    <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="100px"-->
+<!--                        height="20px"-->
+<!--                        src="https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true">-->
+<!--                    </iframe>-->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Simple Jekyll Search -->
+<script src="/js/simple-jekyll-search.min.js"></script>
+
+<!-- Service Worker -->
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+        var d = document, t = 'script',
+            o = d.createElement(t),
+            s = d.getElementsByTagName(t)[0];
+        o.src = u;
+        if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+        s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+
+
+
+
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function () {
+        var $nav = document.querySelector("nav");
+        if ($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog(selector) {
+
+        // interop with multilangual 
+        if ('' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector), a, n, t, l, i, c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#" + $(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="' + i + '" rel="nofollow">' + t + '</a>');
+            l = $('<li class="' + n + '_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function (e) {
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<!-- Multi-Lingual -->
+
+
+<!-- Simple Jekyll Search -->
+<script>
+    // https://stackoverflow.com/questions/1912501/unescape-html-entities-in-javascript
+    function htmlDecode(input) {
+        var e = document.createElement('textarea');
+        e.innerHTML = input;
+        // handle case of empty input
+        return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+    }
+
+    SimpleJekyllSearch({
+        searchInput: document.getElementById('search-input'),
+        resultsContainer: document.getElementById('search-results'),
+        json: '/search.json',
+        searchResultTemplate: '<div class="post-preview item"><a href="{url}"><h2 class="post-title">{title}</h2><h3 class="post-subtitle">{subtitle}</h3><hr></a></div>',
+        noResultsText: 'No results',
+        limit: 50,
+        fuzzy: false,
+        // a hack to get escaped subtitle unescaped. for some reason, 
+        // post.subtitle w/o escape filter nuke entire search.
+        templateMiddleware: function (prop, value, template) {
+            if (prop === 'subtitle' || prop === 'title') {
+                if (value.indexOf("code")) {
+                    return htmlDecode(value);
+                } else {
+                    return value;
+                }
+            }
+        }
+    });
+
+    $(document).ready(function () {
+        var $searchPage = $('.search-page');
+        var $searchOpen = $('.search-icon');
+        var $searchClose = $('.search-icon-close');
+        var $searchInput = $('#search-input');
+        var $body = $('body');
+
+        $searchOpen.on('click', function (e) {
+            e.preventDefault();
+            $searchPage.toggleClass('search-active');
+            var prevClasses = $body.attr('class') || '';
+            setTimeout(function () {
+                $body.addClass('no-scroll');
+            }, 400)
+
+            if ($searchPage.hasClass('search-active')) {
+                $searchClose.on('click', function (e) {
+                    e.preventDefault();
+                    $searchPage.removeClass('search-active');
+                    $body.attr('class', prevClasses);  // from closure 
+                });
+                $searchInput.focus();
+            }
+        });
+    });
+</script>
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
