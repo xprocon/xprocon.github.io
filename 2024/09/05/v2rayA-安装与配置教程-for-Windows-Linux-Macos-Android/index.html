@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="这里是 @Procon普光 的个人博客，与你一起发现更大的世界">
+    <meta name="keywords" content="普光, Procon普光, 博客, 个人网站, 互联网, Java , 后端">
+    <meta name="theme-color" content="#000000">
+
+    <!-- Open Graph -->
+    <meta property="og:title"
+        content="2024年v2rayA 安装与配置教程 for Windows、Linux、Macos、Android - Procon's Tech Life Blog">
+    
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="1. V2Ray 介绍
+">
+    
+    <meta property="article:published_time" content=" 2024-09-05T12:00:00Z">
+    
+    
+    <meta property="article:author" content="Procon">
+    
+    
+    <meta property="article:tag" content="v2ray">
+    
+    <meta property="article:tag" content="v2raya">
+    
+    <meta property="article:tag" content="vpn">
+    
+    
+    <meta property="og:image" content="https://blog.procon.cchttps://procon-note.oss-cn-guangzhou.aliyuncs.com/typora/avatar_m.jpg">
+    <meta property="og:url" content="https://blog.procon.cc/2024/09/05/v2rayA-%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-for-Windows-Linux-Macos-Android/">
+    <meta property="og:site_name" content="Procon's Tech Life Blog">
+
+    <title>2024年v2rayA 安装与配置教程 for Windows、Linux、Macos、Android - Procon's Tech Life Blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://blog.procon.cc/2024/09/05/v2rayA-%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-for-Windows-Linux-Macos-Android/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href=" /css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href=" /css/hux-blog.min.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"
+        type="text/css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+
+    <!-- Google AdSense -->
+    <script data-ad-client="ca-pub-6487568398225121" async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top invert">
+    
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Procon's Tech Life Blog</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div id="huxblog_navbar">
+                <div class="navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="/">Home</a>
+                        </li>
+                        
+                        
+                        
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                        
+                        
+                        <li>
+                            <a href="/archive/">Archive</a>
+                        </li>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <li class="search-icon">
+                            <a href="javascript:void(0)">
+                                <i class="fa fa-search"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <script>
+        // Drop Bootstarp low-performance Navbar
+        // Use customize navbar with high-quality material design animation
+        // in high-perf jank-free CSS3 implementation
+        var $body = document.body;
+        var $toggle = document.querySelector('.navbar-toggle');
+        var $navbar = document.querySelector('#huxblog_navbar');
+        var $collapse = document.querySelector('.navbar-collapse');
+
+        var __HuxNav__ = {
+            close: function () {
+                $navbar.className = " ";
+                // wait until animation end.
+                setTimeout(function () {
+                    // prevent frequently toggle
+                    if ($navbar.className.indexOf('in') < 0) {
+                        $collapse.style.height = "0px"
+                    }
+                }, 400)
+            },
+            open: function () {
+                $collapse.style.height = "auto"
+                $navbar.className += " in";
+            }
+        }
+
+        // Bind Event
+        $toggle.addEventListener('click', function (e) {
+            if ($navbar.className.indexOf('in') > 0) {
+                __HuxNav__.close()
+            } else {
+                __HuxNav__.open()
+            }
+        })
+
+        /**
+         * Since Fastclick is used to delegate 'touchstart' globally
+         * to hack 300ms delay in iOS by performing a fake 'click',
+         * Using 'e.stopPropagation' to stop 'touchstart' event from 
+         * $toggle/$collapse will break global delegation.
+         * 
+         * Instead, we use a 'e.target' filter to prevent handler
+         * added to document close HuxNav.  
+         *
+         * Also, we use 'click' instead of 'touchstart' as compromise
+         */
+        document.addEventListener('click', function (e) {
+            if (e.target == $toggle) return;
+            if (e.target.className == 'icon-bar') return;
+            __HuxNav__.close();
+        })
+    </script>
+    <!-- Search -->
+<div class="search-page">
+  <div class="search-icon-close-container">
+    <span class="search-icon-close">
+      <i class="fa fa-chevron-down"></i>
+    </span>
+  </div>
+  <div class="search-main container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <form></form>
+        <input type="text" id="search-input" placeholder="$ grep...">
+        </form>
+        <div id="search-results" class="mini-post-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/home-bg.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+
+
+
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/home-bg.jpg');
+        background: ;
+    }
+
+    
+</style>
+
+
+
+
+<header class="intro-header style-text" >
+
+    <div class="header-mask"></div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/archive/?tag=v2ray" title="v2ray">v2ray</a>
+                        
+                        <a class="tag" href="/archive/?tag=v2raya" title="v2raya">v2raya</a>
+                        
+                        <a class="tag" href="/archive/?tag=vpn" title="vpn">vpn</a>
+                        
+                    </div>
+                    <h1>2024年v2rayA 安装与配置教程 for Windows、Linux、Macos、Android</h1>
+                    
+                    <h2 class="subheading"></h2>
+                    <span class="meta">Posted by Procon on September 5, 2024</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+
+
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<h1 id="1-v2ray-介绍">1. V2Ray 介绍</h1>
+
+<p>在正式开始安装之前我们先简要介绍一下 v2rayA 以及其核心 v2ray，以便有一些基本了解，方便理解后续安装和配置过程。如果您对 v2ray 已有了解，完全可以跳过本节，进入下一章节。</p>
+
+<ul>
+  <li>
+    <p>V2Ray 是一个支持多种协议的代理上网软件。</p>
+  </li>
+  <li>
+    <p>它可以使用多种协议进行数据传输，包括 VMess、Trojan、Shadowsocks 等。</p>
+  </li>
+  <li>
+    <p>是 <a href="https://steemit.com/@v2ray">Victoria Raymond</a> 以及其社区团队开发的 Project V 下的代理上网软件。</p>
+  </li>
+  <li>
+    <p>Project V 是一个工具集合，号称可以帮助其使用者打造专属的基础通信网络。</p>
+  </li>
+  <li>
+    <p>Project V 的核心工具称为 V2Ray，其主要负责网络协议和功能的实现，与其它 Project V 通信。</p>
+  </li>
+  <li>
+    <p>V2Ray 可以单独运行，也可以和其它工具配合，以提供简便的操作流程。</p>
+  </li>
+  <li>
+    <p>开发过程主要使用 Go 语言，Core 采用 MIT 许可证并开放源代码。</p>
+  </li>
+  <li>
+    <p>VMess 是 V2Ray 的核心协议, 也是 V2Ray 的默认协议，是 V2Ray 的主要开发方向。</p>
+  </li>
+  <li>
+    <p>VMess 具有较高的性能、安全性和抗封锁能力。</p>
+  </li>
+</ul>
+
+<h1 id="2-安装-v2raya">2. 安装 v2rayA</h1>
+
+<p>安装与配置过程分为以下几个步骤:</p>
+
+<ul>
+  <li>首先安装 v2ray 内核</li>
+  <li>然后安装 v2rayA(客户端)，</li>
+  <li>配置 v2rayA</li>
+  <li>配置以及连接机场节点。</li>
+</ul>
+
+<h2 id="21-安装-v2ray-core-内核windows-系统可跳过此步骤">2.1. 安装 v2ray-core 内核（windows 系统可跳过此步骤）</h2>
+
+<p>$\color{red}{因为 Windows v2rayA Installer 自带了 v2ray 内核，对于 Windows 系统可以跳过内核安装这一步骤。
+对于 Linux 和 macOS 操作系统则仍然需要先安装 v2ray-core 内核}$</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>下载过程中如果遇到 github 不能访问的情况，
+方法 1：可以通过 github 代理 https://ghproxy.net/ 下载
+方法 2: 可尝试使用文章-解决 GitHub 访问不了的方法中介绍的方法。
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="211-linux-上下载并安装-v2ray-内核debian-和-redhat-系列-linux-通用">2.1.1. Linux 上下载并安装 v2ray 内核（Debian 和 Redhat 系列 linux 通用）</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre>
+<span class="c">## 下载v2ray-core，并保存到tmp目录</span>
+wget <span class="nt">-O</span> /tmp/v2ray-linux-64.zip https://ghproxy.net/https://github.com/v2fly/v2ray-core/releases/download/v5.13.0/v2ray-linux-64.zip
+
+<span class="c"># 将其解压到/usr/local/v2ray-core， 需要root权限</span>
+<span class="nb">sudo </span>unzip /tmp/v2ray-linux-64.zip <span class="nt">-d</span> /usr/local/v2ray-core
+
+<span class="c"># 将.dat文件拷贝到/usr/local/share/v2ray/</span>
+<span class="nb">sudo mkdir</span> <span class="nt">-p</span> /usr/local/share/v2ray/
+<span class="nb">sudo mv</span> /usr/local/v2ray-core/<span class="k">*</span>dat /usr/local/share/v2ray/
+
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="212-macos-上下载并安装-v2ray-内核">2.1.2. Macos 上下载并安装 v2ray 内核</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre>
+<span class="c"># （Macos only）下载v2ray-core，并保存到tmp目录</span>
+<span class="nb">sudo </span>curl <span class="nt">-L</span> https://ghproxy.net/https://github.com/v2fly/v2ray-core/releases/download/v5.13.0/v2ray-macos-64.zip <span class="nt">-o</span> /tmp/v2ray-macos-64.zip
+
+<span class="c"># 解压缩并将文件拷贝到/usr/local下的相应目录</span>
+
+unzip /tmp/v2ray-macos-64.zip <span class="nt">-d</span> /tmp/v2ray-core
+<span class="nb">sudo mv</span> /tmp/v2ray-core/v2ray /usr/local/bin/
+<span class="nb">sudo mv</span> /tmp/v2ray-core/<span class="k">*</span>dat /usr/local/share/v2ray/
+
+<span class="c"># 授予v2ray可执行权限</span>
+<span class="nb">sudo chmod </span>755 /usr/local/bin/v2ray
+
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="22-安装-v2raya">2.2. 安装 v2rayA</h2>
+
+<p>针对不同的操作系统，请参考不同的安装步骤。</p>
+
+<h3 id="221-windows-上安装-v2raya">2.2.1. Windows 上安装 v2rayA</h3>
+
+<p>在 <strong>Windows</strong> 操作系统上, 可以手动安装也可以使用脚本进行安装，详细过程如下。</p>
+
+<h4 id="2211-手动安装-v2raya">2.2.1.1. 手动安装 v2rayA</h4>
+
+<p>从<a href="https://ghproxy.net/https://github.com/v2rayA/v2rayA/releases/download/v2.2.4.6/installer_windows_inno_x64_2.2.4.6.exe">v2rayA github release</a>下载安装包，下载完成后双击安装程序按照安装向导进行安装。</p>
+
+<h4 id="2212-脚本安装-v2raya">2.2.1.2. 脚本安装 v2rayA</h4>
+
+<div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="c"># 打开powershell, 普通用户权限即可, 执行以下命令下载 v2rayA 安装文件，安装文件将会被保存在用户的下载目录下</span><span class="w">
+</span><span class="c"># 执行下载命令会弹出警告框，因为下载的是.exe文件，点击允许即可开始下载。</span><span class="w">
+</span><span class="n">powershell</span><span class="w"> </span><span class="nt">-c</span><span class="w"> </span><span class="s2">"invoke-webrequest -uri https://ghproxy.net/https://github.com/v2rayA/v2rayA/releases/download/v2.2.4.6/installer_windows_inno_x64_2.2.4.6.exe -outfile Downloads\installer_windows_inno_x64_2.2.4.6.exe"</span><span class="w">
+
+</span><span class="c"># 下载完成后，开始安装</span><span class="w">
+</span><span class="n">Start-Process</span><span class="w"> </span><span class="nt">-FilePath</span><span class="w"> </span><span class="s2">"Downloads\installer_windows_inno_x64_2.2.4.6.exe"</span><span class="w"> </span><span class="nt">-ArgumentList</span><span class="w"> </span><span class="s2">"/silent"</span><span class="w">
+
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="222-macos-上下载并安装-v2raya">2.2.2. MacOS 上下载并安装 v2rayA</h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre>
+<span class="c"># 下载v2raya</span>
+<span class="nb">sudo </span>curl <span class="nt">-L</span> https://ghproxy.net/https://github.com/v2rayA/v2rayA/releases/download/v2.2.4.6/v2raya_darwin_x64_2.2.4.6 <span class="nt">-o</span> /usr/local/bin/v2raya
+<span class="c"># 授予v2raya可执行权限</span>
+<span class="nb">sudo chmod </span>755 /usr/local/bin/v2raya
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="223-linux-debian-系列下载并安装-v2raya">2.2.3. Linux Debian 系列下载并安装 v2rayA</h3>
+
+<p>对于 debian 系列发行版（Ubuntu, Mint, MX, Kubuntu, Zorin 等等）</p>
+
+<p>使用命令行安装：</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="c"># 下载debian安装包, 针对不同的硬件架构以下下载命令稍做调整即可.</span>
+<span class="c"># 所有安装包可以在这里找到https://github.com/v2rayA/v2rayA/releases/</span>
+wget <span class="nt">-O</span> /tmp/installer_debian_x64_2.2.4.6.deb https://ghproxy.net/https://github.com/v2rayA/v2rayA/releases/download/v2.2.4.6/installer_debian_x64_2.2.4.6.deb
+
+<span class="c"># 安装v2rayA</span>
+<span class="nb">sudo </span>apt <span class="nb">install</span> /tmp/installer_debian_x64_2.2.4.6.deb
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="224-linux-redhat-系列下载并安装-v2raya">2.2.4. Linux Redhat 系列下载并安装 v2rayA</h3>
+
+<p>对于 Redhat 系列发行版（Centos, Fedora, AlmaLinux, Rocky Linux 等）</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre>
+<span class="c"># 使用wget下载v2rayA rpm包</span>
+wget <span class="nt">-O</span> /tmp/installer_redhat_x64_2.2.4.6.rpm https://ghproxy.net/https://github.com/v2rayA/v2rayA/releases/download/v2.2.4.6/installer_redhat_x64_2.2.4.6.rpm
+
+<span class="c"># 或者使用curl下载v2rayA rpm包</span>
+curl https://ghproxy.net/https://github.com/v2rayA/v2rayA/releases/download/v2.2.4.6/installer_redhat_x64_2.2.4.6.rpm <span class="nt">-output</span> /tmp/installer_redhat_x64_2.2.4.6.rpm
+
+<span class="c"># 安装 v2rayA</span>
+<span class="nb">sudo </span>rpm <span class="nt">-i</span> /tmp/installer_redhat_x64_2.2.4.6.rpm
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h1 id="3-配置-v2raya-windows-可跳过此步骤">3. 配置 v2rayA （windows 可跳过此步骤）</h1>
+
+<h2 id="31-配置-v2raya">3.1. 配置 v2rayA</h2>
+
+<p>修改<code class="language-plaintext highlighter-rouge">/etc/default/v2raya</code>配置文件让 v2rayA 使用 v2ray-core</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nb">sudo </span>vi /etc/default/v2raya
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre>
+<span class="c"># 将V2rayA和v2ray-core关联起来</span>
+<span class="c"># 添加配置两行配置</span>
+<span class="nv">V2RAYA_V2RAY_BIN</span><span class="o">=</span>/usr/local/v2ray-core/v2ray
+<span class="nv">V2RAYA_V2RAY_CONFDIR</span><span class="o">=</span>/usr/local/v2ray-core
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="32设置开机启动">3.2.设置开机启动</h2>
+
+<pre><code class="language-ba">
+# --now 参数表示设置为开机启动并立即启动v2raya
+sudo systemctl enable --now v2raya
+# 查看服务状态
+systemctl status v2raya
+</code></pre>
+
+<h1 id="4使用v2raya">4.使用v2raya</h1>
+
+
+
+                <hr style="visibility: hidden;">
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2024/07/02/Java8%E9%83%A8%E5%88%86%E6%96%B0%E7%89%B9%E6%80%A7/" data-toggle="tooltip" data-placement="top" title="jdk部分新特性">
+                        Previous<br>
+                        <span>jdk部分新特性</span>
+                        </a>
+                    </li>
+                    
+                    
+                </ul>
+                <hr style="visibility: hidden;">
+
+                <!-- Gitalk 评论 start  -->
+                
+                <!-- Link Gitalk 的支持文件  -->
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+                <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+                <div id="gitalk-container"></div>
+                <script type="text/javascript">
+                    var gitalk = new Gitalk({
+
+                        // gitalk的主要参数
+                        clientID: '2542452a44c3a8034a35',
+                        clientSecret: '3119b189eb567a7a89c2440917078889d1689226',
+                        repo: 'xprocon.github.io',
+                        owner: 'xprocon',
+                        admin: ['xprocon'],
+                        id: 'post',
+                        distractionFreeMode: true,  //是否启用评论全屏遮罩.
+                        createIssueManually: true, //如果当前页面没有相应的 isssue ，且登录的用户属于 admin，则会自动创建 issue。如果设置为 true，则显示一个初始化页面，创建 issue 需要点击 init 按钮。
+                        perPage: 15 //每页多少个评论
+                    });
+                    gitalk.render('gitalk-container');
+                </script>
+                
+                <!-- Gitalk end -->
+
+                
+
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+
+<section>
+    
+        <hr class="hidden-sm hidden-xs">
+    
+    <h5><a href="/archive/">FEATURED TAGS</a></h5>
+    <div class="tags">
+        
+        
+        
+        
+        
+        
+                <a data-sort="0043" 
+                    href="/archive/?tag=Java"
+                    title="Java"
+                    rel="6">Java</a>
+        
+                <a data-sort="0033" 
+                    href="/archive/?tag=linux"
+                    title="linux"
+                    rel="16">linux</a>
+        
+                <a data-sort="0036" 
+                    href="/archive/?tag=%E8%BF%90%E7%BB%B4"
+                    title="运维"
+                    rel="13">运维</a>
+        
+                <a data-sort="0037" 
+                    href="/archive/?tag=%E5%AD%A6%E4%B9%A0"
+                    title="学习"
+                    rel="12">学习</a>
+        
+                <a data-sort="0038" 
+                    href="/archive/?tag=java"
+                    title="java"
+                    rel="11">java</a>
+        
+                <a data-sort="0040" 
+                    href="/archive/?tag=centos"
+                    title="centos"
+                    rel="9">centos</a>
+        
+                <a data-sort="0044" 
+                    href="/archive/?tag=%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"
+                    title="开发环境"
+                    rel="5">开发环境</a>
+        
+                <a data-sort="0044" 
+                    href="/archive/?tag=nginx"
+                    title="nginx"
+                    rel="5">nginx</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=%E5%AE%B9%E5%99%A8%E5%8C%96"
+                    title="容器化"
+                    rel="4">容器化</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=git"
+                    title="git"
+                    rel="4">git</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=spring"
+                    title="spring"
+                    rel="4">spring</a>
+        
+                <a data-sort="0046" 
+                    href="/archive/?tag=%E4%BA%91%E5%8E%9F%E7%94%9F"
+                    title="云原生"
+                    rel="3">云原生</a>
+        
+                <a data-sort="0046" 
+                    href="/archive/?tag=%E5%9F%BA%E7%A1%80"
+                    title="基础"
+                    rel="3">基础</a>
+        
+                <a data-sort="0046" 
+                    href="/archive/?tag=jetbrains"
+                    title="jetbrains"
+                    rel="3">jetbrains</a>
+        
+                <a data-sort="0046" 
+                    href="/archive/?tag=python"
+                    title="python"
+                    rel="3">python</a>
+    </div>
+</section>
+
+
+                <!-- Friends Blog -->
+                
+<hr>
+<h5>FRIENDS</h5>
+<ul class="list-inline">
+  
+  <li><a href="https://www.baidu.com/">百度（baidu）</a></li>
+  
+  <li><a href="http://10.175.194.215:8080/">IT工具箱（ittools）</a></li>
+  
+  <li><a href="https://www.emojiall.com/zh-hans">emoji（emoji搜索）</a></li>
+  
+  <li><a href="https://www.v2ex.com/">v2ex（v2ex论坛）</a></li>
+  
+  <li><a href="https://www.reddit.com/r/China_irl/">reddit（流浪防区）</a></li>
+  
+</ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<!-- add support for mathjax by voleking-->
+
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'right',
+          // icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- SNS Link -->
+                
+
+
+<ul class="list-inline text-center">
+
+
+  
+  
+  <li>
+    <a href="https://twitter.com/xprocon">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+  <li>
+    <a target="_blank" href="https://www.zhihu.com/people/procon">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa  fa-stack-1x fa-inverse">知</i>
+      </span>
+    </a>
+  </li>
+  
+  
+  <li>
+    <a target="_blank" href="http://weibo.com/huangpuguang1ni">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+  
+  <li>
+    <a target="_blank" href="https://github.com/xprocon">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+</ul>
+
+                <p class="copyright text-muted">
+                    Copyright &copy; Procon's Tech Life Blog 2024
+                    <br>
+                    Powered by <a href="https://blog.procon.cc">Procon Blog</a>
+<!--                    <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="100px"-->
+<!--                        height="20px"-->
+<!--                        src="https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true">-->
+<!--                    </iframe>-->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Simple Jekyll Search -->
+<script src="/js/simple-jekyll-search.min.js"></script>
+
+<!-- Service Worker -->
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+        var d = document, t = 'script',
+            o = d.createElement(t),
+            s = d.getElementsByTagName(t)[0];
+        o.src = u;
+        if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+        s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+
+
+
+
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function () {
+        var $nav = document.querySelector("nav");
+        if ($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog(selector) {
+
+        // interop with multilangual 
+        if ('' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector), a, n, t, l, i, c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#" + $(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="' + i + '" rel="nofollow">' + t + '</a>');
+            l = $('<li class="' + n + '_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function (e) {
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<!-- Multi-Lingual -->
+
+
+<!-- Simple Jekyll Search -->
+<script>
+    // https://stackoverflow.com/questions/1912501/unescape-html-entities-in-javascript
+    function htmlDecode(input) {
+        var e = document.createElement('textarea');
+        e.innerHTML = input;
+        // handle case of empty input
+        return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+    }
+
+    SimpleJekyllSearch({
+        searchInput: document.getElementById('search-input'),
+        resultsContainer: document.getElementById('search-results'),
+        json: '/search.json',
+        searchResultTemplate: '<div class="post-preview item"><a href="{url}"><h2 class="post-title">{title}</h2><h3 class="post-subtitle">{subtitle}</h3><hr></a></div>',
+        noResultsText: 'No results',
+        limit: 50,
+        fuzzy: false,
+        // a hack to get escaped subtitle unescaped. for some reason, 
+        // post.subtitle w/o escape filter nuke entire search.
+        templateMiddleware: function (prop, value, template) {
+            if (prop === 'subtitle' || prop === 'title') {
+                if (value.indexOf("code")) {
+                    return htmlDecode(value);
+                } else {
+                    return value;
+                }
+            }
+        }
+    });
+
+    $(document).ready(function () {
+        var $searchPage = $('.search-page');
+        var $searchOpen = $('.search-icon');
+        var $searchClose = $('.search-icon-close');
+        var $searchInput = $('#search-input');
+        var $body = $('body');
+
+        $searchOpen.on('click', function (e) {
+            e.preventDefault();
+            $searchPage.toggleClass('search-active');
+            var prevClasses = $body.attr('class') || '';
+            setTimeout(function () {
+                $body.addClass('no-scroll');
+            }, 400)
+
+            if ($searchPage.hasClass('search-active')) {
+                $searchClose.on('click', function (e) {
+                    e.preventDefault();
+                    $searchPage.removeClass('search-active');
+                    $body.attr('class', prevClasses);  // from closure 
+                });
+                $searchInput.focus();
+            }
+        });
+    });
+</script>
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
