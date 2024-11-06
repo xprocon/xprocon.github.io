@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="这里是 @Procon普光 的个人博客，与你一起发现更大的世界">
+    <meta name="keywords" content="普光, Procon普光, 博客, 个人网站, 互联网, Java , 后端">
+    <meta name="theme-color" content="#000000">
+
+    <!-- Open Graph -->
+    <meta property="og:title"
+        content="nginx限流 - Procon's Tech Life Blog">
+    
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="nginx限流
+">
+    
+    <meta property="article:published_time" content=" 2021-01-20T12:00:00Z">
+    
+    
+    <meta property="article:author" content="Procon">
+    
+    
+    <meta property="article:tag" content="linux">
+    
+    <meta property="article:tag" content="nginx">
+    
+    <meta property="article:tag" content="运维">
+    
+    
+    <meta property="og:image" content="https://blog.procon.cchttps://procon-note.oss-cn-guangzhou.aliyuncs.com/typora/avatar_m.jpg">
+    <meta property="og:url" content="https://blog.procon.cc/2021/01/20/nginx%E9%99%90%E6%B5%81/">
+    <meta property="og:site_name" content="Procon's Tech Life Blog">
+
+    <title>nginx限流 - Procon's Tech Life Blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://blog.procon.cc/2021/01/20/nginx%E9%99%90%E6%B5%81/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href=" /css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href=" /css/hux-blog.min.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"
+        type="text/css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+
+    <!-- Google AdSense -->
+    <script data-ad-client="ca-pub-6487568398225121" async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top invert">
+    
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Procon's Tech Life Blog</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div id="huxblog_navbar">
+                <div class="navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="/">Home</a>
+                        </li>
+                        
+                        
+                        
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                        
+                        
+                        <li>
+                            <a href="/archive/">Archive</a>
+                        </li>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <li class="search-icon">
+                            <a href="javascript:void(0)">
+                                <i class="fa fa-search"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <script>
+        // Drop Bootstarp low-performance Navbar
+        // Use customize navbar with high-quality material design animation
+        // in high-perf jank-free CSS3 implementation
+        var $body = document.body;
+        var $toggle = document.querySelector('.navbar-toggle');
+        var $navbar = document.querySelector('#huxblog_navbar');
+        var $collapse = document.querySelector('.navbar-collapse');
+
+        var __HuxNav__ = {
+            close: function () {
+                $navbar.className = " ";
+                // wait until animation end.
+                setTimeout(function () {
+                    // prevent frequently toggle
+                    if ($navbar.className.indexOf('in') < 0) {
+                        $collapse.style.height = "0px"
+                    }
+                }, 400)
+            },
+            open: function () {
+                $collapse.style.height = "auto"
+                $navbar.className += " in";
+            }
+        }
+
+        // Bind Event
+        $toggle.addEventListener('click', function (e) {
+            if ($navbar.className.indexOf('in') > 0) {
+                __HuxNav__.close()
+            } else {
+                __HuxNav__.open()
+            }
+        })
+
+        /**
+         * Since Fastclick is used to delegate 'touchstart' globally
+         * to hack 300ms delay in iOS by performing a fake 'click',
+         * Using 'e.stopPropagation' to stop 'touchstart' event from 
+         * $toggle/$collapse will break global delegation.
+         * 
+         * Instead, we use a 'e.target' filter to prevent handler
+         * added to document close HuxNav.  
+         *
+         * Also, we use 'click' instead of 'touchstart' as compromise
+         */
+        document.addEventListener('click', function (e) {
+            if (e.target == $toggle) return;
+            if (e.target.className == 'icon-bar') return;
+            __HuxNav__.close();
+        })
+    </script>
+    <!-- Search -->
+<div class="search-page">
+  <div class="search-icon-close-container">
+    <span class="search-icon-close">
+      <i class="fa fa-chevron-down"></i>
+    </span>
+  </div>
+  <div class="search-main container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <form></form>
+        <input type="text" id="search-input" placeholder="$ grep...">
+        </form>
+        <div id="search-results" class="mini-post-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/home-bg-geek.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+
+
+
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/home-bg-geek.jpg');
+        background: ;
+    }
+
+    
+</style>
+
+
+
+
+<header class="intro-header style-text" >
+
+    <div class="header-mask"></div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/archive/?tag=linux" title="linux">linux</a>
+                        
+                        <a class="tag" href="/archive/?tag=nginx" title="nginx">nginx</a>
+                        
+                        <a class="tag" href="/archive/?tag=%E8%BF%90%E7%BB%B4" title="运维">运维</a>
+                        
+                    </div>
+                    <h1>nginx限流</h1>
+                    
+                    <h2 class="subheading"></h2>
+                    <span class="meta">Posted by Procon on January 20, 2021</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+
+
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<h1 id="nginx限流">nginx限流</h1>
+
+<p>一般情况下，首页的并发量是比较大的，即使 有了多级缓存，当用户不停的刷新页面的时候，也是没有必要的，另外如果有恶意的请求 大量达到，也会对系统造成影响。</p>
+
+<p>而限流就是保护措施之一。</p>
+
+<h3 id="51-生活中限流对比">5.1 生活中限流对比</h3>
+
+<ul>
+  <li>水坝泄洪，通过闸口限制洪水流量（控制流量速度）。</li>
+  <li>办理银行业务：所有人先领号，各窗口叫号处理。每个窗口处理速度根据客户具体业务而定，所有人排队等待叫号即可。若快下班时，告知客户明日再来(拒绝流量)</li>
+  <li>火车站排队买票安检，通过排队 的方式依次放入。（缓存带处理任务）</li>
+</ul>
+
+<h3 id="52-nginx的限流">5.2 nginx的限流</h3>
+
+<p>nginx提供两种限流的方式：</p>
+
+<ul>
+  <li>
+    <p>一是控制速率</p>
+  </li>
+  <li>
+    <p>二是控制并发连接数</p>
+  </li>
+  <li>
+    <h4 id="521-控制速率">5.2.1 控制速率</h4>
+  </li>
+  <li>
+    <p>控制速率的方式之一就是采用漏桶算法。</p>
+  </li>
+  <li></li>
+  <li>
+    <p>(1)漏桶算法实现控制速率限流</p>
+  </li>
+  <li>
+    <p>漏桶(Leaky Bucket)算法思路很简单,水(请求)先进入到漏桶里,漏桶以一定的速度出水(接口有响应速率),当水流入速度过大会直接溢出(访问频率超过接口响应速率),然后就拒绝请求,可以看出漏桶算法能强行限制数据的传输速率.示意图如下:</p>
+  </li>
+  <li>
+    <p><img src="https://procon-note.oss-cn-guangzhou.aliyuncs.com/typoraimage-20221125154225169.png" alt="image-20221125154225169" /></p>
+
+    <p>(2)nginx的配置</p>
+
+    <p>配置示意图如下：</p>
+
+    <p><img src="https://procon-note.oss-cn-guangzhou.aliyuncs.com/typoraimage-20221125154212222.png" alt="image-20221125154212222" /></p>
+
+    <p>修改/usr/local/openresty/nginx/conf/nginx.conf:</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+</pre></td><td class="rouge-code"><pre>user  root root;
+worker_processes  1;
+  
+events {
+    worker_connections  1024;
+}
+  
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+  
+    #cache
+    lua_shared_dict dis_cache 128m;
+  
+    #限流设置
+    limit_req_zone $binary_remote_addr zone=contentRateLimit:10m rate=2r/s;
+  
+    sendfile        on;
+    #tcp_nopush     on;
+  
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
+  
+    #gzip  on;
+  
+    server {
+        listen       80;
+        server_name  localhost;
+  
+        location /update_content {
+            content_by_lua_file /root/lua/update_content.lua;
+        }
+  
+        location /read_content {
+            #使用限流配置
+            limit_req zone=contentRateLimit;
+            content_by_lua_file /root/lua/read_content.lua;
+        }
+    }
+}
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+
+    <p>配置说明：</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>binary_remote_addr 是一种key，表示基于 remote_addr(客户端IP) 来做限流，binary_ 的目的是压缩内存占用量。
+zone：定义共享内存区来存储访问信息， contentRateLimit:10m 表示一个大小为10M，名字为contentRateLimit的内存区域。1M能存储16000 IP地址的访问信息，10M可以存储16W IP地址访问信息。
+rate 用于设置最大访问速率，rate=10r/s 表示每秒最多处理10个请求。Nginx 实际上以毫秒为粒度来跟踪请求信息，因此 10r/s 实际上是限制：每100毫秒处理一个请求。这意味着，自上一个请求处理完后，若后续100毫秒内又有请求到达，将拒绝处理该请求.我们这里设置成2 方便测试。
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+
+    <p>测试：</p>
+
+    <p>重新加载配置文件</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>cd /usr/local/openresty/nginx/sbin
+  
+./nginx -s reload
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+
+    <p>访问页面：<code class="language-plaintext highlighter-rouge">http://192.168.211.132/read_content?id=1</code> ,连续刷新会直接报错。</p>
+
+    <p><img src="https://procon-note.oss-cn-guangzhou.aliyuncs.com/typoraimage-20221125154302917.png" alt="image-20221125154302917" /></p>
+
+    <p>(3)处理突发流量</p>
+
+    <p>上面例子限制 2r/s，如果有时正常流量突然增大，超出的请求将被拒绝，无法处理突发流量，可以结合 <strong>burst</strong> 参数使用来解决该问题。</p>
+
+    <p>例如，如下配置表示：</p>
+
+    <p><img src="https://procon-note.oss-cn-guangzhou.aliyuncs.com/typoraimage-20221125154322684.png" alt="image-20221125154322684" /></p>
+
+    <p>上图代码如下：</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre>server {
+    listen       80;
+    server_name  localhost;
+    location /update_content {
+        content_by_lua_file /root/lua/update_content.lua;
+    }
+    location /read_content {
+        limit_req zone=contentRateLimit burst=4;
+        content_by_lua_file /root/lua/read_content.lua;
+    }
+}
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+
+    <p>burst 译为突发、爆发，表示在超过设定的处理速率后能额外处理的请求数,当 rate=10r/s 时，将1s拆成10份，即每100ms可处理1个请求。</p>
+
+    <p>此处，<strong>burst=4</strong> ，若同时有4个请求到达，Nginx 会处理第一个请求，剩余3个请求将放入队列，然后每隔500ms从队列中获取一个请求进行处理。若请求数大于4，将拒绝处理多余的请求，直接返回503.</p>
+
+    <p>不过，单独使用 burst 参数并不实用。假设 burst=50 ，rate依然为10r/s，排队中的50个请求虽然每100ms会处理一个，但第50个请求却需要等待 50 * 100ms即 5s，这么长的处理时间自然难以接受。</p>
+
+    <p>因此，burst 往往结合 nodelay 一起使用。</p>
+  </li>
+  <li>
+    <p>例如：如下配置：</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre>server {
+    listen       80;
+    server_name  localhost;
+    location /update_content {
+        content_by_lua_file /root/lua/update_content.lua;
+    }
+    location /read_content {
+        limit_req zone=contentRateLimit burst=4 nodelay;
+        content_by_lua_file /root/lua/read_content.lua;
+    }
+}
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+
+    <p>如上表示：</p>
+
+    <p>平均每秒允许不超过2个请求，突发不超过4个请求，并且处理突发4个请求的时候，没有延迟，等到完成之后，按照正常的速率处理。</p>
+
+    <p>如上两种配置结合就达到了速率稳定，但突然流量也能正常处理的效果。完整配置代码如下：</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+</pre></td><td class="rouge-code"><pre>user  root root;
+worker_processes  1;
+  
+events {
+    worker_connections  1024;
+}
+  
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+  
+    #cache
+    lua_shared_dict dis_cache 128m;
+  
+    #限流设置
+    limit_req_zone $binary_remote_addr zone=contentRateLimit:10m rate=2r/s;
+  
+    sendfile        on;
+    #tcp_nopush     on;
+  
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
+  
+    #gzip  on;
+  
+    server {
+        listen       80;
+        server_name  localhost;
+  
+        location /update_content {
+            content_by_lua_file /root/lua/update_content.lua;
+        }
+  
+        location /read_content {
+            limit_req zone=contentRateLimit burst=4 nodelay;
+            content_by_lua_file /root/lua/read_content.lua;
+        }
+    }
+}
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+
+    <p>测试：如下图 在1秒钟之内可以刷新4次，正常处理。</p>
+
+    <p><img src="https://procon-note.oss-cn-guangzhou.aliyuncs.com/typoraimage-20221125154343165.png" alt="image-20221125154343165" /></p>
+
+    <p>但是超过之后，连续刷新5次，抛出异常。</p>
+
+    <p><img src="https://procon-note.oss-cn-guangzhou.aliyuncs.com/typoraimage-20221125154352884.png" alt="image-20221125154352884" /></p>
+
+    <h4 id="522-控制并发量连接数">5.2.2 控制并发量（连接数）</h4>
+
+    <p>ngx_http_limit_conn_module 提供了限制连接数的能力。主要是利用limit_conn_zone和limit_conn两个指令。</p>
+
+    <p>利用连接数限制 某一个用户的ip连接的数量来控制流量。</p>
+
+    <p>注意：并非所有连接都被计算在内 只有当服务器正在处理请求并且已经读取了整个请求头时，才会计算有效连接。此处忽略测试。</p>
+
+    <p>配置语法：</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>Syntax: limit_conn zone number;
+Default: —;
+Context: http, server, location;
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+
+    <p>(1)配置限制固定连接数</p>
+
+    <p>如下，配置如下：</p>
+
+    <p><img src="https://procon-note.oss-cn-guangzhou.aliyuncs.com/typoraimage-20221125154411926.png" alt="image-20221125154411926" /></p>
+
+    <p>上图配置如下：</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+</pre></td><td class="rouge-code"><pre>http {
+    include       mime.types;
+    default_type  application/octet-stream;
+  
+    #cache
+    lua_shared_dict dis_cache 128m;
+  
+    #限流设置
+    limit_req_zone $binary_remote_addr zone=contentRateLimit:10m rate=2r/s;
+  
+    #根据IP地址来限制，存储内存大小10M
+    limit_conn_zone $binary_remote_addr zone=addr:1m;
+  
+    sendfile        on;
+    #tcp_nopush     on;
+  
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
+  
+    #gzip  on;
+  
+    server {
+        listen       80;
+        server_name  localhost;
+        #所有以brand开始的请求，访问本地changgou-service-goods微服务
+        location /brand {
+            limit_conn addr 2;
+            proxy_pass http://192.168.211.1:18081;
+        }
+  
+        location /update_content {
+            content_by_lua_file /root/lua/update_content.lua;
+        }
+  
+        location /read_content {
+            limit_req zone=contentRateLimit burst=4 nodelay;
+            content_by_lua_file /root/lua/read_content.lua;
+        }
+    }
+}
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+
+    <p>表示：</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>limit_conn_zone $binary_remote_addr zone=addr:10m;  表示限制根据用户的IP地址来显示，设置存储地址为的内存大小10M
+  
+limit_conn addr 2;   表示 同一个地址只允许连接2次。
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+
+    <p>测试：</p>
+
+    <p>此时开3个线程，测试的时候会发生异常，开2个就不会有异常</p>
+
+    <p><img src="https://procon-note.oss-cn-guangzhou.aliyuncs.com/typoraimage-20221125154543316.png" alt="image-20221125154543316" /></p>
+
+    <p>(2)限制每个客户端IP与服务器的连接数，同时限制与虚拟服务器的连接总数。(了解)</p>
+
+    <p>如下配置：</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre>limit_conn_zone $binary_remote_addr zone=perip:10m;
+limit_conn_zone $server_name zone=perserver:10m; 
+server {  
+    listen       80;
+    server_name  localhost;
+    charset utf-8;
+    location / {
+        limit_conn perip 10;#单个客户端ip与服务器的连接数．
+        limit_conn perserver 100; ＃限制与服务器的总连接数
+        root   html;
+        index  index.html index.htm;
+    }
+}
+</pre></td></tr></tbody></table></code></pre></div>    </div>
+  </li>
+</ul>
+
+
+                <hr style="visibility: hidden;">
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2021/01/19/nginx%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%B8%AD%E6%96%87%E8%AF%A6%E8%A7%A3/" data-toggle="tooltip" data-placement="top" title="nginx配置文件中文详解">
+                        Previous<br>
+                        <span>nginx配置文件中文详解</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2021/02/15/nginx-location%E6%8C%87%E4%BB%A4%E8%AF%A6%E8%A7%A3/" data-toggle="tooltip" data-placement="top" title="nginx location指令详解">
+                        Next<br>
+                        <span>nginx location指令详解</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <hr style="visibility: hidden;">
+
+                <!-- Gitalk 评论 start  -->
+                
+                <!-- Link Gitalk 的支持文件  -->
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+                <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+                <div id="gitalk-container"></div>
+                <script type="text/javascript">
+                    var gitalk = new Gitalk({
+
+                        // gitalk的主要参数
+                        clientID: '2542452a44c3a8034a35',
+                        clientSecret: '3119b189eb567a7a89c2440917078889d1689226',
+                        repo: 'xprocon.github.io',
+                        owner: 'xprocon',
+                        admin: ['xprocon'],
+                        id: 'post',
+                        distractionFreeMode: true,  //是否启用评论全屏遮罩.
+                        createIssueManually: true, //如果当前页面没有相应的 isssue ，且登录的用户属于 admin，则会自动创建 issue。如果设置为 true，则显示一个初始化页面，创建 issue 需要点击 init 按钮。
+                        perPage: 15 //每页多少个评论
+                    });
+                    gitalk.render('gitalk-container');
+                </script>
+                
+                <!-- Gitalk end -->
+
+                
+
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+
+<section>
+    
+        <hr class="hidden-sm hidden-xs">
+    
+    <h5><a href="/archive/">FEATURED TAGS</a></h5>
+    <div class="tags">
+        
+        
+        
+        
+        
+        
+                <a data-sort="0042" 
+                    href="/archive/?tag=Java"
+                    title="Java"
+                    rel="6">Java</a>
+        
+                <a data-sort="0032" 
+                    href="/archive/?tag=linux"
+                    title="linux"
+                    rel="16">linux</a>
+        
+                <a data-sort="0035" 
+                    href="/archive/?tag=%E8%BF%90%E7%BB%B4"
+                    title="运维"
+                    rel="13">运维</a>
+        
+                <a data-sort="0036" 
+                    href="/archive/?tag=%E5%AD%A6%E4%B9%A0"
+                    title="学习"
+                    rel="12">学习</a>
+        
+                <a data-sort="0037" 
+                    href="/archive/?tag=java"
+                    title="java"
+                    rel="11">java</a>
+        
+                <a data-sort="0039" 
+                    href="/archive/?tag=centos"
+                    title="centos"
+                    rel="9">centos</a>
+        
+                <a data-sort="0043" 
+                    href="/archive/?tag=%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"
+                    title="开发环境"
+                    rel="5">开发环境</a>
+        
+                <a data-sort="0043" 
+                    href="/archive/?tag=nginx"
+                    title="nginx"
+                    rel="5">nginx</a>
+        
+                <a data-sort="0044" 
+                    href="/archive/?tag=%E5%AE%B9%E5%99%A8%E5%8C%96"
+                    title="容器化"
+                    rel="4">容器化</a>
+        
+                <a data-sort="0044" 
+                    href="/archive/?tag=git"
+                    title="git"
+                    rel="4">git</a>
+        
+                <a data-sort="0044" 
+                    href="/archive/?tag=spring"
+                    title="spring"
+                    rel="4">spring</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=%E4%BA%91%E5%8E%9F%E7%94%9F"
+                    title="云原生"
+                    rel="3">云原生</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=%E5%9F%BA%E7%A1%80"
+                    title="基础"
+                    rel="3">基础</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=jetbrains"
+                    title="jetbrains"
+                    rel="3">jetbrains</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=python"
+                    title="python"
+                    rel="3">python</a>
+    </div>
+</section>
+
+
+                <!-- Friends Blog -->
+                
+<hr>
+<h5>FRIENDS</h5>
+<ul class="list-inline">
+  
+  <li><a href="https://www.baidu.com/">百度（baidu）</a></li>
+  
+  <li><a href="http://10.175.194.215:8080/">IT工具箱（ittools）</a></li>
+  
+  <li><a href="https://www.emojiall.com/zh-hans">emoji（emoji搜索）</a></li>
+  
+  <li><a href="https://www.v2ex.com/">v2ex（v2ex论坛）</a></li>
+  
+  <li><a href="https://www.reddit.com/r/China_irl/">reddit（流浪防区）</a></li>
+  
+</ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<!-- add support for mathjax by voleking-->
+
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'right',
+          // icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- SNS Link -->
+                
+
+
+<ul class="list-inline text-center">
+
+
+  
+  
+  <li>
+    <a href="https://twitter.com/xprocon">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+  <li>
+    <a target="_blank" href="https://www.zhihu.com/people/procon">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa  fa-stack-1x fa-inverse">知</i>
+      </span>
+    </a>
+  </li>
+  
+  
+  <li>
+    <a target="_blank" href="http://weibo.com/huangpuguang1ni">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+  
+  <li>
+    <a target="_blank" href="https://github.com/xprocon">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+</ul>
+
+                <p class="copyright text-muted">
+                    Copyright &copy; Procon's Tech Life Blog 2024
+                    <br>
+                    Powered by <a href="https://blog.procon.cc">Procon Blog</a>
+<!--                    <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="100px"-->
+<!--                        height="20px"-->
+<!--                        src="https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true">-->
+<!--                    </iframe>-->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Simple Jekyll Search -->
+<script src="/js/simple-jekyll-search.min.js"></script>
+
+<!-- Service Worker -->
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+        var d = document, t = 'script',
+            o = d.createElement(t),
+            s = d.getElementsByTagName(t)[0];
+        o.src = u;
+        if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+        s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+
+
+
+
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function () {
+        var $nav = document.querySelector("nav");
+        if ($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog(selector) {
+
+        // interop with multilangual 
+        if ('' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector), a, n, t, l, i, c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#" + $(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="' + i + '" rel="nofollow">' + t + '</a>');
+            l = $('<li class="' + n + '_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function (e) {
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<!-- Multi-Lingual -->
+
+
+<!-- Simple Jekyll Search -->
+<script>
+    // https://stackoverflow.com/questions/1912501/unescape-html-entities-in-javascript
+    function htmlDecode(input) {
+        var e = document.createElement('textarea');
+        e.innerHTML = input;
+        // handle case of empty input
+        return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+    }
+
+    SimpleJekyllSearch({
+        searchInput: document.getElementById('search-input'),
+        resultsContainer: document.getElementById('search-results'),
+        json: '/search.json',
+        searchResultTemplate: '<div class="post-preview item"><a href="{url}"><h2 class="post-title">{title}</h2><h3 class="post-subtitle">{subtitle}</h3><hr></a></div>',
+        noResultsText: 'No results',
+        limit: 50,
+        fuzzy: false,
+        // a hack to get escaped subtitle unescaped. for some reason, 
+        // post.subtitle w/o escape filter nuke entire search.
+        templateMiddleware: function (prop, value, template) {
+            if (prop === 'subtitle' || prop === 'title') {
+                if (value.indexOf("code")) {
+                    return htmlDecode(value);
+                } else {
+                    return value;
+                }
+            }
+        }
+    });
+
+    $(document).ready(function () {
+        var $searchPage = $('.search-page');
+        var $searchOpen = $('.search-icon');
+        var $searchClose = $('.search-icon-close');
+        var $searchInput = $('#search-input');
+        var $body = $('body');
+
+        $searchOpen.on('click', function (e) {
+            e.preventDefault();
+            $searchPage.toggleClass('search-active');
+            var prevClasses = $body.attr('class') || '';
+            setTimeout(function () {
+                $body.addClass('no-scroll');
+            }, 400)
+
+            if ($searchPage.hasClass('search-active')) {
+                $searchClose.on('click', function (e) {
+                    e.preventDefault();
+                    $searchPage.removeClass('search-active');
+                    $body.attr('class', prevClasses);  // from closure 
+                });
+                $searchInput.focus();
+            }
+        });
+    });
+</script>
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

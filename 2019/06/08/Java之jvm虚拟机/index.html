@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="这里是 @Procon普光 的个人博客，与你一起发现更大的世界">
+    <meta name="keywords" content="普光, Procon普光, 博客, 个人网站, 互联网, Java , 后端">
+    <meta name="theme-color" content="#000000">
+
+    <!-- Open Graph -->
+    <meta property="og:title"
+        content="Java虚拟机 - Procon's Tech Life Blog">
+    
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="JVM
+">
+    
+    <meta property="article:published_time" content=" 2019-06-08T12:00:00Z">
+    
+    
+    <meta property="article:author" content="Procon">
+    
+    
+    <meta property="article:tag" content="java">
+    
+    <meta property="article:tag" content="jvm">
+    
+    <meta property="article:tag" content="学习">
+    
+    <meta property="article:tag" content="基础">
+    
+    
+    <meta property="og:image" content="https://blog.procon.cchttps://procon-note.oss-cn-guangzhou.aliyuncs.com/typora/avatar_m.jpg">
+    <meta property="og:url" content="https://blog.procon.cc/2019/06/08/Java%E4%B9%8Bjvm%E8%99%9A%E6%8B%9F%E6%9C%BA/">
+    <meta property="og:site_name" content="Procon's Tech Life Blog">
+
+    <title>Java虚拟机 - Procon's Tech Life Blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://blog.procon.cc/2019/06/08/Java%E4%B9%8Bjvm%E8%99%9A%E6%8B%9F%E6%9C%BA/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href=" /css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href=" /css/hux-blog.min.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"
+        type="text/css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+
+    <!-- Google AdSense -->
+    <script data-ad-client="ca-pub-6487568398225121" async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top invert">
+    
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Procon's Tech Life Blog</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div id="huxblog_navbar">
+                <div class="navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="/">Home</a>
+                        </li>
+                        
+                        
+                        
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                        
+                        
+                        <li>
+                            <a href="/archive/">Archive</a>
+                        </li>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <li class="search-icon">
+                            <a href="javascript:void(0)">
+                                <i class="fa fa-search"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <script>
+        // Drop Bootstarp low-performance Navbar
+        // Use customize navbar with high-quality material design animation
+        // in high-perf jank-free CSS3 implementation
+        var $body = document.body;
+        var $toggle = document.querySelector('.navbar-toggle');
+        var $navbar = document.querySelector('#huxblog_navbar');
+        var $collapse = document.querySelector('.navbar-collapse');
+
+        var __HuxNav__ = {
+            close: function () {
+                $navbar.className = " ";
+                // wait until animation end.
+                setTimeout(function () {
+                    // prevent frequently toggle
+                    if ($navbar.className.indexOf('in') < 0) {
+                        $collapse.style.height = "0px"
+                    }
+                }, 400)
+            },
+            open: function () {
+                $collapse.style.height = "auto"
+                $navbar.className += " in";
+            }
+        }
+
+        // Bind Event
+        $toggle.addEventListener('click', function (e) {
+            if ($navbar.className.indexOf('in') > 0) {
+                __HuxNav__.close()
+            } else {
+                __HuxNav__.open()
+            }
+        })
+
+        /**
+         * Since Fastclick is used to delegate 'touchstart' globally
+         * to hack 300ms delay in iOS by performing a fake 'click',
+         * Using 'e.stopPropagation' to stop 'touchstart' event from 
+         * $toggle/$collapse will break global delegation.
+         * 
+         * Instead, we use a 'e.target' filter to prevent handler
+         * added to document close HuxNav.  
+         *
+         * Also, we use 'click' instead of 'touchstart' as compromise
+         */
+        document.addEventListener('click', function (e) {
+            if (e.target == $toggle) return;
+            if (e.target.className == 'icon-bar') return;
+            __HuxNav__.close();
+        })
+    </script>
+    <!-- Search -->
+<div class="search-page">
+  <div class="search-icon-close-container">
+    <span class="search-icon-close">
+      <i class="fa fa-chevron-down"></i>
+    </span>
+  </div>
+  <div class="search-main container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <form></form>
+        <input type="text" id="search-input" placeholder="$ grep...">
+        </form>
+        <div id="search-results" class="mini-post-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/home-bg-geek.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+
+
+
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/home-bg-geek.jpg');
+        background: ;
+    }
+
+    
+</style>
+
+
+
+
+<header class="intro-header style-text" >
+
+    <div class="header-mask"></div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/archive/?tag=java" title="java">java</a>
+                        
+                        <a class="tag" href="/archive/?tag=jvm" title="jvm">jvm</a>
+                        
+                        <a class="tag" href="/archive/?tag=%E5%AD%A6%E4%B9%A0" title="学习">学习</a>
+                        
+                        <a class="tag" href="/archive/?tag=%E5%9F%BA%E7%A1%80" title="基础">基础</a>
+                        
+                    </div>
+                    <h1>Java虚拟机</h1>
+                    
+                    <h2 class="subheading"></h2>
+                    <span class="meta">Posted by Procon on June 8, 2019</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+
+
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<h1 id="jvm">JVM</h1>
+
+<h2 id="java内存区域">Java内存区域</h2>
+
+<h3 id="1-运行时数据区域">1. 运行时数据区域</h3>
+
+<p><img src="https://procon-note.oss-cn-guangzhou.aliyuncs.com/typora/typoraimage-20200828100054215.png" alt="image-20200828100054215" /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">程序计数器：</code>程序控制流的指示器，分支、循环、跳转、异常处理、线程中断恢复等都需要依赖程序计数器。在多线程中每个线程需要一个单独的程序计数器。</li>
+  <li><code class="language-plaintext highlighter-rouge">Java虚拟机栈</code>：每个方法被执行的时候，Java虚拟机都会同步创建一个栈帧（Stack Frame）用于存储局部变量表、操作数栈、动态连接、方法出口等信息。每一个方法被调用直至执行完毕的过程，就对应着一个栈帧在虚拟机栈中从入栈到出栈的过程</li>
+</ul>
+
+<h2 id="垃圾收集器和内存分配策略">垃圾收集器和内存分配策略</h2>
+
+<h3 id="1-分代收集">1. 分代收集</h3>
+
+<p><code class="language-plaintext highlighter-rouge">部分收集（Partial GC)</code>:不是完整的收集整个堆内存，分为：</p>
+
+<ul>
+  <li>新生代收集（Minor GC / Young GC）：目标只是新生代的收集。</li>
+  <li>老年代收集（Major GC/Old GC）：指目标只是老年代的垃圾收集。目前只有CMS收集器会有单独收集老年代的行为。另外请注意“Major GC”这个说法现在有点混淆，在不同资料上常有不同所指。</li>
+  <li>混合收集（Mixed GC）：指目标是收集整个新生代以及部分老年代的垃圾收集。目前只有G1收集器会有这种行为。</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">整堆收集（Full GC）：</code>收集整个Java堆和方法区的垃圾收集。</p>
+
+<h3 id="2垃圾收集算法">2.垃圾收集算法</h3>
+
+<h4 id="21-标记-清除算法">2.1 标记-清除算法</h4>
+
+<ul>
+  <li>
+    <p>概念：标记需要清除的对象，统一回收被标记的对象(亦可以反过来);</p>
+  </li>
+  <li>
+    <p>缺点：</p>
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">容易产生空间碎片：</code>回收的内存空间是不连续的，当要分配大对象的时候出现内存空间不足又促发垃圾回收。</li>
+      <li><code class="language-plaintext highlighter-rouge">效率不稳定：</code>执行效率都随对象数量增长而降低。</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="22--复制-清除算法">2.2  复制-清除算法</h4>
+
+<ul>
+  <li>概念：把内存区域分成大小相等的两块，一块当作保留区域。当一块区域用完后，就把存活的对象移到另一块区域，同时清空该区域。</li>
+  <li>缺陷：内存浪费严重，可用内存减少了一半。</li>
+</ul>
+
+<h4 id="23--标记-整理算法">2.3  标记-整理算法</h4>
+
+<p>概念：还是使用了标记-清除算法，标记后不直接清除，先把可存活对象移动到内存一侧在清理另一侧内存，可以解决空间碎片问题。</p>
+
+<p>缺点：会造成系统延迟。</p>
+
+<h3 id="3-常见垃圾收集器">3. 常见垃圾收集器</h3>
+
+<p><img src="https://procon-note.oss-cn-guangzhou.aliyuncs.com/typoraimage-20200828135810387.png" alt="image-20200828135810387" /></p>
+
+<p><code class="language-plaintext highlighter-rouge">说明</code>：如果两个收集器之间存在连线，就说明它们可以搭配使用[插图]，图中收集器所处的区域，则表示它是属于新生代收集器抑或是老年代收集器</p>
+
+<h3 id="4内存分配策略">4.内存分配策略</h3>
+
+<ul>
+  <li>对象优先在新生代Eden区分配，如果内存不足虚拟机会发起一次Minor GC收集（<font color="red">-XX：+PrintGCDetails</font>:打印内存回收日志的详细信息）。</li>
+  <li>大对象直接进入老年代。</li>
+  <li>长期存活对象进入老年代</li>
+</ul>
+
+<h4 id="41-对态对象年龄判断">4.1 对态对象年龄判断</h4>
+
+<p>如果在Survivor空间中相同年龄所有对象大小的总和大于Survivor空间的一半，年龄大于或等于该年龄的对象就可以直接进入老年代，无须等到<code class="language-plaintext highlighter-rouge">-XX：MaxTenuringThreshold</code>（HotSpot虚拟机默认为15）中要求的年龄。</p>
+
+<h4 id="42-空间分配担保">4.2 空间分配担保</h4>
+
+<p>在发生Minor GC之前，虚拟机必须先检查老年代最大可用的连续空间是否大于新生代所有对象总空间，如果这个条件成立，那这一次Minor GC可以确保是安全的。如果不成立，则虚拟机会先查看-XX：HandlePromotionFailure参数的设置值是否允许担保失败（Handle Promotion Failure）；如果允许，那会继续检查老年代最大可用的连续空间是否大于历次晋升到老年代对象的平均大小，如果大于，将尝试进行一次Minor GC，尽管这次Minor GC是有风险的；如果小于，或者-XX：HandlePromotionFailure设置不允许冒险，那这时就要改为进行一次FullGC。</p>
+
+<h3 id="5调优案例分析">5.调优案例分析</h3>
+
+<font color="red">单体应用在较大内存的硬件上主要的部署方式有两种：</font>
+
+<ul>
+  <li>通过一个单独的Java虚拟机实例来管理大量的Java堆内存。</li>
+  <li>同时使用若干个Java虚拟机，建立逻辑集群来利用硬件资源。</li>
+</ul>
+
+<p>## 类文件结构</p>
+
+<h3 id="class文件格式">class文件格式</h3>
+
+<p><img src="https://procon-note.oss-cn-guangzhou.aliyuncs.com/typoraimage-20200828142838536.png" alt="image-20200828142838536" /></p>
+
+<p><code class="language-plaintext highlighter-rouge">magic</code>: 值为0xCAFEBABE，唯一作用是确定这个文件是否为一个能被虚拟机接受的Class文件</p>
+
+<p><code class="language-plaintext highlighter-rouge">Minor Version</code>:  次版本号</p>
+
+<p><code class="language-plaintext highlighter-rouge">Major Version</code>：主版本号（JDK 1.1之后的每个JDK大版本发布主版本号向上加1（JDK1.0～1.1使用了45.0～45.3的版本号）。</p>
+
+<p><code class="language-plaintext highlighter-rouge">constant_pool</code>: 常量池可以比喻为Class文件里的资源仓库，它是Class文件结构中与其他项目关联最多的数据，通常也是占用Class文件空间最大的数据项目之一，另外，它还是在Class文件中第一个出现的表类型数据项目。</p>
+
+<p><code class="language-plaintext highlighter-rouge">constant_pool_count</code>: 由于常量池中常量的数量是不固定的，所以在常量池的入口需要放置一项u2类型的数据，代表常量池容量计数值</p>
+
+<p><code class="language-plaintext highlighter-rouge">access_flags</code>: 这个标志用于识别一些类或者接口层次的访问信息，包括：这个Class是类还是接口；是否定义为public类型；是否定义为abstract类型；如果是类的话，是否被声明为final等。</p>
+
+<p><code class="language-plaintext highlighter-rouge">this_class</code>: 类索引—–用于确定这个类的全限定名。</p>
+
+<p><code class="language-plaintext highlighter-rouge">super_calass</code>: 父索引—-除了java.lang.Object之外，所有的Java类都有父类，因此除了java.lang.Object外，所有Java类的父类索引都不为0。</p>
+
+<p><code class="language-plaintext highlighter-rouge">implement _class</code>: 接口索引—-接口索引集合就用来描述这个类实现了哪些接口，这些被实现的接口将按implements关键字（如果这个Class文件表示的是一个接口，则应当是extends关键字）后的接口顺序从左到右排列在接口索引集合中。</p>
+
+<p><code class="language-plaintext highlighter-rouge">filed_info</code>: 字段表—用于描述接口或者类中声明的变量。</p>
+
+<h2 id="类的加载过程">类的加载过程</h2>
+
+<h3 id="1-加载过程">1. 加载过程</h3>
+
+<p>##### 1.1 需要立即初始化的场景</p>
+
+<ul>
+  <li>
+    <p>new、getstatic、putstatic、invokestatic遇到这四个字节码指令（<code class="language-plaintext highlighter-rouge">对应的java场景：</code>new关键字、读取或设置一个类型的静态字段、调用一个类型的静态方法）</p>
+  </li>
+  <li>子类初始化时父类没有初始化，要初始化父类</li>
+  <li>使用反射方法对类型初始化</li>
+  <li>虚拟机启动时初始化主类</li>
+  <li>default关键字修饰的接口，实现类发生变化时</li>
+  <li>如果一个java.lang.invoke.MethodHandle实例最后的解析结果为REF_getStatic、REF_putStatic、REF_invokeStatic、REF_newInvokeSpecial四种类型的方法句柄，并且这个方法句柄对应的类没有进行过初始化，则需要先触发其初始化</li>
+</ul>
+
+<h5 id="12-类的加载">1.2 类的加载</h5>
+
+<ul>
+  <li>根据类的全限定名获取二进制流文件</li>
+  <li>将字节流代表的静态存储结构转换为方法区的运行时的数据结构</li>
+  <li>在内存中生成一个代表这个类的Class对象，作为方法区这个类的各种数据访问入口</li>
+</ul>
+
+<h5 id="13-验证">1.3 验证</h5>
+
+<p>​		这一阶段的目的是确保Class文件的字节流中包含的信息符合《Java虚拟机规范》的全部约束要求，保证这些信息被当作代码运行后不会危害虚拟机自身的安全。</p>
+
+<h5 id="14-准备">1.4. 准备</h5>
+
+<p>准备阶段是正式为类中定义的变量（即静态变量，被static修饰的变量）分配内存并设置类变量初始值的阶段。</p>
+
+<h5 id="15-解析">1.5. 解析</h5>
+
+<p>解析阶段是Java虚拟机将常量池内的符号引用替换为直接引用的过程。</p>
+
+<h3 id="2-类加载器">2. 类加载器</h3>
+
+<p><code class="language-plaintext highlighter-rouge">概念</code>：Java虚拟机设计团队有意把类加载阶段中的“通过一个类的全限定名来获取描述该类的二进制字节流”这个动作放到Java虚拟机外部去实现，以便让应用程序自己决定如何去获取所需的类。实现这个动作的代码被称为“类加载器”（ClassLoader）。</p>
+
+<h4 id="21-双亲委派机制">2.1 双亲委派机制</h4>
+
+<p>两种不同的类加载器：</p>
+
+<ul>
+  <li>启动类加载器（Bootstrap ClassLoader）：这个类加载器使用C++语言实现（hotspot JDK9之前），是虚拟机自身的一部分。<code class="language-plaintext highlighter-rouge">负责加载存放在JAVA_HOME/lib目录（或者被-Xbootclasspath参数所指定的路径中存放的）并且符合命名规范的类库如rt.jar、tools.jar。无法被Java程序直接引用</code></li>
+  <li>其他类加载器：这些类加载器都由Java语言实现，独立存在于虚拟机外部，并且全都继承自抽象类java.lang.ClassLoad。
+    <ol>
+      <li>
+        <font color="red">扩展类加载器（Extension Class Loader）：</font>
+        <p>加载存放再JAVA_HOME/ext目录的类库（或者被java.ext.dirs系统变量所指定的路径中所有的类库）。</p>
+      </li>
+      <li>
+        <font color="red">应用类加载器（Application Class Loader）：</font>
+        <p>这个类加载器由sun.misc.Launcher$AppClassLoader来实现。由于应用程序类加载器是ClassLoader类中的getSystem-ClassLoader()方法的返回值，所以有些场合中也称它为“系统类加载器”。它负责加载用户类路径（ClassPath）上所有的类库，开发者同样可以直接在代码中使用这个类加载器。如果应用程序中没有自定义过自己的类加载器，一般情况下这个就是程序中默认的类加载器。</p>
+      </li>
+    </ol>
+  </li>
+</ul>
+
+<p>类加载双亲委派模型如下图所示：</p>
+
+<p><img src="https://procon-note.oss-cn-guangzhou.aliyuncs.com/typoraimage-20200830102726761.png" alt="image-20200830102726761" /></p>
+
+<font color="red">双亲委派模型的工作过程是：</font>
+<p>如果一个类加载器收到了类加载的请求，它首先不会自己去尝试加载这个类，而是把这个请求委派给父类加载器去完成，每一个层次的类加载器都是如此，因此所有的加载请求最终都应该传送到最顶层的启动类加载器中，只有当父加载器反馈自己无法完成这个加载请求（它的搜索范围中没有找到所需的类）时，子加载器才会尝试自己去完成加载。</p>
+
+<p><img src="https://procon-note.oss-cn-guangzhou.aliyuncs.com/typoraimage-20200830153501543.png" alt="image-20200830153501543" /></p>
+
+<h2 id="java内存模型与线程">Java内存模型与线程</h2>
+
+<h3 id="1java内存模型">1.Java内存模型</h3>
+
+<p>内存中的变量，线程间变量值的传递均需要通过主内存来完成，线程、主内存、工作内存三者的交互关系如图：</p>
+
+<p><img src="https://procon-note.oss-cn-guangzhou.aliyuncs.com/typoraimage-20200830165426230.png" alt="image-20200830165426230" /></p>
+
+<h4 id="11--内存间的交互">1.1  内存间的交互</h4>
+
+<p>八种操作：</p>
+
+<font color="red"> 锁定（lock）：</font>
+<p>作用于主内存的变量，它把一个变量标识为一条线程独占的状态。</p>
+
+<font color="red"> 解锁（unlock）：</font>
+<p>作用于主内存的变量，它把一个处于锁定状态的变量释放出来，释放后的变量才可以被其他线程锁定。</p>
+
+<font color="red"> 读取（read）：</font>
+<p>作用于主内存的变量，它把一个变量的值从主内存传输到线程的工作内存中，以便随后的load动作使用。</p>
+
+<font color="red"> 载入（load）：</font>
+<p>作用于工作内存的变量，它把read操作从主内存中得到的变量值放入工作内存的变量副本中</p>
+
+<font color="red"> 使用（use）：</font>
+<p>作用于工作内存的变量，它把工作内存中一个变量的值传递给执行引擎，每当虚拟机遇到一个需要使用变量的值的字节码指令时将会执行这个操作。</p>
+
+<font color="red"> 赋值（assign）：</font>
+<p>·assign（赋值）：作用于工作内存的变量，它把一个从执行引擎接收的值赋给工作内存的变量，每当虚拟机遇到一个给变量赋值的字节码指令时执行这个操作</p>
+
+<font color="red"> 存储（store）：</font>
+<p>作用于工作内存的变量，它把工作内存中一个变量的值传送到主内存中，以便随后的write操作使用。</p>
+
+<font color="red"> 写入（write）：</font>
+<p>作用于主内存的变量，它把store操作从工作内存中得到的变量的值放入主内存的变量中。</p>
+
+<font color="red">volatile关键字:</font>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">可见性：</code>加了volatile的关键字的变量对所有线程是可见的。</li>
+  <li><code class="language-plaintext highlighter-rouge">禁止指令重排序优化：</code>指令重排序是指处理器采用了允许将多条指令不按程序规定的顺序分开发送给各个相应的电路单元进行处理。但并不是说指令任意重排，处理器必须能正确处理指令依赖情况保障程序能得出正确的执行结果。</li>
+</ul>
+
+<h4 id="12-原子性可见性与有序性">1.2 原子性、可见性与有序性</h4>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">原子性：</code>由Java内存模型来直接保证的原子性变量操作包括read、load、assign、use、store和write这六个，我们大致可以认为，基本数据类型的访问、读写都是具备原子性的。</li>
+  <li><code class="language-plaintext highlighter-rouge">可见性：</code>指当一个线程修改了共享变量的值时，其他线程能够立即得知这个修改。除了volatile之外，Java还有两个关键字能实现可见性，它们是synchronized和final。</li>
+  <li><code class="language-plaintext highlighter-rouge">有序性：</code>如果在本线程内观察，所有的操作都是有序的；如果在一个线程中观察另一个线程，所有的操作都是无序的。</li>
+</ul>
+
+<h4 id="13-先行发生原则">1.3 先行发生原则</h4>
+
+<p>​       先行发生是Java内存模型中定义的两项操作之间的偏序关系，比如说操作A先行发生于操作B，其实就是说在发生操作B之前，操作A产生的影响能被操作B观察到，“影响”包括修改了内存中共享变量的值、发送了消息、调用了方法等。</p>
+
+<ul>
+  <li>
+    <font color="red">程序次序规则（Program Order Rule）：</font>
+    <p>在一个线程内，按照控制流顺序，书写在前面的操作先行发生于书写在后面的操作。</p>
+  </li>
+  <li>
+    <font color="red">管程锁定规则（Monitor Lock Rule）：</font>
+    <p>一个unlock操作先行发生于后面对同一个锁的lock操作。这里必须强调的是“同一个锁”，而“后面”是指时间上的先后。</p>
+  </li>
+  <li>
+    <font color="red">volatile变量规则（Volatile Variable Rule）：</font>
+    <p>对一个volatile变量的写操作先行发生于后面对这个变量的读操作，这里的“后面”同样是指时间上的先后。</p>
+  </li>
+  <li>
+    <font color="red">线程启动规则（Thread Start Rule）：</font>
+    <p>Thread对象的start()方法先行发生于此线程的每一个动作。</p>
+  </li>
+  <li>
+    <font color="red">线程终止规则（Thread Termination Rule）：</font>
+    <p>线程中的所有操作都先行发生于对此线程的终止检测，我们可以通过Thread::join()方法是否结束、Thread::isAlive()的返回值等手段检测线程是否已经终止执行。</p>
+  </li>
+  <li>
+    <font color="red">线程中断规则（Thread Interruption Rule）：</font>
+    <p>对线程interrupt()方法的调用先行发生于被中断线程的代码检测到中断事件的发生，可以通过Thread::interrupted()方法检测到是否有中断发生。</p>
+  </li>
+  <li>
+    <font color="red">对象终结规则（Finalizer Rule）：</font>
+    <p>一个对象的初始化完成（构造函数执行结束）先行发生于它的finalize()方法的开始。</p>
+  </li>
+  <li>
+    <font color="red">传递性（Transitivity）：</font>
+    <p>如果操作A先行发生于操作B，操作B先行发生于操作C，那就可以得出操作A先行发生于操作C的结论。</p>
+  </li>
+</ul>
+
+<h2 id="java线程">Java线程</h2>
+
+<p><img src="https://procon-note.oss-cn-guangzhou.aliyuncs.com/typoraimage-20200830225905005.png" alt="image-20200830225905005" /></p>
+
+<h3 id="1--线程状态转换">1.  线程状态转换</h3>
+
+<ul>
+  <li>
+    <font color="red">新建（New）：</font>
+    <p>创建后尚未启动的线程处于这种状态。</p>
+  </li>
+  <li>
+    <font color="red">运行（Runnable）：</font>
+    <p>包括操作系统线程状态中的Running和Ready，也就是处于此状态的线程有可能正在执行，也有可能正在等待着操作系统为它分配执行时间。</p>
+  </li>
+  <li>
+    <font color="red">无限期等待（Waiting）：</font>
+    <p>处于这种状态的线程不会被分配处理器执行时间，它们要等待被其他线程显式唤醒。以下方法会让线程陷入无限期的等待状态：</p>
+  </li>
+</ul>
+
+<p>​        ■没有设置Timeout参数的Object::wait()方法；</p>
+
+<p>​        ■没有设置Timeout参数的Thread::join()方法；</p>
+
+<p>​         ■LockSupport::park()方法。</p>
+
+<ul>
+  <li>
+    <font color="red">限期等待（Timed Waiting）：</font>
+    <p>处于这种状态的线程也不会被分配处理器执行时间，不过无须等待被其他线程显式唤醒，在一定时间之后它们会由系统自动唤醒。以下方法会让线程进入限期等待状态：</p>
+
+    <p>■Thread::sleep()方法；</p>
+
+    <p>■设置了Timeout参数的Object::wait()方法；</p>
+
+    <p>■设置了Timeout参数的Thread::join()方法；</p>
+
+    <p>■LockSupport::parkNanos()方法；</p>
+
+    <p>■LockSupport::parkUntil()方法。</p>
+  </li>
+  <li>
+    <font color="red">阻塞（Blocked）：</font>
+    <p>线程被阻塞了，“阻塞状态”与“等待状态”的区别是“阻塞状态”在等待着获取到一个排它锁，这个事件将在另外一个线程放弃这个锁的时候发生；而“等待状态”则是在等待一段时间，或者唤醒动作的发生。在程序等待进入同步区域的时候，线程将进入这种状态。</p>
+  </li>
+  <li>
+    <font color="red">结束（Terminated）：</font>
+    <p>已终止线程的线程状态，线程已经结束执行</p>
+  </li>
+</ul>
+
+<p><img src="https://procon-note.oss-cn-guangzhou.aliyuncs.com/typoraimage-20200830231235172.png" alt="image-20200830231235172" /></p>
+
+<h3 id="2-线程安全">2. 线程安全</h3>
+
+<font color="red"><b>概念：</b></font>
+<p>当多个线程访问一个对象时，如果不用考虑这些线程在运行时环境的调度和执行，也不需要进行额外的同步，或者在调用放进行额外的协调操作，调用这个对象的行为都可以获得正确的结果，那么就称这个线程时安全的。</p>
+
+<h4 id="21-java操作共享数据分类">2.1 Java操作共享数据分类</h4>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">不可变：</code>只要一个不可变的对象被正确地构建出来（即没有发生this引用逃逸的情况），那其外部的可见状态永远都不会改变，永远都不会看到它在多个线程之中处于不一致的状态。“不可变”带来的安全性是最直接、最纯粹的。</li>
+  <li><code class="language-plaintext highlighter-rouge">绝对线程安全：</code>要达到“不管运行时环境如何，调用者都不需要任何额外的同步措施”可能需要付出非常高昂的，甚至不切实际的代价。（Vector）</li>
+  <li>线程兼容</li>
+  <li>线程对立</li>
+</ul>
+
+<h4 id="22-线程安全的实现">2.2 线程安全的实现</h4>
+
+<ul>
+  <li>
+    <font color="red"><b>互斥同步（Mutual Exclusion &amp; Synchronization）:</b></font>
+    <p>同步是指在多个线程并发访问共享数据时，保证共享数据在同一个时刻只被一条（或者是一些，当使用信号量的时候）线程使用。而互斥是实现同步的一种手段，临界区（Critical Section）、互斥量（Mutex）和信号量（Semaphore）都是常见的互斥实现方式。因此在“互斥同步”这四个字里面，互斥是因，同步是果；互斥是方法，同步是目的</p>
+  </li>
+  <li>
+    <font color="red"><b>·等待可中断：</b></font>
+    <p>是指当持有锁的线程长期不释放锁的时候，正在等待的线程可以选择放弃等待，改为处理其他事情。可中断特性对处理执行时间非常长的同步块很有帮助。</p>
+  </li>
+  <li>
+    <font color="red"><b>公平锁:</b></font>
+    <p>是指多个线程在等待同一个锁时，必须按照申请锁的时间顺序来依次获得锁；而非公平锁则不保证这一点，在锁被释放时，任何一个等待锁的线程都有机会获得锁。synchronized中的锁是非公平的，ReentrantLock在默认情况下也是非公平的，但可以通过带布尔值的构造函数要求使用公平锁。不过一旦使用了公平锁，将会导致ReentrantLock的性能急剧下降，会明显影响吞吐量</p>
+  </li>
+  <li>
+    <font color="red"><b>锁绑定多个条件:</b></font>
+    <p>是指一个ReentrantLock对象可以同时绑定多个Condition对象。在synchronized中，锁对象的wait()跟它的notify()或者notifyAll()方法配合可以实现一个隐含的条件，如果要和多于一个的条件关联的时候，就不得不额外添加一个锁；而ReentrantLock则无须这样做，多次调用newCondition()方法即可。</p>
+  </li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">性能已经不再是选择synchronized或者ReentrantLock的决定因素，在synchronized与ReentrantLock都可满足需要时优先使用synchronized。</code></p>
+
+<ul>
+  <li>
+    <font color="red"><b>非阻塞同步（Non-Blocking Synchronization）:</b></font>
+    <p>互斥同步属于一种悲观的并发策略，其总是认为只要不去做正确的同步措施（例如加锁），那就肯定会出现问题，无论共享的数据是否真的会出现竞争，它都会进行加锁（这里讨论的是概念模型，实际上虚拟机会优化掉很大一部分不必要的加锁），这将会导致用户态到核心态转换、维护锁计数器和检查是否有被阻塞的线程需要被唤醒等开销。随着硬件指令集的发展，我们已经有了另外一个选择：基于冲突检测的乐观并发策略，通俗地说就是不管风险，先进行操作，如果没有其他线程争用共享数据，那操作就直接成功了；如果共享的数据的确被争用，产生了冲突，那再进行其他的补偿措施，最常用的补偿措施是不断地重试，直到出现没有竞争的共享数据为止。这种乐观并发策略的实现不再需要把线程阻塞挂起，因此这种同步操作被称为非阻塞同步（Non-Blocking Synchronization），使用这种措施的代码也常被称为无锁（Lock-Free）编程。</p>
+  </li>
+  <li>
+    <font color="red"><b>比较并交换（Compare-and-Swap，`CAS`）:</b></font>
+    <p>CAS指令需要有三个操作数，分别是内存位置（在Java中可以简单地理解为变量的内存地址，用V表示）、旧的预期值（用A表示）和准备设置的新值（用B表示）。CAS指令执行时，当且仅当V符合A时，处理器才会用B更新V的值，否则它就不执行更新。但是，不管是否更新了V的值，都会返回V的旧值，上述的处理过程是一个原子操作，执行期间不会被其他线程中断。</p>
+  </li>
+</ul>
+
+<h4 id="23-自旋锁与自适应自旋">2.3 自旋锁与自适应自旋</h4>
+
+<font color="red">自旋锁：</font>
+<p>为了让线程等待，我们只须让线程执行一个忙循环（自旋），这项技术就是所谓的自旋锁，自旋次数的默认值是十次，用户也可以使用参数-XX：PreBlockSpin来自行更改。在JDK 6中对自旋锁的优化，引入了自适应的自旋。自适应意味着自旋的时间不再是固定的了，而是由前一次在同一个锁上的自旋时间及锁的拥有者的状态来决定的。</p>
+
+
+
+                <hr style="visibility: hidden;">
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/06/05/Java-jar%E5%8C%85%E4%B8%8A%E4%BC%A0%E5%88%B0%E6%9C%AC%E5%9C%B0Maven%E4%BB%93%E5%BA%93/" data-toggle="tooltip" data-placement="top" title="上传jar包到本地">
+                        Previous<br>
+                        <span>上传jar包到本地</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2019/07/04/Java%E4%B9%8Bjvm%E6%8C%87%E4%BB%A4%E6%89%8B%E5%86%8C/" data-toggle="tooltip" data-placement="top" title="jvm指令">
+                        Next<br>
+                        <span>jvm指令</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <hr style="visibility: hidden;">
+
+                <!-- Gitalk 评论 start  -->
+                
+                <!-- Link Gitalk 的支持文件  -->
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+                <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+                <div id="gitalk-container"></div>
+                <script type="text/javascript">
+                    var gitalk = new Gitalk({
+
+                        // gitalk的主要参数
+                        clientID: '2542452a44c3a8034a35',
+                        clientSecret: '3119b189eb567a7a89c2440917078889d1689226',
+                        repo: 'xprocon.github.io',
+                        owner: 'xprocon',
+                        admin: ['xprocon'],
+                        id: 'post',
+                        distractionFreeMode: true,  //是否启用评论全屏遮罩.
+                        createIssueManually: true, //如果当前页面没有相应的 isssue ，且登录的用户属于 admin，则会自动创建 issue。如果设置为 true，则显示一个初始化页面，创建 issue 需要点击 init 按钮。
+                        perPage: 15 //每页多少个评论
+                    });
+                    gitalk.render('gitalk-container');
+                </script>
+                
+                <!-- Gitalk end -->
+
+                
+
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+
+<section>
+    
+        <hr class="hidden-sm hidden-xs">
+    
+    <h5><a href="/archive/">FEATURED TAGS</a></h5>
+    <div class="tags">
+        
+        
+        
+        
+        
+        
+                <a data-sort="0042" 
+                    href="/archive/?tag=Java"
+                    title="Java"
+                    rel="6">Java</a>
+        
+                <a data-sort="0032" 
+                    href="/archive/?tag=linux"
+                    title="linux"
+                    rel="16">linux</a>
+        
+                <a data-sort="0035" 
+                    href="/archive/?tag=%E8%BF%90%E7%BB%B4"
+                    title="运维"
+                    rel="13">运维</a>
+        
+                <a data-sort="0036" 
+                    href="/archive/?tag=%E5%AD%A6%E4%B9%A0"
+                    title="学习"
+                    rel="12">学习</a>
+        
+                <a data-sort="0037" 
+                    href="/archive/?tag=java"
+                    title="java"
+                    rel="11">java</a>
+        
+                <a data-sort="0039" 
+                    href="/archive/?tag=centos"
+                    title="centos"
+                    rel="9">centos</a>
+        
+                <a data-sort="0043" 
+                    href="/archive/?tag=%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"
+                    title="开发环境"
+                    rel="5">开发环境</a>
+        
+                <a data-sort="0043" 
+                    href="/archive/?tag=nginx"
+                    title="nginx"
+                    rel="5">nginx</a>
+        
+                <a data-sort="0044" 
+                    href="/archive/?tag=%E5%AE%B9%E5%99%A8%E5%8C%96"
+                    title="容器化"
+                    rel="4">容器化</a>
+        
+                <a data-sort="0044" 
+                    href="/archive/?tag=git"
+                    title="git"
+                    rel="4">git</a>
+        
+                <a data-sort="0044" 
+                    href="/archive/?tag=spring"
+                    title="spring"
+                    rel="4">spring</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=%E4%BA%91%E5%8E%9F%E7%94%9F"
+                    title="云原生"
+                    rel="3">云原生</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=%E5%9F%BA%E7%A1%80"
+                    title="基础"
+                    rel="3">基础</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=jetbrains"
+                    title="jetbrains"
+                    rel="3">jetbrains</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=python"
+                    title="python"
+                    rel="3">python</a>
+    </div>
+</section>
+
+
+                <!-- Friends Blog -->
+                
+<hr>
+<h5>FRIENDS</h5>
+<ul class="list-inline">
+  
+  <li><a href="https://www.baidu.com/">百度（baidu）</a></li>
+  
+  <li><a href="http://10.175.194.215:8080/">IT工具箱（ittools）</a></li>
+  
+  <li><a href="https://www.emojiall.com/zh-hans">emoji（emoji搜索）</a></li>
+  
+  <li><a href="https://www.v2ex.com/">v2ex（v2ex论坛）</a></li>
+  
+  <li><a href="https://www.reddit.com/r/China_irl/">reddit（流浪防区）</a></li>
+  
+</ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<!-- add support for mathjax by voleking-->
+
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'right',
+          // icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- SNS Link -->
+                
+
+
+<ul class="list-inline text-center">
+
+
+  
+  
+  <li>
+    <a href="https://twitter.com/xprocon">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+  <li>
+    <a target="_blank" href="https://www.zhihu.com/people/procon">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa  fa-stack-1x fa-inverse">知</i>
+      </span>
+    </a>
+  </li>
+  
+  
+  <li>
+    <a target="_blank" href="http://weibo.com/huangpuguang1ni">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+  
+  <li>
+    <a target="_blank" href="https://github.com/xprocon">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+</ul>
+
+                <p class="copyright text-muted">
+                    Copyright &copy; Procon's Tech Life Blog 2024
+                    <br>
+                    Powered by <a href="https://blog.procon.cc">Procon Blog</a>
+<!--                    <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="100px"-->
+<!--                        height="20px"-->
+<!--                        src="https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true">-->
+<!--                    </iframe>-->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Simple Jekyll Search -->
+<script src="/js/simple-jekyll-search.min.js"></script>
+
+<!-- Service Worker -->
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+        var d = document, t = 'script',
+            o = d.createElement(t),
+            s = d.getElementsByTagName(t)[0];
+        o.src = u;
+        if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+        s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+
+
+
+
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function () {
+        var $nav = document.querySelector("nav");
+        if ($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog(selector) {
+
+        // interop with multilangual 
+        if ('' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector), a, n, t, l, i, c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#" + $(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="' + i + '" rel="nofollow">' + t + '</a>');
+            l = $('<li class="' + n + '_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function (e) {
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<!-- Multi-Lingual -->
+
+
+<!-- Simple Jekyll Search -->
+<script>
+    // https://stackoverflow.com/questions/1912501/unescape-html-entities-in-javascript
+    function htmlDecode(input) {
+        var e = document.createElement('textarea');
+        e.innerHTML = input;
+        // handle case of empty input
+        return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+    }
+
+    SimpleJekyllSearch({
+        searchInput: document.getElementById('search-input'),
+        resultsContainer: document.getElementById('search-results'),
+        json: '/search.json',
+        searchResultTemplate: '<div class="post-preview item"><a href="{url}"><h2 class="post-title">{title}</h2><h3 class="post-subtitle">{subtitle}</h3><hr></a></div>',
+        noResultsText: 'No results',
+        limit: 50,
+        fuzzy: false,
+        // a hack to get escaped subtitle unescaped. for some reason, 
+        // post.subtitle w/o escape filter nuke entire search.
+        templateMiddleware: function (prop, value, template) {
+            if (prop === 'subtitle' || prop === 'title') {
+                if (value.indexOf("code")) {
+                    return htmlDecode(value);
+                } else {
+                    return value;
+                }
+            }
+        }
+    });
+
+    $(document).ready(function () {
+        var $searchPage = $('.search-page');
+        var $searchOpen = $('.search-icon');
+        var $searchClose = $('.search-icon-close');
+        var $searchInput = $('#search-input');
+        var $body = $('body');
+
+        $searchOpen.on('click', function (e) {
+            e.preventDefault();
+            $searchPage.toggleClass('search-active');
+            var prevClasses = $body.attr('class') || '';
+            setTimeout(function () {
+                $body.addClass('no-scroll');
+            }, 400)
+
+            if ($searchPage.hasClass('search-active')) {
+                $searchClose.on('click', function (e) {
+                    e.preventDefault();
+                    $searchPage.removeClass('search-active');
+                    $body.attr('class', prevClasses);  // from closure 
+                });
+                $searchInput.focus();
+            }
+        });
+    });
+</script>
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

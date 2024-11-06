@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="这里是 @Procon普光 的个人博客，与你一起发现更大的世界">
+    <meta name="keywords" content="普光, Procon普光, 博客, 个人网站, 互联网, Java , 后端">
+    <meta name="theme-color" content="#000000">
+
+    <!-- Open Graph -->
+    <meta property="og:title"
+        content="Jetbrains Idea快捷键 - Procon's Tech Life Blog">
+    
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="快捷键
+">
+    
+    <meta property="article:published_time" content=" 2020-07-01T12:00:00Z">
+    
+    
+    <meta property="article:author" content="Procon">
+    
+    
+    <meta property="article:tag" content="jetbrains">
+    
+    <meta property="article:tag" content="开发环境">
+    
+    <meta property="article:tag" content="idea">
+    
+    
+    <meta property="og:image" content="https://blog.procon.cchttps://procon-note.oss-cn-guangzhou.aliyuncs.com/typora/avatar_m.jpg">
+    <meta property="og:url" content="https://blog.procon.cc/2020/07/01/JetBrains-Idea%E5%BF%AB%E6%8D%B7%E9%94%AE/">
+    <meta property="og:site_name" content="Procon's Tech Life Blog">
+
+    <title>Jetbrains Idea快捷键 - Procon's Tech Life Blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://blog.procon.cc/2020/07/01/JetBrains-Idea%E5%BF%AB%E6%8D%B7%E9%94%AE/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href=" /css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href=" /css/hux-blog.min.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"
+        type="text/css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+
+    <!-- Google AdSense -->
+    <script data-ad-client="ca-pub-6487568398225121" async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top invert">
+    
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Procon's Tech Life Blog</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div id="huxblog_navbar">
+                <div class="navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="/">Home</a>
+                        </li>
+                        
+                        
+                        
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                        
+                        
+                        <li>
+                            <a href="/archive/">Archive</a>
+                        </li>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <li class="search-icon">
+                            <a href="javascript:void(0)">
+                                <i class="fa fa-search"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <script>
+        // Drop Bootstarp low-performance Navbar
+        // Use customize navbar with high-quality material design animation
+        // in high-perf jank-free CSS3 implementation
+        var $body = document.body;
+        var $toggle = document.querySelector('.navbar-toggle');
+        var $navbar = document.querySelector('#huxblog_navbar');
+        var $collapse = document.querySelector('.navbar-collapse');
+
+        var __HuxNav__ = {
+            close: function () {
+                $navbar.className = " ";
+                // wait until animation end.
+                setTimeout(function () {
+                    // prevent frequently toggle
+                    if ($navbar.className.indexOf('in') < 0) {
+                        $collapse.style.height = "0px"
+                    }
+                }, 400)
+            },
+            open: function () {
+                $collapse.style.height = "auto"
+                $navbar.className += " in";
+            }
+        }
+
+        // Bind Event
+        $toggle.addEventListener('click', function (e) {
+            if ($navbar.className.indexOf('in') > 0) {
+                __HuxNav__.close()
+            } else {
+                __HuxNav__.open()
+            }
+        })
+
+        /**
+         * Since Fastclick is used to delegate 'touchstart' globally
+         * to hack 300ms delay in iOS by performing a fake 'click',
+         * Using 'e.stopPropagation' to stop 'touchstart' event from 
+         * $toggle/$collapse will break global delegation.
+         * 
+         * Instead, we use a 'e.target' filter to prevent handler
+         * added to document close HuxNav.  
+         *
+         * Also, we use 'click' instead of 'touchstart' as compromise
+         */
+        document.addEventListener('click', function (e) {
+            if (e.target == $toggle) return;
+            if (e.target.className == 'icon-bar') return;
+            __HuxNav__.close();
+        })
+    </script>
+    <!-- Search -->
+<div class="search-page">
+  <div class="search-icon-close-container">
+    <span class="search-icon-close">
+      <i class="fa fa-chevron-down"></i>
+    </span>
+  </div>
+  <div class="search-main container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <form></form>
+        <input type="text" id="search-input" placeholder="$ grep...">
+        </form>
+        <div id="search-results" class="mini-post-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/home-bg-geek.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+
+
+
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/home-bg-geek.jpg');
+        background: ;
+    }
+
+    
+</style>
+
+
+
+
+<header class="intro-header style-text" >
+
+    <div class="header-mask"></div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/archive/?tag=jetbrains" title="jetbrains">jetbrains</a>
+                        
+                        <a class="tag" href="/archive/?tag=%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83" title="开发环境">开发环境</a>
+                        
+                        <a class="tag" href="/archive/?tag=idea" title="idea">idea</a>
+                        
+                    </div>
+                    <h1>Jetbrains Idea快捷键</h1>
+                    
+                    <h2 class="subheading"></h2>
+                    <span class="meta">Posted by Procon on July 1, 2020</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+
+
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<h1 id="快捷键">快捷键</h1>
+
+<h2 id="intellij-idea-快捷键光标定位切换查找相关">Intellij Idea 快捷键(光标定位/切换/查找相关)</h2>
+
+<p>### 1、进入/返回方法快捷键</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre>Ctrl+B   进入光标所在方法定义的地方或返回该方法被使用的地方（代替Ctrl+鼠标点击方法进入方式，避免了手指在键盘和鼠标之间切换，非常好用的快捷键）
+Ctrl+Alt+B   进入子类或子方法定义的地方，
+Ctrl+F12   查看当前类的所有方法
+Ctrl+H   显示该类继承关系结构图
+Ctrl+Q   显示类/方法/变量上的doc注释说明
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="2光标定位及选中快捷键">2、光标定位及选中快捷键</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+</pre></td><td class="rouge-code"><pre>Ctrl+Alt+Left/Right   光标定位到上一个/下一个浏览位置处
+Ctrl+Shift+Backspace   光标定位到上次修改的地方
+
+
+Alt+Up/Down   移动光标到上一个/下一个方法开始处
+Ctrl+Left/Right   移动光标到前一个/后一个单词处，加Shift键，产生选中效果
+Ctrl+[/]   移动光标到前/后代码块，加Shift键，产生选中效果
+
+
+Ctrl+W   按语法选中代码，连续按会有其他效果，加Shift键，产生反向选中效果
+F2   快速定位到下一个错误和警告处，加Shift键，定位到上一个错误处
+Ctrl+”+/-“   当前方法展开/折叠，加Shift键，全部方法展开/折叠
+
+
+Ctrl+Alt+T 在选中代码情况下，Surround With(if/else/try catch…) 快速包裹代码
+Ctrl+Alt+V 提出选中内容为局部变量
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="3删除插入相关快捷键">3、删除/插入相关快捷键</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="rouge-code"><pre>Ctrl+Backspace   按单词删除
+Ctrl+D   复制行
+Ctrl+Y   删除当前行
+Ctr+Shift+U   大小写转化
+
+
+Shift+Enter   向下插入新行，配合Ctrl键，先代码补全再插入新行
+Ctrl+Alt+Enter   向上插入新行
+
+Ctrl+Shift+Up/Down   整体向上/下移动语句块/方法
+Alt+Shift+Up/Down   单行向上/下移一行
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="4文件之间定位相关快捷">4、文件之间定位相关快捷</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre>Ctrl+E/Ctrl+Tab   查看/切换最近打开过的文件（通过方向键上下选择后，按Enter键进入）
+ALT+Left/Right   打开的代码编辑窗口中左右切换
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="5查找相关快捷键">5、查找相关快捷键</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre>Ctrl+F/R   当前文件下查找/替换文本，加Shift键，当前工程路径下查找/替换文本
+Ctrl+N   查找类
+Ctrl+Shift+N   查找文件
+Ctrl+Shift+Alt+N   查找类中的方法或变量
+
+Shift+Shift   全局查找
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="idea常用快捷键">IDEA常用快捷键</h2>
+
+<font color="red">Ctrl+Z</font>
+<p>：撤销</p>
+
+<font color="red">Ctrl+Shift+Z</font>
+<p>：重做</p>
+
+<font color="red">Ctrl+X</font>
+<p>:剪贴</p>
+
+<font color="red">Ctrl+C</font>
+<p>:复制</p>
+
+<font color="red">Ctrl+V</font>
+<p>:粘贴</p>
+
+<font color="red">Ctrl+Y</font>
+<p>:删除当前行</p>
+
+<font color="red">Ctrl+D</font>
+<blockquote>
+  <p>:复制当前行</p>
+</blockquote>
+
+<font color="red">Ctrl+Shift+J</font>
+<p>:将选中的行合并成一行</p>
+
+<font color="red">Ctrl+N</font>
+<p>:查找类文件</p>
+
+<font color="red">Ctrl+Shift+N</font>
+<p>:查找文件</p>
+
+<font color="red">Ctrl+G</font>
+<p>:定位到文件某一行</p>
+
+<font color="red">Alt+向左箭头</font>
+<p>:返回上次光标位置</p>
+
+<font color="red">Alt+向右箭头</font>
+<p>:返回至后一次光标位置</p>
+
+<font color="red">Ctrl+Shift+Backspace</font>
+<p>:返回上次编辑位置</p>
+
+<font color="red">Ctrl+Shift+反斜杠</font>
+<p>:返回后一次编辑位置</p>
+
+<font color="red">Ctrl+B</font>
+<p>:定位至变量定义的位置</p>
+
+<font color="red">Ctrl+Alt+B</font>
+<p>:定位至选中类或者方法的具体实现</p>
+
+<font color="red">Ctrl+Shift+B</font>
+<blockquote>
+  <p>:直接定位至光标所在变量的类型定义</p>
+</blockquote>
+
+<font color="red">Ctrl+U</font>
+<p>:直接定位至当前方法override或者implements的方法定义处</p>
+
+<font color="red">Ctrl+F12</font>
+<p>:显示当前文件的文件结构</p>
+
+<font color="red">Ctrl+Alt+F12</font>
+<p>:显示当前文件的路径，并可以方便的将相关父路径打开</p>
+
+<font color="red">Ctrl+H</font>
+<p>:显示当前类的继承层次</p>
+
+<font color="red">Ctrl+Shift+H</font>
+<p>:显示当前方法的继承层次</p>
+
+<font color="red">Ctrl+Alt+H</font>
+<p>:显示当前方法的调用层次</p>
+
+<font color="red">F2</font>
+<p>:定位至下一个错误处</p>
+
+<font color="red">Shift+F2</font>
+<p>:定位至前一个错误处</p>
+
+<font color="red">Ctrl+Alt+向上箭头</font>
+<p>:查找前一个变量共现的地方</p>
+
+<font color="red">Ctrl+Alt+向下箭头</font>
+<p>:查找下一个变量共现的地方</p>
+
+<font color="red">Ctrl+=</font>
+<p>:展开代码</p>
+
+<font color="red">Ctrl+-</font>
+<p>:收缩代码</p>
+
+<font color="red">Ctrl+Alt+=</font>
+<p>:递归展开代码</p>
+
+<font color="red">Ctrl+Alt+-</font>
+<p>:递归收缩代码</p>
+
+<font color="red">Ctrl+Shift+=</font>
+<p>:展开所有代码</p>
+
+<font color="red">Ctrl+Shift+-</font>
+<p>:收缩所有代码</p>
+
+<font color="red">Ctrl+Shitft+向下箭头</font>
+<p>:将光标所在的代码块向下整体移动</p>
+
+<font color="red">Ctrl+Shift+向上箭头</font>
+<p>:将光标所在的代码块向上整体移动</p>
+
+<font color="red">Ctrl+Alt+Shift+向左箭头</font>
+<p>:将元素向左移动</p>
+
+<font color="red">Ctrl+Alt+Shift+向右箭头</font>
+<p>:将元素向右移动</p>
+
+<font color="red">Alt+Shift+向下箭头</font>
+<p>:将行向下移动</p>
+
+<font color="red">Alt+Shift+向上箭头</font>
+<p>:将行向上移动</p>
+
+<font color="red">Ctrl+F</font>
+<p>:在当前文件中查找</p>
+
+<font color="red">Ctrl+R</font>
+<p>:替换字符串</p>
+
+<font color="red">Ctrl+Shift+F</font>
+<p>:在全局文件中查找字符串</p>
+
+<font color="red">Ctrl+Shift+R</font>
+<p>:在全局中替换字符串</p>
+
+<font color="red">Alt+F7</font>
+<p>:查找当前变量的使用，并列表显示</p>
+
+<font color="red">Ctrl+Alt+F7</font>
+<p>:查找当前变量的使用，并直接对话框提示</p>
+
+<font color="red">Ctrl+F7</font>
+<p>:在文件中查找符号的使用</p>
+
+<font color="red">Ctrl+Shift+F7</font>
+<p>:在文件中高亮显示变量的使用</p>
+
+<font color="red">Ctrl+O</font>
+<p>:重写基类方法</p>
+
+<font color="red">Ctrl+I</font>
+<p>:实现基类或接口中的方法</p>
+
+<font color="red">Alt+Insert</font>
+<p>:产生构造方法，get/set方法等</p>
+
+<font color="red">Ctrl+Alt+T</font>
+<p>:将选中的代码使用if，while，try/catch等包装</p>
+
+<font color="red">Ctrl+Shitf+Delete</font>
+<p>:去除相关的包装代码</p>
+
+<font color="red">Alt+/</font>
+<p>:自动完成</p>
+
+<font color="red">Alt+Enter</font>
+<p>:自动提示完成，抛出异常</p>
+
+<font color="red">Ctrl+J</font>
+<p>:插入Live Template 快速插入一行或者多行代码</p>
+
+<font color="red">Ctrl+Alt+J</font>
+<p>:使用Live Template包装</p>
+
+<font color="red">Ctrl+/</font>
+<p>:使用//注释</p>
+
+<font color="red">Ctrl+Shift+/</font>
+<p>:使用/\/注释</p>
+
+<font color="red">Ctrl+Alt+L</font>
+<p>:格式化代码</p>
+
+<font color="red">Ctrl+Alt+I</font>
+<p>:自动缩进行</p>
+
+<font color="red">Ctrl+Alt+O</font>
+<p>:优化import</p>
+
+<font color="red">Ctrl+]</font>
+<p>:快速跳转至诸如{}围起来的代码块的结尾处</p>
+
+<font color="red">Ctrl+[</font>
+<p>:快速跳转至诸如{}围起来的代码块的开头处</p>
+
+<font color="red">Ctrl+Shift+Enter</font>
+<p>:将输入的if，for，函数等等补上{}或者；使代码语句完整</p>
+
+<font color="red">Shift+Enter</font>
+<p>:在当前行的下方开始新行</p>
+
+<font color="red">Ctrl+Alt+Enter</font>
+<p>:在当前行的上方插入新行</p>
+
+<font color="red">Ctrl+Delete</font>
+<p>:删除光标所在至单词结尾处的所有字符</p>
+
+<font color="red">Ctrl+Backspace</font>
+<p>:删除光标所在至单词开头处的所有字符</p>
+
+<font color="red">Ctrl+向左箭头</font>
+<p>:将光标移至前一个单词</p>
+
+<font color="red">Ctrl+向右箭头</font>
+<p>:将光标移至后一个单词</p>
+
+<font color="red">Ctrl+向上箭头</font>
+<p>:向上滚动一行</p>
+
+<font color="red">Ctrl+向下箭头</font>
+<p>:向下滚动一行</p>
+
+<font color="red">Ctrl+W</font>
+<p>:选中整个单词</p>
+
+<font color="red">Ctrl+Shift+U</font>
+<p>:切换大小写</p>
+
+<font color="red">Shift+F6</font>
+<p>:重命名</p>
+
+<font color="red">Ctrl+F6</font>
+<p>:更改函数签名</p>
+
+<font color="red">Ctrl+Shift+F6</font>
+<p>:更改类型</p>
+
+
+                <hr style="visibility: hidden;">
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2020/04/06/python%E7%88%AC%E8%99%AB/" data-toggle="tooltip" data-placement="top" title="python爬虫">
+                        Previous<br>
+                        <span>python爬虫</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2020/08/08/Typora%E5%BF%AB%E6%8D%B7%E9%94%AE/" data-toggle="tooltip" data-placement="top" title="Typora快捷键">
+                        Next<br>
+                        <span>Typora快捷键</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <hr style="visibility: hidden;">
+
+                <!-- Gitalk 评论 start  -->
+                
+                <!-- Link Gitalk 的支持文件  -->
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+                <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+                <div id="gitalk-container"></div>
+                <script type="text/javascript">
+                    var gitalk = new Gitalk({
+
+                        // gitalk的主要参数
+                        clientID: '2542452a44c3a8034a35',
+                        clientSecret: '3119b189eb567a7a89c2440917078889d1689226',
+                        repo: 'xprocon.github.io',
+                        owner: 'xprocon',
+                        admin: ['xprocon'],
+                        id: 'post',
+                        distractionFreeMode: true,  //是否启用评论全屏遮罩.
+                        createIssueManually: true, //如果当前页面没有相应的 isssue ，且登录的用户属于 admin，则会自动创建 issue。如果设置为 true，则显示一个初始化页面，创建 issue 需要点击 init 按钮。
+                        perPage: 15 //每页多少个评论
+                    });
+                    gitalk.render('gitalk-container');
+                </script>
+                
+                <!-- Gitalk end -->
+
+                
+
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+
+<section>
+    
+        <hr class="hidden-sm hidden-xs">
+    
+    <h5><a href="/archive/">FEATURED TAGS</a></h5>
+    <div class="tags">
+        
+        
+        
+        
+        
+        
+                <a data-sort="0042" 
+                    href="/archive/?tag=Java"
+                    title="Java"
+                    rel="6">Java</a>
+        
+                <a data-sort="0032" 
+                    href="/archive/?tag=linux"
+                    title="linux"
+                    rel="16">linux</a>
+        
+                <a data-sort="0035" 
+                    href="/archive/?tag=%E8%BF%90%E7%BB%B4"
+                    title="运维"
+                    rel="13">运维</a>
+        
+                <a data-sort="0036" 
+                    href="/archive/?tag=%E5%AD%A6%E4%B9%A0"
+                    title="学习"
+                    rel="12">学习</a>
+        
+                <a data-sort="0037" 
+                    href="/archive/?tag=java"
+                    title="java"
+                    rel="11">java</a>
+        
+                <a data-sort="0039" 
+                    href="/archive/?tag=centos"
+                    title="centos"
+                    rel="9">centos</a>
+        
+                <a data-sort="0043" 
+                    href="/archive/?tag=%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"
+                    title="开发环境"
+                    rel="5">开发环境</a>
+        
+                <a data-sort="0043" 
+                    href="/archive/?tag=nginx"
+                    title="nginx"
+                    rel="5">nginx</a>
+        
+                <a data-sort="0044" 
+                    href="/archive/?tag=%E5%AE%B9%E5%99%A8%E5%8C%96"
+                    title="容器化"
+                    rel="4">容器化</a>
+        
+                <a data-sort="0044" 
+                    href="/archive/?tag=git"
+                    title="git"
+                    rel="4">git</a>
+        
+                <a data-sort="0044" 
+                    href="/archive/?tag=spring"
+                    title="spring"
+                    rel="4">spring</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=%E4%BA%91%E5%8E%9F%E7%94%9F"
+                    title="云原生"
+                    rel="3">云原生</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=%E5%9F%BA%E7%A1%80"
+                    title="基础"
+                    rel="3">基础</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=jetbrains"
+                    title="jetbrains"
+                    rel="3">jetbrains</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=python"
+                    title="python"
+                    rel="3">python</a>
+    </div>
+</section>
+
+
+                <!-- Friends Blog -->
+                
+<hr>
+<h5>FRIENDS</h5>
+<ul class="list-inline">
+  
+  <li><a href="https://www.baidu.com/">百度（baidu）</a></li>
+  
+  <li><a href="http://10.175.194.215:8080/">IT工具箱（ittools）</a></li>
+  
+  <li><a href="https://www.emojiall.com/zh-hans">emoji（emoji搜索）</a></li>
+  
+  <li><a href="https://www.v2ex.com/">v2ex（v2ex论坛）</a></li>
+  
+  <li><a href="https://www.reddit.com/r/China_irl/">reddit（流浪防区）</a></li>
+  
+</ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<!-- add support for mathjax by voleking-->
+
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'right',
+          // icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- SNS Link -->
+                
+
+
+<ul class="list-inline text-center">
+
+
+  
+  
+  <li>
+    <a href="https://twitter.com/xprocon">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+  <li>
+    <a target="_blank" href="https://www.zhihu.com/people/procon">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa  fa-stack-1x fa-inverse">知</i>
+      </span>
+    </a>
+  </li>
+  
+  
+  <li>
+    <a target="_blank" href="http://weibo.com/huangpuguang1ni">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+  
+  <li>
+    <a target="_blank" href="https://github.com/xprocon">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+</ul>
+
+                <p class="copyright text-muted">
+                    Copyright &copy; Procon's Tech Life Blog 2024
+                    <br>
+                    Powered by <a href="https://blog.procon.cc">Procon Blog</a>
+<!--                    <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="100px"-->
+<!--                        height="20px"-->
+<!--                        src="https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true">-->
+<!--                    </iframe>-->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Simple Jekyll Search -->
+<script src="/js/simple-jekyll-search.min.js"></script>
+
+<!-- Service Worker -->
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+        var d = document, t = 'script',
+            o = d.createElement(t),
+            s = d.getElementsByTagName(t)[0];
+        o.src = u;
+        if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+        s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+
+
+
+
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function () {
+        var $nav = document.querySelector("nav");
+        if ($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog(selector) {
+
+        // interop with multilangual 
+        if ('' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector), a, n, t, l, i, c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#" + $(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="' + i + '" rel="nofollow">' + t + '</a>');
+            l = $('<li class="' + n + '_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function (e) {
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<!-- Multi-Lingual -->
+
+
+<!-- Simple Jekyll Search -->
+<script>
+    // https://stackoverflow.com/questions/1912501/unescape-html-entities-in-javascript
+    function htmlDecode(input) {
+        var e = document.createElement('textarea');
+        e.innerHTML = input;
+        // handle case of empty input
+        return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+    }
+
+    SimpleJekyllSearch({
+        searchInput: document.getElementById('search-input'),
+        resultsContainer: document.getElementById('search-results'),
+        json: '/search.json',
+        searchResultTemplate: '<div class="post-preview item"><a href="{url}"><h2 class="post-title">{title}</h2><h3 class="post-subtitle">{subtitle}</h3><hr></a></div>',
+        noResultsText: 'No results',
+        limit: 50,
+        fuzzy: false,
+        // a hack to get escaped subtitle unescaped. for some reason, 
+        // post.subtitle w/o escape filter nuke entire search.
+        templateMiddleware: function (prop, value, template) {
+            if (prop === 'subtitle' || prop === 'title') {
+                if (value.indexOf("code")) {
+                    return htmlDecode(value);
+                } else {
+                    return value;
+                }
+            }
+        }
+    });
+
+    $(document).ready(function () {
+        var $searchPage = $('.search-page');
+        var $searchOpen = $('.search-icon');
+        var $searchClose = $('.search-icon-close');
+        var $searchInput = $('#search-input');
+        var $body = $('body');
+
+        $searchOpen.on('click', function (e) {
+            e.preventDefault();
+            $searchPage.toggleClass('search-active');
+            var prevClasses = $body.attr('class') || '';
+            setTimeout(function () {
+                $body.addClass('no-scroll');
+            }, 400)
+
+            if ($searchPage.hasClass('search-active')) {
+                $searchClose.on('click', function (e) {
+                    e.preventDefault();
+                    $searchPage.removeClass('search-active');
+                    $body.attr('class', prevClasses);  // from closure 
+                });
+                $searchInput.focus();
+            }
+        });
+    });
+</script>
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

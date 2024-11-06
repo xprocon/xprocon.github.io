@@ -1,0 +1,2062 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="这里是 @Procon普光 的个人博客，与你一起发现更大的世界">
+    <meta name="keywords" content="普光, Procon普光, 博客, 个人网站, 互联网, Java , 后端">
+    <meta name="theme-color" content="#000000">
+
+    <!-- Open Graph -->
+    <meta property="og:title"
+        content="java使用Arthas - Procon's Tech Life Blog">
+    
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="Arthas 教程
+">
+    
+    <meta property="article:published_time" content=" 2019-03-18T12:00:00Z">
+    
+    
+    <meta property="article:author" content="Procon">
+    
+    
+    <meta property="article:tag" content="java">
+    
+    <meta property="article:tag" content="arthas">
+    
+    <meta property="article:tag" content="alibaba">
+    
+    <meta property="article:tag" content="学习">
+    
+    
+    <meta property="og:image" content="https://blog.procon.cchttps://procon-note.oss-cn-guangzhou.aliyuncs.com/typora/avatar_m.jpg">
+    <meta property="og:url" content="https://blog.procon.cc/2019/03/18/Java-%E4%BD%BF%E7%94%A8Arthas%E6%8E%92%E6%9F%A5%E9%97%AE%E9%A2%98%E5%AD%A6%E4%B9%A0/">
+    <meta property="og:site_name" content="Procon's Tech Life Blog">
+
+    <title>java使用Arthas - Procon's Tech Life Blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://blog.procon.cc/2019/03/18/Java-%E4%BD%BF%E7%94%A8Arthas%E6%8E%92%E6%9F%A5%E9%97%AE%E9%A2%98%E5%AD%A6%E4%B9%A0/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href=" /css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href=" /css/hux-blog.min.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"
+        type="text/css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+
+    <!-- Google AdSense -->
+    <script data-ad-client="ca-pub-6487568398225121" async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top invert">
+    
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Procon's Tech Life Blog</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div id="huxblog_navbar">
+                <div class="navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="/">Home</a>
+                        </li>
+                        
+                        
+                        
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                        
+                        
+                        <li>
+                            <a href="/archive/">Archive</a>
+                        </li>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <li class="search-icon">
+                            <a href="javascript:void(0)">
+                                <i class="fa fa-search"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <script>
+        // Drop Bootstarp low-performance Navbar
+        // Use customize navbar with high-quality material design animation
+        // in high-perf jank-free CSS3 implementation
+        var $body = document.body;
+        var $toggle = document.querySelector('.navbar-toggle');
+        var $navbar = document.querySelector('#huxblog_navbar');
+        var $collapse = document.querySelector('.navbar-collapse');
+
+        var __HuxNav__ = {
+            close: function () {
+                $navbar.className = " ";
+                // wait until animation end.
+                setTimeout(function () {
+                    // prevent frequently toggle
+                    if ($navbar.className.indexOf('in') < 0) {
+                        $collapse.style.height = "0px"
+                    }
+                }, 400)
+            },
+            open: function () {
+                $collapse.style.height = "auto"
+                $navbar.className += " in";
+            }
+        }
+
+        // Bind Event
+        $toggle.addEventListener('click', function (e) {
+            if ($navbar.className.indexOf('in') > 0) {
+                __HuxNav__.close()
+            } else {
+                __HuxNav__.open()
+            }
+        })
+
+        /**
+         * Since Fastclick is used to delegate 'touchstart' globally
+         * to hack 300ms delay in iOS by performing a fake 'click',
+         * Using 'e.stopPropagation' to stop 'touchstart' event from 
+         * $toggle/$collapse will break global delegation.
+         * 
+         * Instead, we use a 'e.target' filter to prevent handler
+         * added to document close HuxNav.  
+         *
+         * Also, we use 'click' instead of 'touchstart' as compromise
+         */
+        document.addEventListener('click', function (e) {
+            if (e.target == $toggle) return;
+            if (e.target.className == 'icon-bar') return;
+            __HuxNav__.close();
+        })
+    </script>
+    <!-- Search -->
+<div class="search-page">
+  <div class="search-icon-close-container">
+    <span class="search-icon-close">
+      <i class="fa fa-chevron-down"></i>
+    </span>
+  </div>
+  <div class="search-main container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <form></form>
+        <input type="text" id="search-input" placeholder="$ grep...">
+        </form>
+        <div id="search-results" class="mini-post-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/home-bg-o.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+
+
+
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/home-bg-o.jpg');
+        background: ;
+    }
+
+    
+</style>
+
+
+
+
+<header class="intro-header style-text" >
+
+    <div class="header-mask"></div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/archive/?tag=java" title="java">java</a>
+                        
+                        <a class="tag" href="/archive/?tag=arthas" title="arthas">arthas</a>
+                        
+                        <a class="tag" href="/archive/?tag=alibaba" title="alibaba">alibaba</a>
+                        
+                        <a class="tag" href="/archive/?tag=%E5%AD%A6%E4%B9%A0" title="学习">学习</a>
+                        
+                    </div>
+                    <h1>java使用Arthas</h1>
+                    
+                    <h2 class="subheading">实时排查跟踪和解决线上问题</h2>
+                    <span class="meta">Posted by Procon on March 18, 2019</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+
+
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<h1 id="arthas-教程">Arthas 教程</h1>
+
+<h2 id="启动demo">启动demo</h2>
+
+<p>下载<code class="language-plaintext highlighter-rouge">demo-arthas-spring-boot.jar</code>，再用<code class="language-plaintext highlighter-rouge">java -jar</code>命令启动：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>wget https://code.aliyun.com/middleware-container/handsonLabExternedFiles/raw/master/demo-arthas-spring-boot.jar<span class="p">;</span>java <span class="nt">-jar</span> demo-arthas-spring-boot.jar
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">demo-arthas-spring-boot</code>是一个很简单的spring boot应用，源代码：<a href="https://github.com/hengyunabc/spring-boot-inside/tree/master/demo-arthas-spring-boot">查看</a></p>
+
+<p>启动之后，可以访问61000端口： 点击</p>
+
+<p><img src="https://typora-photo.oss-cn-shenzhen.aliyuncs.com/img/O1CN010Qbzcz1ctPSWSZI6L_!!6000000003658-2-tps-333-182.png" alt="Demo Web" /></p>
+
+<p>下面介绍Arthas里查看<code class="language-plaintext highlighter-rouge">JVM</code>信息的命令。</p>
+
+<h4 id="sysprop">sysprop</h4>
+
+<p><code class="language-plaintext highlighter-rouge">sysprop</code> 可以打印所有的System Properties信息。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>sysprop
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>也可以指定单个key： <code class="language-plaintext highlighter-rouge">sysprop java.version</code></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>sysprop java.version
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>也可以通过<code class="language-plaintext highlighter-rouge">grep</code>来过滤： <code class="language-plaintext highlighter-rouge">sysprop | grep user</code></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>sysprop | <span class="nb">grep </span>user
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>可以设置新的value： <code class="language-plaintext highlighter-rouge">sysprop testKey testValue</code></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>sysprop testKey testValue
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="sysenv">sysenv</h4>
+
+<p><code class="language-plaintext highlighter-rouge">sysenv</code> 命令可以获取到环境变量。和<code class="language-plaintext highlighter-rouge">sysprop</code>命令类似。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>sysenv
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="jvm">jvm</h4>
+
+<p><code class="language-plaintext highlighter-rouge">jvm</code> 命令会打印出<code class="language-plaintext highlighter-rouge">JVM</code>的各种详细信息。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>jvm
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="dashboard">dashboard</h4>
+
+<p><code class="language-plaintext highlighter-rouge">dashboard</code> 命令可以查看当前系统的实时数据面板。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>dashboard
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>输入 <code class="language-plaintext highlighter-rouge">q</code> 或者 <code class="language-plaintext highlighter-rouge">Ctrl+C</code> 可以退出dashboard命令。</p>
+
+<h2 id="tips">Tips</h2>
+
+<p>为了更好使用Arthas，下面先介绍Arthas里的一些使用技巧。</p>
+
+<h4 id="help">help</h4>
+
+<p>Arthas里每一个命令都有详细的帮助信息。可以用<code class="language-plaintext highlighter-rouge">-h</code>来查看。帮助信息里有<code class="language-plaintext highlighter-rouge">EXAMPLES</code>和<code class="language-plaintext highlighter-rouge">WIKI</code>链接。</p>
+
+<p>比如：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>sysprop <span class="nt">-h</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="自动补全">自动补全</h4>
+
+<p>Arthas支持丰富的自动补全功能，在使用有疑惑时，可以输入<code class="language-plaintext highlighter-rouge">Tab</code>来获取更多信息。</p>
+
+<p>比如输入 <code class="language-plaintext highlighter-rouge">sysprop java.</code> 之后，再输入<code class="language-plaintext highlighter-rouge">Tab</code>，会补全出对应的key：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre>$ sysprop java.
+java.runtime.name             java.protocol.handler.pkgs    java.vm.version
+java.vm.vendor                java.vendor.url               java.vm.name
+...
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="readline的快捷键支持">readline的快捷键支持</h4>
+
+<p>Arthas支持常见的命令行快捷键，比如<code class="language-plaintext highlighter-rouge">Ctrl + A</code>跳转行首，<code class="language-plaintext highlighter-rouge">Ctrl + E</code>跳转行尾。</p>
+
+<p>更多的快捷键可以用 <code class="language-plaintext highlighter-rouge">keymap</code> 命令查看。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>keymap
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="历史命令的补全">历史命令的补全</h4>
+
+<p>如果想再执行之前的命令，可以在输入一半时，按<code class="language-plaintext highlighter-rouge">Up/↑</code> 或者 <code class="language-plaintext highlighter-rouge">Ddown/↓</code>，来匹配到之前的命令。</p>
+
+<p>比如之前执行过<code class="language-plaintext highlighter-rouge">sysprop java.version</code>，那么在输入<code class="language-plaintext highlighter-rouge">sysprop ja</code>之后，可以输入<code class="language-plaintext highlighter-rouge">Up/↑</code>，就会自动补全为<code class="language-plaintext highlighter-rouge">sysprop java.version</code>。</p>
+
+<p>如果想查看所有的历史命令，也可以通过 <code class="language-plaintext highlighter-rouge">history</code> 命令查看到。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nb">history</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="pipeline">pipeline</h4>
+
+<p>Arthas支持在pipeline之后，执行一些简单的命令，比如：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre>sysprop | grep java
+sysprop | grep java
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>sysprop | wc -l
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="scsm-查看已加载的类">sc/sm 查看已加载的类</h2>
+
+<p>下面介绍Arthas里查找已加载类的命令。</p>
+
+<h4 id="sc">sc</h4>
+
+<p><code class="language-plaintext highlighter-rouge">sc</code> 命令可以查找到所有JVM已经加载到的类。 如果搜索的是接口，还会搜索所有的实现类。比如查看所有的<code class="language-plaintext highlighter-rouge">Filter</code>实现类：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>sc javax.servlet.Filter
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>通过<code class="language-plaintext highlighter-rouge">-d</code>参数，可以打印出类加载的具体信息，很方便查找类加载问题。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>sc <span class="nt">-d</span> javax.servlet.Filter
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">sc</code>支持通配，比如搜索所有的<code class="language-plaintext highlighter-rouge">StringUtils</code>：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>sc <span class="k">*</span>StringUtils
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="sm">sm</h4>
+
+<p><code class="language-plaintext highlighter-rouge">sm</code>命令则是查找类的具体函数。比如：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>sm java.math.RoundingMode
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>通过<code class="language-plaintext highlighter-rouge">-d</code>参数可以打印函数的具体属性：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>sm <span class="nt">-d</span> java.math.RoundingMode
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>也可以查找特定的函数，比如查找构造函数：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>sm java.math.RoundingMode &lt;init&gt;
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="jad">Jad</h2>
+
+<p>可以通过 <code class="language-plaintext highlighter-rouge">jad</code> 命令来反编译代码：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>jad com.example.demo.arthas.user.UserController
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>通过<code class="language-plaintext highlighter-rouge">--source-only</code>参数可以只打印出在反编译的源代码：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>jad <span class="nt">--source-only</span> com.example.demo.arthas.user.UserController
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="ognl">Ognl</h2>
+
+<p>在Arthas里，有一个单独的<code class="language-plaintext highlighter-rouge">ognl</code>命令，可以动态执行代码。</p>
+
+<h4 id="调用static函数">调用static函数</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>ognl <span class="s1">'@java.lang.System@out.println("hello ognl")'</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>可以检查<code class="language-plaintext highlighter-rouge">Terminal 1</code>里的进程输出，可以发现打印出了<code class="language-plaintext highlighter-rouge">hello ognl</code>。</p>
+
+<h4 id="查找usercontroller的classloader">查找UserController的ClassLoader</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>sc <span class="nt">-d</span> com.example.demo.arthas.user.UserController | <span class="nb">grep </span>classLoaderHash
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>sc <span class="nt">-d</span> com.example.demo.arthas.user.UserController | <span class="nb">grep </span>classLoaderHash
+<span class="go"> classLoaderHash   1be6f5c3
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>注意hashcode是变化的，需要先查看当前的ClassLoader信息，提取对应ClassLoader的hashcode。</p>
+
+<p>如果你使用<code class="language-plaintext highlighter-rouge">-c</code>，你需要手动输入hashcode：<code class="language-plaintext highlighter-rouge">-c &lt;hashcode&gt;</code></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>ognl <span class="nt">-c</span> 1be6f5c3 @com.example.demo.arthas.user.UserController@logger
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>对于只有唯一实例的ClassLoader可以通过<code class="language-plaintext highlighter-rouge">--classLoaderClass</code>指定class name，使用起来更加方便：</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>ognl <span class="nt">--classLoaderClass</span> org.springframework.boot.loader.LaunchedURLClassLoader  @org.springframework.boot.SpringApplication@logger
+<span class="go">@Slf4jLocationAwareLog[
+</span><span class="gp">    FQCN=@String[org.apache.commons.logging.LogAdapter$</span>Slf4jLocationAwareLog],
+<span class="go">    name=@String[org.springframework.boot.SpringApplication],
+    logger=@Logger[Logger[org.springframework.boot.SpringApplication]],
+]
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">--classLoaderClass</code> 的值是ClassLoader的类名，只有匹配到唯一的ClassLoader实例时才能工作，目的是方便输入通用命令，而<code class="language-plaintext highlighter-rouge">-c &lt;hashcode&gt;</code>是动态变化的。</p>
+
+<h4 id="获取静态类的静态字段">获取静态类的静态字段</h4>
+
+<p>获取<code class="language-plaintext highlighter-rouge">UserController</code>类里的<code class="language-plaintext highlighter-rouge">logger</code>字段：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>ognl <span class="nt">--classLoaderClass</span> org.springframework.boot.loader.LaunchedURLClassLoader @com.example.demo.arthas.user.UserController@logger
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>还可以通过<code class="language-plaintext highlighter-rouge">-x</code>参数控制返回值的展开层数。比如：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>ognl <span class="nt">--classLoaderClass</span> org.springframework.boot.loader.LaunchedURLClassLoader <span class="nt">-x</span> 2 @com.example.demo.arthas.user.UserController@logger
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="执行多行表达式赋值给临时变量返回一个list">执行多行表达式，赋值给临时变量，返回一个List</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>ognl <span class="s1">'#value1=@System@getProperty("java.home"), #value2=@System@getProperty("java.runtime.name"), {#value1, #value2}'</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>ognl <span class="s1">'#value1=@System@getProperty("java.home"), #value2=@System@getProperty("java.runtime.name"), {#value1, #value2}'</span>
+<span class="go">@ArrayList[
+    @String[/Library/Java/JavaVirtualMachines/jdk1.8.0_162.jdk/Contents/Home/jre],
+    @String[Java(TM) SE Runtime Environment],
+]
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="更多">更多</h4>
+
+<p>在Arthas里<code class="language-plaintext highlighter-rouge">ognl</code>表达式是很重要的功能，在很多命令里都可以使用<code class="language-plaintext highlighter-rouge">ognl</code>表达式。</p>
+
+<p>一些更复杂的用法，可以参考：</p>
+
+<ul>
+  <li>OGNL特殊用法请参考：https://github.com/alibaba/arthas/issues/71</li>
+  <li>OGNL表达式官方指南：https://commons.apache.org/proper/commons-ognl/language-guide.html</li>
+</ul>
+
+<h2 id="案例-排查函数调用异常">案例: 排查函数调用异常</h2>
+
+<h4 id="现象">现象</h4>
+
+<p>目前，访问 http://localhost:61000/user/0 ，会返回500异常：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>curl http://localhost:61000/user/0
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="go">{"timestamp":1550223186170,"status":500,"error":"Internal Server Error","exception":"java.lang.IllegalArgumentException","message":"id &lt; 1","path":"/user/0"}
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>但请求的具体参数，异常栈是什么呢？</p>
+
+<h4 id="查看usercontroller的-参数异常">查看UserController的 参数/异常</h4>
+
+<p>在Arthas里执行：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>watch com.example.demo.arthas.user.UserController <span class="k">*</span> <span class="s1">'{params, throwExp}'</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ol>
+  <li>第一个参数是类名，支持通配</li>
+  <li>第二个参数是函数名，支持通配 访问 <code class="language-plaintext highlighter-rouge">curl http://localhost:61000/user/0</code> ,<code class="language-plaintext highlighter-rouge">watch</code>命令会打印调用的参数和异常</li>
+</ol>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>curl http://localhost:61000/user/0
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>watch com.example.demo.arthas.user.UserController <span class="k">*</span> <span class="s1">'{params, throwExp}'</span>
+<span class="go">Press Q or Ctrl+C to abort.
+Affect(class-cnt:1 , method-cnt:2) cost in 53 ms.
+</span><span class="gp">ts=2019-02-15 01:35:25;</span><span class="w"> </span><span class="o">[</span><span class="nv">cost</span><span class="o">=</span>0.996655ms] <span class="nv">result</span><span class="o">=</span>@ArrayList[
+<span class="gp">    @Object[][isEmpty=false;</span><span class="nv">size</span><span class="o">=</span>1],
+<span class="go">    @IllegalArgumentException[java.lang.IllegalArgumentException: id &lt; 1],
+]
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>可以看到实际抛出的异常是<code class="language-plaintext highlighter-rouge">IllegalArgumentException</code>。</p>
+
+<p>可以输入 <code class="language-plaintext highlighter-rouge">q</code> 或者 <code class="language-plaintext highlighter-rouge">Ctrl+C</code> 退出watch命令。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>q
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>如果想把获取到的结果展开，可以用<code class="language-plaintext highlighter-rouge">-x</code>参数：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>watch com.example.demo.arthas.user.UserController <span class="k">*</span> <span class="s1">'{params, throwExp}'</span> <span class="nt">-x</span> 2
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="返回值表达式">返回值表达式</h4>
+
+<p>在上面的例子里，第三个参数是<code class="language-plaintext highlighter-rouge">返回值表达式</code>，它实际上是一个<code class="language-plaintext highlighter-rouge">ognl</code>表达式，它支持一些内置对象：</p>
+
+<ul>
+  <li>loader</li>
+  <li>clazz</li>
+  <li>method</li>
+  <li>target</li>
+  <li>params</li>
+  <li>returnObj</li>
+  <li>throwExp</li>
+  <li>isBefore</li>
+  <li>isThrow</li>
+  <li>isReturn</li>
+</ul>
+
+<p>你可以利用这些内置对象来组成不同的表达式。比如返回一个数组：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>watch com.example.demo.arthas.user.UserController <span class="k">*</span> <span class="s1">'{params[0], target, returnObj}'</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>更多参考： https://arthas.aliyun.com/doc/advice-class.html</p>
+
+<h4 id="条件表达式">条件表达式</h4>
+
+<p><code class="language-plaintext highlighter-rouge">watch</code>命令支持在第4个参数里写条件表达式，比如：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>watch com.example.demo.arthas.user.UserController <span class="k">*</span> returnObj <span class="s1">'params[0] &gt; 100'</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>当访问 user/1 时，<code class="language-plaintext highlighter-rouge">watch</code>命令没有输出</p>
+
+<p>当访问 user/101 时，<code class="language-plaintext highlighter-rouge">watch</code>会打印出结果。</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>watch com.example.demo.arthas.user.UserController <span class="k">*</span> returnObj <span class="s1">'params[0] &gt; 100'</span>
+<span class="go">Press Q or Ctrl+C to abort.
+Affect(class-cnt:1 , method-cnt:2) cost in 47 ms.
+</span><span class="gp">ts=2019-02-13 19:42:12;</span><span class="w"> </span><span class="o">[</span><span class="nv">cost</span><span class="o">=</span>0.821443ms] <span class="nv">result</span><span class="o">=</span>@User[
+<span class="go">    id=@Integer[101],
+    name=@String[name101],
+]
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="当异常时捕获">当异常时捕获</h4>
+
+<p><code class="language-plaintext highlighter-rouge">watch</code>命令支持<code class="language-plaintext highlighter-rouge">-e</code>选项，表示只捕获抛出异常时的请求：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>watch com.example.demo.arthas.user.UserController <span class="k">*</span> <span class="s2">"{params[0],throwExp}"</span> <span class="nt">-e</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="按照耗时进行过滤">按照耗时进行过滤</h4>
+
+<p>watch命令支持按请求耗时进行过滤，比如：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>watch com.example.demo.arthas.user.UserController <span class="k">*</span> <span class="s1">'{params, returnObj}'</span> <span class="s1">'#cost&gt;200'</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="案例-热更新代码">案例: 热更新代码</h2>
+
+<p>下面介绍通过<code class="language-plaintext highlighter-rouge">jad</code>/<code class="language-plaintext highlighter-rouge">mc</code>/<code class="language-plaintext highlighter-rouge">redefine</code> 命令实现动态更新代码的功能。</p>
+
+<p>目前，访问 http://localhost:61000/user/0 ，会返回500异常：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>curl http://localhost:61000/user/0
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>{"timestamp":1550223186170,"status":500,"error":"Internal Server Error","exception":"java.lang.IllegalArgumentException","message":"id &lt; 1","path":"/user/0"}
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>下面通过热更新代码，修改这个逻辑。</p>
+
+<h4 id="jad反编译usercontroller">jad反编译UserController</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>jad <span class="nt">--source-only</span> com.example.demo.arthas.user.UserController <span class="o">&gt;</span> /tmp/UserController.java
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>jad编译的结果保存在 <code class="language-plaintext highlighter-rouge">/tmp/UserController.java</code>文件里了。</p>
+
+<p>再打开一个<code class="language-plaintext highlighter-rouge">Terminal 3</code>，然后用vim来编辑<code class="language-plaintext highlighter-rouge">/tmp/UserController.java</code>：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>vim /tmp/UserController.java
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>比如当 user id 小于1时，也正常返回，不抛出异常：</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="rouge-code"><pre>    <span class="nd">@GetMapping</span><span class="o">(</span><span class="n">value</span><span class="o">={</span><span class="s">"/user/{id}"</span><span class="o">})</span>
+    <span class="kd">public</span> <span class="nc">User</span> <span class="nf">findUserById</span><span class="o">(</span><span class="nd">@PathVariable</span> <span class="nc">Integer</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"id: {}"</span><span class="o">,</span> <span class="o">(</span><span class="nc">Object</span><span class="o">)</span><span class="n">id</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">id</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">id</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">User</span><span class="o">(</span><span class="n">id</span><span class="o">,</span> <span class="s">"name"</span> <span class="o">+</span> <span class="n">id</span><span class="o">);</span>
+            <span class="c1">// throw new IllegalArgumentException("id &lt; 1");</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">User</span><span class="o">(</span><span class="n">id</span><span class="o">.</span><span class="na">intValue</span><span class="o">(),</span> <span class="s">"name"</span> <span class="o">+</span> <span class="n">id</span><span class="o">);</span>
+    <span class="o">}</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="sc查找加载usercontroller的classloader">sc查找加载UserController的ClassLoader</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>sc <span class="nt">-d</span> <span class="k">*</span>UserController | <span class="nb">grep </span>classLoaderHash
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>sc <span class="nt">-d</span> <span class="k">*</span>UserController | <span class="nb">grep </span>classLoaderHash
+<span class="go"> classLoaderHash   1be6f5c3
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>可以发现是 spring boot <code class="language-plaintext highlighter-rouge">LaunchedURLClassLoader@1be6f5c3</code> 加载的。</p>
+
+<p>请记下你的classLoaderHash，后面需要使用它。在这里，它是 <code class="language-plaintext highlighter-rouge">1be6f5c3</code>。</p>
+
+<h4 id="mc">mc</h4>
+
+<p>保存好<code class="language-plaintext highlighter-rouge">/tmp/UserController.java</code>之后，使用<code class="language-plaintext highlighter-rouge">mc</code>(Memory Compiler)命令来编译，并且通过<code class="language-plaintext highlighter-rouge">-c</code>或者<code class="language-plaintext highlighter-rouge">--classLoaderClass</code>参数指定ClassLoader：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>mc <span class="nt">--classLoaderClass</span> org.springframework.boot.loader.LaunchedURLClassLoader /tmp/UserController.java <span class="nt">-d</span> /tmp
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>mc <span class="nt">--classLoaderClass</span> org.springframework.boot.loader.LaunchedURLClassLoader /tmp/UserController.java <span class="nt">-d</span> /tmp
+<span class="go">Memory compiler output:
+/tmp/com/example/demo/arthas/user/UserController.class
+Affect(row-cnt:1) cost in 346 ms
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>也可以通过<code class="language-plaintext highlighter-rouge">mc -c &lt;classLoaderHash&gt; /tmp/UserController.java -d /tmp</code>，使用<code class="language-plaintext highlighter-rouge">-c</code>参数指定ClassLoaderHash:</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>mc <span class="nt">-c</span> 1be6f5c3 /tmp/UserController.java <span class="nt">-d</span> /tmp
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="redefine">redefine</h4>
+
+<p>再使用<code class="language-plaintext highlighter-rouge">redefine</code>命令重新加载新编译好的<code class="language-plaintext highlighter-rouge">UserController.class</code>：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>redefine /tmp/com/example/demo/arthas/user/UserController.class
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre>$ redefine /tmp/com/example/demo/arthas/user/UserController.class
+redefine success, size: 1
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="热修改代码结果">热修改代码结果</h4>
+
+<p><code class="language-plaintext highlighter-rouge">redefine</code>成功之后，再次访问 user/0 ，结果是：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre>{
+  "id": 0,
+  "name": "name0"
+}
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="案例-动态更新应用logger-level">案例: 动态更新应用Logger Level</h2>
+
+<p>在这个案例里，动态修改应用的Logger Level。</p>
+
+<h4 id="查找usercontroller的classloader-1">查找UserController的ClassLoader</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>sc <span class="nt">-d</span> com.example.demo.arthas.user.UserController | <span class="nb">grep </span>classLoaderHash
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>sc <span class="nt">-d</span> com.example.demo.arthas.user.UserController | <span class="nb">grep </span>classLoaderHash
+<span class="go"> classLoaderHash   1be6f5c3
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="用ognl获取logger">用ognl获取logger</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>ognl <span class="nt">--classLoaderClass</span> org.springframework.boot.loader.LaunchedURLClassLoader <span class="s1">'@com.example.demo.arthas.user.UserController@logger'</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>ognl <span class="nt">--classLoaderClass</span> org.springframework.boot.loader.LaunchedURLClassLoader <span class="s1">'@com.example.demo.arthas.user.UserController@logger'</span>
+<span class="go">@Logger[
+    serialVersionUID=@Long[5454405123156820674],
+    FQCN=@String[ch.qos.logback.classic.Logger],
+    name=@String[com.example.demo.arthas.user.UserController],
+    level=null,
+    effectiveLevelInt=@Integer[20000],
+    parent=@Logger[Logger[com.example.demo.arthas.user]],
+    childrenList=null,
+    aai=null,
+    additive=@Boolean[true],
+    loggerContext=@LoggerContext[ch.qos.logback.classic.LoggerContext[default]],
+]
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>可以知道<code class="language-plaintext highlighter-rouge">UserController@logger</code>实际使用的是logback。可以看到<code class="language-plaintext highlighter-rouge">level=null</code>，则说明实际最终的level是从<code class="language-plaintext highlighter-rouge">root</code> logger里来的。</p>
+
+<h4 id="单独设置usercontroller的logger-level">单独设置UserController的logger level</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>ognl <span class="nt">--classLoaderClass</span> org.springframework.boot.loader.LaunchedURLClassLoader <span class="s1">'@com.example.demo.arthas.user.UserController@logger.setLevel(@ch.qos.logback.classic.Level@DEBUG)'</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>再次获取<code class="language-plaintext highlighter-rouge">UserController@logger</code>，可以发现已经是<code class="language-plaintext highlighter-rouge">DEBUG</code>了：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>ognl <span class="nt">--classLoaderClass</span> org.springframework.boot.loader.LaunchedURLClassLoader <span class="s1">'@com.example.demo.arthas.user.UserController@logger'</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>ognl <span class="nt">--classLoaderClass</span> org.springframework.boot.loader.LaunchedURLClassLoader <span class="s1">'@com.example.demo.arthas.user.UserController@logger'</span>
+<span class="go">@Logger[
+    serialVersionUID=@Long[5454405123156820674],
+    FQCN=@String[ch.qos.logback.classic.Logger],
+    name=@String[com.example.demo.arthas.user.UserController],
+    level=@Level[DEBUG],
+    effectiveLevelInt=@Integer[10000],
+    parent=@Logger[Logger[com.example.demo.arthas.user]],
+    childrenList=null,
+    aai=null,
+    additive=@Boolean[true],
+    loggerContext=@LoggerContext[ch.qos.logback.classic.LoggerContext[default]],
+]
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="修改logback的全局logger-level">修改logback的全局logger level</h4>
+
+<p>通过获取<code class="language-plaintext highlighter-rouge">root</code> logger，可以修改全局的logger level：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>ognl <span class="nt">--classLoaderClass</span> org.springframework.boot.loader.LaunchedURLClassLoader <span class="s1">'@org.slf4j.LoggerFactory@getLogger("root").setLevel(@ch.qos.logback.classic.Level@DEBUG)'</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="案例-排查logger冲突问题">案例: 排查logger冲突问题</h2>
+
+<p>在这个案例里，展示排查logger冲突的方法。</p>
+
+<h4 id="确认应用使用的logger系统">确认应用使用的logger系统</h4>
+
+<p>以<code class="language-plaintext highlighter-rouge">UserController</code>为例，它使用的是slf4j api，但实际使用到的logger系统是logback。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>ognl <span class="nt">--classLoaderClass</span> org.springframework.boot.loader.LaunchedURLClassLoader <span class="s1">'@com.example.demo.arthas.user.UserController@logger'</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>ognl <span class="nt">--classLoaderClass</span> org.springframework.boot.loader.LaunchedURLClassLoader <span class="s1">'@com.example.demo.arthas.user.UserController@logger'</span>
+<span class="go">@Logger[
+    serialVersionUID=@Long[5454405123156820674],
+    FQCN=@String[ch.qos.logback.classic.Logger],
+    name=@String[com.example.demo.arthas.user.UserController],
+    level=null,
+    effectiveLevelInt=@Integer[20000],
+    parent=@Logger[Logger[com.example.demo.arthas.user]],
+    childrenList=null,
+    aai=null,
+    additive=@Boolean[true],
+    loggerContext=@LoggerContext[ch.qos.logback.classic.LoggerContext[default]],
+]
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="获取logback实际加载的配置文件">获取logback实际加载的配置文件</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>ognl <span class="nt">--classLoaderClass</span> org.springframework.boot.loader.LaunchedURLClassLoader <span class="s1">'#map1=@org.slf4j.LoggerFactory@getLogger("root").loggerContext.objectMap, #map1.get("CONFIGURATION_WATCH_LIST")'</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="使用classloader命令查找可能存在的logger配置文件">使用classloader命令查找可能存在的logger配置文件</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>classloader <span class="nt">--classLoaderClass</span> org.springframework.boot.loader.LaunchedURLClassLoader <span class="nt">-r</span> logback-spring.xml
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre>$ classloader --classLoaderClass org.springframework.boot.loader.LaunchedURLClassLoader -r logback-spring.xml
+ jar:file:/Users/hengyunabc/code/java/spring-boot-inside/demo-arthas-spring-boot/target/demo-arthas-spring-boot-0.0.1-SNAPSHOT.jar!/BOOT-INF/classes!/logback-spring.xml
+
+Affect(row-cnt:1) cost in 13 ms.
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>可以知道加载的配置的具体来源。</p>
+
+<p>可以尝试加载容易冲突的文件：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>classloader <span class="nt">--classLoaderClass</span> org.springframework.boot.loader.LaunchedURLClassLoader <span class="nt">-r</span> logback.xml
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>classloader <span class="nt">--classLoaderClass</span> org.springframework.boot.loader.LaunchedURLClassLoader <span class="nt">-r</span> log4j.properties
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="案例-获取spring-context">案例: 获取Spring Context</h2>
+
+<p>在这个案例里，展示获取spring context，再获取bean，然后调用函数。</p>
+
+<h4 id="使用tt命令获取到spring-context">使用tt命令获取到spring context</h4>
+
+<p><code class="language-plaintext highlighter-rouge">tt</code>即 TimeTunnel，它可以记录下指定方法每次调用的入参和返回信息，并能对这些不同的时间下调用进行观测。</p>
+
+<ul>
+  <li>https://arthas.aliyun.com/doc/tt.html</li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>tt <span class="nt">-t</span> org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter invokeHandlerMethod
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>访问：user/1</p>
+
+<p>可以看到<code class="language-plaintext highlighter-rouge">tt</code>命令捕获到了一个请求：</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>tt <span class="nt">-t</span> org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdaptePress Q or Ctrl+C to abort.
+<span class="go">Affect(class-cnt:1 , method-cnt:1) cost in 252 ms.
+ INDE  TIMESTAMP    COST(  IS-R  IS-  OBJECT     CLASS               METHOD
+ X                  ms)    ET    EXP
+-----------------------------------------------------------------------------------------
+ 1000  2019-02-15   4.583  true  fal  0xc93cf1a  RequestMappingHand  invokeHandlerMethod
+       15:38:32     923          se              lerAdapter
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="使用tt命令从调用记录里获取到spring-context">使用tt命令从调用记录里获取到spring context</h4>
+
+<p>输入 <code class="language-plaintext highlighter-rouge">q</code> 或者 <code class="language-plaintext highlighter-rouge">Ctrl + C</code> 退出上面的 <code class="language-plaintext highlighter-rouge">tt -t</code>命令。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>q
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>tt <span class="nt">-i</span> 1000 <span class="nt">-w</span> <span class="s1">'target.getApplicationContext()'</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre></td><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>tt <span class="nt">-i</span> 1000 <span class="nt">-w</span> <span class="s1">'target.getApplicationContext()'</span>
+<span class="go">@AnnotationConfigEmbeddedWebApplicationContext[
+    reader=@AnnotatedBeanDefinitionReader[org.springframework.context.annotation.AnnotatedBeanDefinitionReader@2e457641],
+    scanner=@ClassPathBeanDefinitionScanner[org.springframework.context.annotation.ClassPathBeanDefinitionScanner@6eb38026],
+    annotatedClasses=null,
+    basePackages=null,
+]
+Affect(row-cnt:1) cost in 439 ms.
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="获取spring-bean并调用函数">获取spring bean，并调用函数</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>tt <span class="nt">-i</span> 1000 <span class="nt">-w</span> <span class="s1">'target.getApplicationContext().getBean("helloWorldService").getHelloMessage()'</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>结果是：</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>tt <span class="nt">-i</span> 1000 <span class="nt">-w</span> <span class="s1">'target.getApplicationContext().getBean("helloWorldService").getHelloMessage()'</span>
+<span class="go">@String[Hello World]
+Affect(row-cnt:1) cost in 52 ms.
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="案例-排查http请求返回401">案例: 排查HTTP请求返回401</h2>
+
+<p>在这个案例里，展示排查HTTP 401问题的技巧。</p>
+
+<p>访问： admin</p>
+
+<p>结果是：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>Something went wrong: 401 Unauthorized
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>我们知道<code class="language-plaintext highlighter-rouge">401</code>通常是被权限管理的<code class="language-plaintext highlighter-rouge">Filter</code>拦截了，那么到底是哪个<code class="language-plaintext highlighter-rouge">Filter</code>处理了这个请求，返回了401？</p>
+
+<h4 id="跟踪所有的filter函数">跟踪所有的Filter函数</h4>
+
+<p>开始trace：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>trace javax.servlet.Filter <span class="k">*</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>访问： admin</p>
+
+<p>可以在调用树的最深层，找到<code class="language-plaintext highlighter-rouge">AdminFilterConfig$AdminFilter</code>返回了<code class="language-plaintext highlighter-rouge">401</code>：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>+---[3.806273ms] javax.servlet.FilterChain:doFilter()
+|   `---[3.447472ms] com.example.demo.arthas.AdminFilterConfig$AdminFilter:doFilter()
+|       `---[0.17259ms] javax.servlet.http.HttpServletResponse:sendError()
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="通过stack获取调用栈">通过stack获取调用栈</h4>
+
+<p>上面是通过<code class="language-plaintext highlighter-rouge">trace</code>命令来获取信息，从结果里，我们可以知道通过<code class="language-plaintext highlighter-rouge">stack</code>跟踪<code class="language-plaintext highlighter-rouge">HttpServletResponse:sendError()</code>，同样可以知道是哪个<code class="language-plaintext highlighter-rouge">Filter</code>返回了<code class="language-plaintext highlighter-rouge">401</code></p>
+
+<p>执行：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>stack javax.servlet.http.HttpServletResponse sendError <span class="s1">'params[0]==401'</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>访问： admin</p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>stack javax.servlet.http.HttpServletResponse sendError <span class="s1">'params[0]==401'</span>
+<span class="go">Press Q or Ctrl+C to abort.
+Affect(class-cnt:2 , method-cnt:4) cost in 87 ms.
+</span><span class="gp">ts=2019-02-15 16:44:06;</span><span class="nv">thread_name</span><span class="o">=</span>http-nio-8080-exec-6<span class="p">;</span><span class="nb">id</span><span class="o">=</span>16<span class="p">;</span><span class="nv">is_daemon</span><span class="o">=</span><span class="nb">true</span><span class="p">;</span><span class="nv">priority</span><span class="o">=</span>5<span class="p">;</span><span class="nv">TCCL</span><span class="o">=</span>org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedWebappClassLoader@8546cd5
+<span class="go">    @org.apache.catalina.connector.ResponseFacade.sendError()
+</span><span class="gp">        at com.example.demo.arthas.AdminFilterConfig$</span>AdminFilter.doFilter<span class="o">(</span>AdminFilterConfig.java:38<span class="o">)</span>
+<span class="go">        at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+        at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+        at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:99)
+        at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="案例-排查http请求返回404">案例: 排查HTTP请求返回404</h2>
+
+<p>在这个案例里，展示排查HTTP 404问题的技巧。</p>
+
+<p>访问： a.txt</p>
+
+<p>结果是：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>Something went wrong: 404 Not Found
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>那么到底是哪个Servlet处理了这个请求，返回了404？</p>
+
+<h4 id="跟踪所有的servlet函数">跟踪所有的Servlet函数</h4>
+
+<p>开始trace：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>trace javax.servlet.Servlet <span class="k">*</span> <span class="o">&gt;</span> /tmp/servlet.txt
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>访问： a.txt</p>
+
+<p>在<code class="language-plaintext highlighter-rouge">Terminal 3</code>里，查看<code class="language-plaintext highlighter-rouge">/tmp/servlet.txt</code>的内容：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>less /tmp/servlet.txt
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">/tmp/servlet.txt</code>里的内容会比较多，需要耐心找到调用树里最长的地方。</p>
+
+<p>可以发现请求最终是被<code class="language-plaintext highlighter-rouge">freemarker</code>处理的：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+</pre></td><td class="rouge-code"><pre>`---[13.974188ms] org.springframework.web.servlet.ViewResolver:resolveViewName();    +---[0.045561ms] javax.servlet.GenericServlet:&lt;init&gt;()
+    +---[min=0.045545ms,max=0.074342ms,total=0.119887ms,count=2] org.springframework.web.servlet.view.freemarker.FreeMarkerView$GenericServletAdapter:&lt;init&gt;()
+    +---[0.170895ms] javax.servlet.GenericServlet:init()
+    |   `---[0.068578ms] javax.servlet.GenericServlet:init()
+    |       `---[0.021793ms] javax.servlet.GenericServlet:init()
+    `---[0.164035ms] javax.servlet.GenericServlet:getServletContext()
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="案例-理解spring-boot应用的classloader结构">案例: 理解Spring Boot应用的ClassLoader结构</h2>
+
+<p>下面介绍<code class="language-plaintext highlighter-rouge">classloader</code>命令的功能。</p>
+
+<p>先访问一个jsp网页，触发jsp的加载： hello</p>
+
+<h4 id="列出所有classloader">列出所有ClassLoader</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>classloader <span class="nt">-l</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre></td><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>classloader <span class="nt">-l</span>
+<span class="go"> name                                                             loadedCount  hash      parent
+ BootstrapClassLoader                                             2724         null      null
+</span><span class="gp"> com.taobao.arthas.agent.ArthasClassloader@411ce1ab               2009         411ce1ab  sun.misc.Launcher$</span>ExtClassLoader@7494e528
+<span class="gp"> com.taobao.arthas.agent.ArthasClassloader@22ae1234               1253         22ae1234  sun.misc.Launcher$</span>ExtClassLoader@7494e528
+<span class="go"> org.apache.jasper.servlet.JasperLoader@65361d9a                  1            65361d9a  TomcatEmbeddedWebappClassLoader
+                                                                                           context: ROOT
+                                                                                           delegate: true
+</span><span class="gp">                                                                                         ----------&gt;</span><span class="w"> </span>Parent Classloader:
+<span class="go">                                                                                         org.springframework.boot.loader.LaunchedURLClassLoader@1be6f5c3
+
+ TomcatEmbeddedWebappClassLoader                                  0            8546cd5   org.springframework.boot.loader.LaunchedURLClassLoader@1be6f5c3
+   context: ROOT
+   delegate: true
+</span><span class="gp"> ----------&gt;</span><span class="w"> </span>Parent Classloader:
+<span class="go"> org.springframework.boot.loader.LaunchedURLClassLoader@1be6f5c3
+
+</span><span class="gp"> org.springframework.boot.loader.LaunchedURLClassLoader@1be6f5c3  5416         1be6f5c3  sun.misc.Launcher$</span>AppClassLoader@3d4eac69
+<span class="gp"> sun.misc.Launcher$</span>AppClassLoader@3d4eac69                        45           3d4eac69  sun.misc.Launcher<span class="nv">$ExtClassLoader</span>@7494e528
+<span class="gp"> sun.misc.Launcher$</span>ExtClassLoader@7494e528                        4            7494e528  null
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<ul>
+  <li>TomcatEmbeddedWebappClassLoader 加载的class数量是0，所以在spring boot embedded tomcat里，它只是一个空壳，所有的类加载都是<code class="language-plaintext highlighter-rouge">LaunchedURLClassLoader</code>完成的</li>
+</ul>
+
+<h4 id="列出classloader里加载的所有类">列出ClassLoader里加载的所有类</h4>
+
+<p>列出上面的<code class="language-plaintext highlighter-rouge">org.apache.jasper.servlet.JasperLoader</code>加载的类：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>classloader <span class="nt">-a</span> <span class="nt">--classLoaderClass</span> apache.jasper.servlet.JasperLoader
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>classloader <span class="nt">-a</span> <span class="nt">--classLoaderClass</span> apache.jasper.servlet.JasperLoader
+<span class="go"> hash:1698045338, org.apache.jasper.servlet.JasperLoader@65361d9a
+ org.apache.jsp.jsp.hello_jsp
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<ul>
+  <li>注：同ognl, 也可用<code class="language-plaintext highlighter-rouge">-c &lt;hashcode&gt;</code>而不用<code class="language-plaintext highlighter-rouge">--classLoaderClass</code>指定</li>
+</ul>
+
+<h4 id="反编译jsp的代码">反编译jsp的代码</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>jad org.apache.jsp.jsp.hello_jsp
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p></p>
+
+<div class="language-console highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre><span class="gp">$</span><span class="w"> </span>jad org.apache.jsp.jsp.hello_jsp
+<span class="go">
+ClassLoader:
++-org.apache.jasper.servlet.JasperLoader@65361d9a
+  +-TomcatEmbeddedWebappClassLoader
+      context: ROOT
+</span><span class="c">...
+</span></pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="查看classloader树">查看ClassLoader树</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>classloader <span class="nt">-t</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+</pre></td><td class="rouge-code"><pre>$ classloader -t
++-BootstrapClassLoader
++-sun.misc.Launcher$ExtClassLoader@28cbbddd
+  +-com.taobao.arthas.agent.ArthasClassloader@8c25e55
+  +-sun.misc.Launcher$AppClassLoader@55f96302
+    +-org.springframework.boot.loader.LaunchedURLClassLoader@1be6f5c3
+      +-TomcatEmbeddedWebappClassLoader
+          context: ROOT
+          delegate: true
+        ----------&gt; Parent Classloader:
+        org.springframework.boot.loader.LaunchedURLClassLoader@1be6f5c3
+
+        +-org.apache.jasper.servlet.JasperLoader@21ae0fe2
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>注意：请使用你的classLoaderHash值覆盖 <code class="language-plaintext highlighter-rouge">&lt;classLoaderHash&gt;</code> ，然后手动执行下面相关命令：</p>
+
+<h4 id="列出classloader的urls">列出ClassLoader的urls</h4>
+
+<p>比如上面查看到的spring LaunchedURLClassLoader的 hashcode是<code class="language-plaintext highlighter-rouge">1be6f5c3</code>，可以通过<code class="language-plaintext highlighter-rouge">-c</code>或者<code class="language-plaintext highlighter-rouge">--classLoaderClass</code>参数来列出它的所有urls：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>classloader <span class="nt">--classLoaderClass</span> org.springframework.boot.loader.LaunchedURLClassLoader
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre></td><td class="rouge-code"><pre>$ classloader --classLoaderClass org.springframework.boot.loader.LaunchedURLClassLoader
+jar:file:/home/scrapbook/tutorial/demo-arthas-spring-boot.jar!/BOOT-INF/classes!/
+jar:file:/home/scrapbook/tutorial/demo-arthas-spring-boot.jar!/BOOT-INF/lib/spring-boot-starter-aop-1.5
+.13.RELEASE.jar!/
+...
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="加载指定classloader里的资源文件">加载指定ClassLoader里的资源文件</h4>
+
+<p>查找指定的资源文件： <code class="language-plaintext highlighter-rouge">classloader --classLoaderClass org.springframework.boot.loader.LaunchedURLClassLoader -r logback-spring.xml</code></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>classloader <span class="nt">--classLoaderClass</span> org.springframework.boot.loader.LaunchedURLClassLoader <span class="nt">-r</span> logback-spring.xml
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre>$ classloader --classLoaderClass org.springframework.boot.loader.LaunchedURLClassLoader -r logback-spring.xml
+ jar:file:/home/scrapbook/tutorial/demo-arthas-spring-boot.jar!/BOOT-INF/classes!/logback-spring.xml
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="尝试加载指定的类">尝试加载指定的类</h4>
+
+<p>比如用上面的spring LaunchedURLClassLoader 尝试加载 <code class="language-plaintext highlighter-rouge">java.lang.String</code> ：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>classloader <span class="nt">--classLoaderClass</span> org.springframework.boot.loader.LaunchedURLClassLoader <span class="nt">--load</span> java.lang.String
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+</pre></td><td class="rouge-code"><pre>$ classloader --classLoaderClass org.springframework.boot.loader.LaunchedURLClassLoader --load java.lang.String
+load class success.
+ class-info        java.lang.String
+ code-source
+ name              java.lang.String
+ isInterface       false
+ isAnnotation      false
+ isEnum            false
+ isAnonymousClass  false
+ isArray           false
+ isLocalClass      false
+ isMemberClass     false
+ isPrimitive       false
+ isSynthetic       false
+ simple-name       String
+ modifier          final,public
+ annotation
+ interfaces        java.io.Serializable,java.lang.Comparable,java.lang.CharSequence
+ super-class       +-java.lang.Object
+ class-loader
+ classLoaderHash   null
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="案例查找top-n线程">案例：查找Top N线程</h2>
+
+<h4 id="查看所有线程信息">查看所有线程信息</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>thread
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="查看具体线程的栈">查看具体线程的栈</h4>
+
+<p>查看线程ID 16的栈：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>thread 16
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="查看cpu使用率top-n线程的栈">查看CPU使用率top n线程的栈</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>thread <span class="nt">-n</span> 3
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>查看5秒内的CPU使用率top n线程栈</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>thread <span class="nt">-n</span> 3 <span class="nt">-i</span> 5000
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h4 id="查找线程是否有阻塞">查找线程是否有阻塞</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>thread <span class="nt">-b</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="web-console">Web Console</h2>
+
+<p>Arthas支持通过Web Socket来连接。</p>
+
+<h3 id="本地体验">本地体验</h3>
+
+<p>当在本地启动时，可以访问 http://127.0.0.1:8563/ ，通过浏览器来使用Arthas。</p>
+
+<p><img src="https://img.alicdn.com/imgextra/i3/O1CN01i041kW1lw0FCaSKNn_!!6000000004882-2-tps-1231-284.png" alt="Arthas WebConsole" /></p>
+
+<p>推荐通过“快速入门”来体验： https://arthas.aliyun.com/doc/quick-start.html</p>
+
+<h2 id="exitstop">Exit/Stop</h2>
+
+<h3 id="reset">reset</h3>
+
+<p>Arthas在 watch/trace 等命令时，实际上是修改了应用的字节码，插入增强的代码。显式执行 <code class="language-plaintext highlighter-rouge">reset</code> 命令，可以清除掉这些增强代码。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>reset
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="退出arthas">退出Arthas</h3>
+
+<p>用 <code class="language-plaintext highlighter-rouge">exit</code> 或者 <code class="language-plaintext highlighter-rouge">quit</code> 命令可以退出Arthas。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre><span class="nb">exit</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Ctrl+C</p>
+
+<p>退出Arthas之后，还可以再次用 <code class="language-plaintext highlighter-rouge">java -jar arthas-boot.jar</code> 来连接。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>java <span class="nt">-jar</span> arthas-boot.jar
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>Ctrl+C</p>
+
+<h3 id="彻底退出arthas">彻底退出Arthas</h3>
+
+<p><code class="language-plaintext highlighter-rouge">exit/quit</code>命令只是退出当前session，arthas server还在目标进程中运行。</p>
+
+<p>想完全退出Arthas，可以执行 <code class="language-plaintext highlighter-rouge">stop</code> 命令。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>stop
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h2 id="arthas-boot支持的参数">arthas-boot支持的参数</h2>
+
+<p><code class="language-plaintext highlighter-rouge">arthas-boot.jar</code> 支持很多参数，可以执行 <code class="language-plaintext highlighter-rouge">java -jar arthas-boot.jar -h</code> 来查看。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>java <span class="nt">-jar</span> arthas-boot.jar <span class="nt">-h</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="允许外部访问">允许外部访问</h3>
+
+<p>默认情况下， arthas server侦听的是 <code class="language-plaintext highlighter-rouge">127.0.0.1</code> 这个IP，如果希望远程可以访问，可以使用<code class="language-plaintext highlighter-rouge">--target-ip</code>的参数。</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>java <span class="nt">-jar</span> arthas-boot.jar <span class="nt">--target-ip</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="列出所有的版本">列出所有的版本</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>java <span class="nt">-jar</span> arthas-boot.jar <span class="nt">--versions</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<p>使用指定版本：</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>java <span class="nt">-jar</span> arthas-boot.jar <span class="nt">--use-version</span> 3.1.0
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="只侦听telnet端口不侦听http端口">只侦听Telnet端口，不侦听HTTP端口</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>java <span class="nt">-jar</span> arthas-boot.jar <span class="nt">--telnet-port</span> 9999 <span class="nt">--http-port</span> <span class="nt">-1</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+<h3 id="打印运行的详情">打印运行的详情</h3>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>java <span class="nt">-jar</span> arthas-boot.jar <span class="nt">-v</span>
+</pre></td></tr></tbody></table></code></pre></div></div>
+
+
+                <hr style="visibility: hidden;">
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2019/02/26/git%E6%8F%90%E4%BA%A4%E8%A7%84%E8%8C%83/" data-toggle="tooltip" data-placement="top" title="git提交规范">
+                        Previous<br>
+                        <span>git提交规范</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2019/03/19/FastDfs%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E5%AD%A6%E4%B9%A0%E5%92%8C%E4%BD%BF%E7%94%A8/" data-toggle="tooltip" data-placement="top" title="Fastdfs学习和使用">
+                        Next<br>
+                        <span>Fastdfs学习和使用</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <hr style="visibility: hidden;">
+
+                <!-- Gitalk 评论 start  -->
+                
+                <!-- Link Gitalk 的支持文件  -->
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+                <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+                <div id="gitalk-container"></div>
+                <script type="text/javascript">
+                    var gitalk = new Gitalk({
+
+                        // gitalk的主要参数
+                        clientID: '2542452a44c3a8034a35',
+                        clientSecret: '3119b189eb567a7a89c2440917078889d1689226',
+                        repo: 'xprocon.github.io',
+                        owner: 'xprocon',
+                        admin: ['xprocon'],
+                        id: 'post',
+                        distractionFreeMode: true,  //是否启用评论全屏遮罩.
+                        createIssueManually: true, //如果当前页面没有相应的 isssue ，且登录的用户属于 admin，则会自动创建 issue。如果设置为 true，则显示一个初始化页面，创建 issue 需要点击 init 按钮。
+                        perPage: 15 //每页多少个评论
+                    });
+                    gitalk.render('gitalk-container');
+                </script>
+                
+                <!-- Gitalk end -->
+
+                
+
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+
+<section>
+    
+        <hr class="hidden-sm hidden-xs">
+    
+    <h5><a href="/archive/">FEATURED TAGS</a></h5>
+    <div class="tags">
+        
+        
+        
+        
+        
+        
+                <a data-sort="0042" 
+                    href="/archive/?tag=Java"
+                    title="Java"
+                    rel="6">Java</a>
+        
+                <a data-sort="0032" 
+                    href="/archive/?tag=linux"
+                    title="linux"
+                    rel="16">linux</a>
+        
+                <a data-sort="0035" 
+                    href="/archive/?tag=%E8%BF%90%E7%BB%B4"
+                    title="运维"
+                    rel="13">运维</a>
+        
+                <a data-sort="0036" 
+                    href="/archive/?tag=%E5%AD%A6%E4%B9%A0"
+                    title="学习"
+                    rel="12">学习</a>
+        
+                <a data-sort="0037" 
+                    href="/archive/?tag=java"
+                    title="java"
+                    rel="11">java</a>
+        
+                <a data-sort="0039" 
+                    href="/archive/?tag=centos"
+                    title="centos"
+                    rel="9">centos</a>
+        
+                <a data-sort="0043" 
+                    href="/archive/?tag=%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"
+                    title="开发环境"
+                    rel="5">开发环境</a>
+        
+                <a data-sort="0043" 
+                    href="/archive/?tag=nginx"
+                    title="nginx"
+                    rel="5">nginx</a>
+        
+                <a data-sort="0044" 
+                    href="/archive/?tag=%E5%AE%B9%E5%99%A8%E5%8C%96"
+                    title="容器化"
+                    rel="4">容器化</a>
+        
+                <a data-sort="0044" 
+                    href="/archive/?tag=git"
+                    title="git"
+                    rel="4">git</a>
+        
+                <a data-sort="0044" 
+                    href="/archive/?tag=spring"
+                    title="spring"
+                    rel="4">spring</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=%E4%BA%91%E5%8E%9F%E7%94%9F"
+                    title="云原生"
+                    rel="3">云原生</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=%E5%9F%BA%E7%A1%80"
+                    title="基础"
+                    rel="3">基础</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=jetbrains"
+                    title="jetbrains"
+                    rel="3">jetbrains</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=python"
+                    title="python"
+                    rel="3">python</a>
+    </div>
+</section>
+
+
+                <!-- Friends Blog -->
+                
+<hr>
+<h5>FRIENDS</h5>
+<ul class="list-inline">
+  
+  <li><a href="https://www.baidu.com/">百度（baidu）</a></li>
+  
+  <li><a href="http://10.175.194.215:8080/">IT工具箱（ittools）</a></li>
+  
+  <li><a href="https://www.emojiall.com/zh-hans">emoji（emoji搜索）</a></li>
+  
+  <li><a href="https://www.v2ex.com/">v2ex（v2ex论坛）</a></li>
+  
+  <li><a href="https://www.reddit.com/r/China_irl/">reddit（流浪防区）</a></li>
+  
+</ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<!-- add support for mathjax by voleking-->
+
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'right',
+          // icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- SNS Link -->
+                
+
+
+<ul class="list-inline text-center">
+
+
+  
+  
+  <li>
+    <a href="https://twitter.com/xprocon">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+  <li>
+    <a target="_blank" href="https://www.zhihu.com/people/procon">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa  fa-stack-1x fa-inverse">知</i>
+      </span>
+    </a>
+  </li>
+  
+  
+  <li>
+    <a target="_blank" href="http://weibo.com/huangpuguang1ni">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+  
+  <li>
+    <a target="_blank" href="https://github.com/xprocon">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+</ul>
+
+                <p class="copyright text-muted">
+                    Copyright &copy; Procon's Tech Life Blog 2024
+                    <br>
+                    Powered by <a href="https://blog.procon.cc">Procon Blog</a>
+<!--                    <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="100px"-->
+<!--                        height="20px"-->
+<!--                        src="https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true">-->
+<!--                    </iframe>-->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Simple Jekyll Search -->
+<script src="/js/simple-jekyll-search.min.js"></script>
+
+<!-- Service Worker -->
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+        var d = document, t = 'script',
+            o = d.createElement(t),
+            s = d.getElementsByTagName(t)[0];
+        o.src = u;
+        if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+        s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+
+
+
+
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function () {
+        var $nav = document.querySelector("nav");
+        if ($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog(selector) {
+
+        // interop with multilangual 
+        if ('' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector), a, n, t, l, i, c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#" + $(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="' + i + '" rel="nofollow">' + t + '</a>');
+            l = $('<li class="' + n + '_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function (e) {
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<!-- Multi-Lingual -->
+
+
+<!-- Simple Jekyll Search -->
+<script>
+    // https://stackoverflow.com/questions/1912501/unescape-html-entities-in-javascript
+    function htmlDecode(input) {
+        var e = document.createElement('textarea');
+        e.innerHTML = input;
+        // handle case of empty input
+        return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+    }
+
+    SimpleJekyllSearch({
+        searchInput: document.getElementById('search-input'),
+        resultsContainer: document.getElementById('search-results'),
+        json: '/search.json',
+        searchResultTemplate: '<div class="post-preview item"><a href="{url}"><h2 class="post-title">{title}</h2><h3 class="post-subtitle">{subtitle}</h3><hr></a></div>',
+        noResultsText: 'No results',
+        limit: 50,
+        fuzzy: false,
+        // a hack to get escaped subtitle unescaped. for some reason, 
+        // post.subtitle w/o escape filter nuke entire search.
+        templateMiddleware: function (prop, value, template) {
+            if (prop === 'subtitle' || prop === 'title') {
+                if (value.indexOf("code")) {
+                    return htmlDecode(value);
+                } else {
+                    return value;
+                }
+            }
+        }
+    });
+
+    $(document).ready(function () {
+        var $searchPage = $('.search-page');
+        var $searchOpen = $('.search-icon');
+        var $searchClose = $('.search-icon-close');
+        var $searchInput = $('#search-input');
+        var $body = $('body');
+
+        $searchOpen.on('click', function (e) {
+            e.preventDefault();
+            $searchPage.toggleClass('search-active');
+            var prevClasses = $body.attr('class') || '';
+            setTimeout(function () {
+                $body.addClass('no-scroll');
+            }, 400)
+
+            if ($searchPage.hasClass('search-active')) {
+                $searchClose.on('click', function (e) {
+                    e.preventDefault();
+                    $searchPage.removeClass('search-active');
+                    $body.attr('class', prevClasses);  // from closure 
+                });
+                $searchInput.focus();
+            }
+        });
+    });
+</script>
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>

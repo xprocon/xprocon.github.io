@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="这里是 @Procon普光 的个人博客，与你一起发现更大的世界">
+    <meta name="keywords" content="普光, Procon普光, 博客, 个人网站, 互联网, Java , 后端">
+    <meta name="theme-color" content="#000000">
+
+    <!-- Open Graph -->
+    <meta property="og:title"
+        content="yum安装和配置NFS - Procon's Tech Life Blog">
+    
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="CentOS 7 下 yum 安装和配置 NFS
+">
+    
+    <meta property="article:published_time" content=" 2018-12-18T12:00:00Z">
+    
+    
+    <meta property="article:author" content="Procon">
+    
+    
+    <meta property="article:tag" content="linux">
+    
+    <meta property="article:tag" content="yum">
+    
+    <meta property="article:tag" content="centos">
+    
+    <meta property="article:tag" content="nfs">
+    
+    
+    <meta property="og:image" content="https://blog.procon.cchttps://procon-note.oss-cn-guangzhou.aliyuncs.com/typora/avatar_m.jpg">
+    <meta property="og:url" content="https://blog.procon.cc/2018/12/18/Linux-centos-7-yum%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE-NFS/">
+    <meta property="og:site_name" content="Procon's Tech Life Blog">
+
+    <title>yum安装和配置NFS - Procon's Tech Life Blog</title>
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/pwa/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://blog.procon.cc/2018/12/18/Linux-centos-7-yum%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE-NFS/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href=" /css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href=" /css/hux-blog.min.css">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+    <!-- Hux change font-awesome CDN to qiniu -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"
+        type="text/css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- ga & ba script hoook -->
+    <script></script>
+
+    <!-- Google AdSense -->
+    <script data-ad-client="ca-pub-6487568398225121" async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+
+
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="">
+
+    <!-- Navigation -->
+
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top invert">
+    
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Procon's Tech Life Blog</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div id="huxblog_navbar">
+                <div class="navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="/">Home</a>
+                        </li>
+                        
+                        
+                        
+                        
+                        <li>
+                            <a href="/about/">About</a>
+                        </li>
+                        
+                        
+                        
+                        <li>
+                            <a href="/archive/">Archive</a>
+                        </li>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <li class="search-icon">
+                            <a href="javascript:void(0)">
+                                <i class="fa fa-search"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <script>
+        // Drop Bootstarp low-performance Navbar
+        // Use customize navbar with high-quality material design animation
+        // in high-perf jank-free CSS3 implementation
+        var $body = document.body;
+        var $toggle = document.querySelector('.navbar-toggle');
+        var $navbar = document.querySelector('#huxblog_navbar');
+        var $collapse = document.querySelector('.navbar-collapse');
+
+        var __HuxNav__ = {
+            close: function () {
+                $navbar.className = " ";
+                // wait until animation end.
+                setTimeout(function () {
+                    // prevent frequently toggle
+                    if ($navbar.className.indexOf('in') < 0) {
+                        $collapse.style.height = "0px"
+                    }
+                }, 400)
+            },
+            open: function () {
+                $collapse.style.height = "auto"
+                $navbar.className += " in";
+            }
+        }
+
+        // Bind Event
+        $toggle.addEventListener('click', function (e) {
+            if ($navbar.className.indexOf('in') > 0) {
+                __HuxNav__.close()
+            } else {
+                __HuxNav__.open()
+            }
+        })
+
+        /**
+         * Since Fastclick is used to delegate 'touchstart' globally
+         * to hack 300ms delay in iOS by performing a fake 'click',
+         * Using 'e.stopPropagation' to stop 'touchstart' event from 
+         * $toggle/$collapse will break global delegation.
+         * 
+         * Instead, we use a 'e.target' filter to prevent handler
+         * added to document close HuxNav.  
+         *
+         * Also, we use 'click' instead of 'touchstart' as compromise
+         */
+        document.addEventListener('click', function (e) {
+            if (e.target == $toggle) return;
+            if (e.target.className == 'icon-bar') return;
+            __HuxNav__.close();
+        })
+    </script>
+    <!-- Search -->
+<div class="search-page">
+  <div class="search-icon-close-container">
+    <span class="search-icon-close">
+      <i class="fa fa-chevron-down"></i>
+    </span>
+  </div>
+  <div class="search-main container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <form></form>
+        <input type="text" id="search-input" placeholder="$ grep...">
+        </form>
+        <div id="search-results" class="mini-post-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- Image to hack wechat -->
+<!-- <img src="/img/icon_wechat.png" width="0" height="0"> -->
+<!-- <img src="/img/home-bg-geek.jpg" width="0" height="0"> -->
+
+<!-- Post Header -->
+
+
+
+<style type="text/css">
+    header.intro-header{
+        position: relative;
+        background-image: url('/img/home-bg-geek.jpg');
+        background: ;
+    }
+
+    
+</style>
+
+
+
+
+<header class="intro-header style-text" >
+
+    <div class="header-mask"></div>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="tags">
+                        
+                        <a class="tag" href="/archive/?tag=linux" title="linux">linux</a>
+                        
+                        <a class="tag" href="/archive/?tag=yum" title="yum">yum</a>
+                        
+                        <a class="tag" href="/archive/?tag=centos" title="centos">centos</a>
+                        
+                        <a class="tag" href="/archive/?tag=nfs" title="nfs">nfs</a>
+                        
+                    </div>
+                    <h1>yum安装和配置NFS</h1>
+                    
+                    <h2 class="subheading">基础学习</h2>
+                    <span class="meta">Posted by Procon on December 18, 2018</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+
+
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+    <!-- Post Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                post-container">
+
+                <!-- Multi-Lingual -->
+                
+
+				<h1 id="centos-7-下-yum-安装和配置-nfs">CentOS 7 下 yum 安装和配置 NFS</h1>
+
+<blockquote>
+  <p>NFS 是 Network File System 的缩写，即网络文件系统。功能是让客户端通过网络访问不同主机上磁盘里的数据，主要用在类Unix系统上实现文件共享的一种方法。 本例演示 CentOS 7 下安装和配置 NFS 的基本步骤。</p>
+
+  <h3 id="环境说明">环境说明</h3>
+
+  <p>CentOS 7（Minimal Install）</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre>$ cat /etc/redhat-release 
+CentOS Linux release 7.5.1804 (Core) 
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <p>本例演示环境如下</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>IP Addr</th>
+        <th>Descprition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Server</td>
+        <td>192.169.0.110</td>
+        <td>服务端 IP</td>
+      </tr>
+      <tr>
+        <td>Client</td>
+        <td>192.168.0.101</td>
+        <td>客户端 IP</td>
+      </tr>
+      <tr>
+        <td>Windows Client</td>
+        <td>192.168.0.102</td>
+        <td>Windows Server 2008</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>根据官网说明 <a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/storage_administration_guide/ch-nfs">Chapter 8. Network File System (NFS) - Red Hat Customer Portal</a>，CentOS 7.4 以后，支持 NFS v4.2 不需要 rpcbind 了，但是如果客户端只支持 NFC v3 则需要 rpcbind 这个服务。</p>
+
+  <h2 id="服务端">服务端</h2>
+
+  <h3 id="服务端安装">服务端安装</h3>
+
+  <p>使用 yum 安装 NFS 安装包。</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>$ sudo yum install nfs-utils
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <p><em><code class="language-plaintext highlighter-rouge">注意</code></em></p>
+
+  <blockquote>
+    <p>只安装 nfs-utils 即可，rpcbind 属于它的依赖，也会安装上。</p>
+  </blockquote>
+
+  <h3 id="服务端配置">服务端配置</h3>
+
+  <p>设置 NFS 服务开机启动</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre>$ sudo systemctl enable rpcbind
+$ sudo systemctl enable nfs
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <p>启动 NFS 服务</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre>$ sudo systemctl start rpcbind
+$ sudo systemctl start nfs
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <p>防火墙需要打开 rpc-bind 和 nfs 的服务</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre>$ sudo firewall-cmd --zone=public --permanent --add-service={rpc-bind,mountd,nfs}
+success
+$ sudo firewall-cmd --reload
+success
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <h3 id="配置共享目录">配置共享目录</h3>
+
+  <p>服务启动之后，我们在服务端配置一个共享目录</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre>$ sudo mkdir /data
+$ sudo chmod 755 /data
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <p>根据这个目录，相应配置导出目录</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>$ sudo vi /etc/exports
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <p>添加如下配置</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>/data/     192.168.0.0/24(rw,sync,no_root_squash,no_all_squash)
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <ol>
+    <li><code class="language-plaintext highlighter-rouge">/data</code>: 共享目录位置。</li>
+    <li><code class="language-plaintext highlighter-rouge">192.168.0.0/24</code>: 客户端 IP 范围，<code class="language-plaintext highlighter-rouge">*</code> 代表所有，即没有限制。</li>
+    <li><code class="language-plaintext highlighter-rouge">rw</code>: 权限设置，可读可写。</li>
+    <li><code class="language-plaintext highlighter-rouge">sync</code>: 同步共享目录。</li>
+    <li><code class="language-plaintext highlighter-rouge">no_root_squash</code>: 可以使用 root 授权。</li>
+    <li><code class="language-plaintext highlighter-rouge">no_all_squash</code>: 可以使用普通用户授权。</li>
+  </ol>
+
+  <p><code class="language-plaintext highlighter-rouge">:wq</code> 保存设置之后，重启 NFS 服务。</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>$ sudo systemctl restart nfs
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <p>可以检查一下本地的共享目录</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>$ showmount -e localhost
+Export list for localhost:
+/data 192.168.0.0/24
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <p>这样，服务端就配置好了，接下来配置客户端，连接服务端，使用共享目录。</p>
+
+  <h2 id="linux-客户端">Linux 客户端</h2>
+
+  <h3 id="客户端安装">客户端安装</h3>
+
+  <p>与服务端类似</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>$ sudo yum install nfs-utils
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <h3 id="客户端配置">客户端配置</h3>
+
+  <p>设置 rpcbind 服务的开机启动</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>$ sudo systemctl enable rpcbind
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <p>启动 NFS 服务</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>$ sudo systemctl start rpcbind
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <p><em><code class="language-plaintext highlighter-rouge">注意</code></em></p>
+
+  <blockquote>
+    <p>客户端不需要打开防火墙，因为客户端时发出请求方，网络能连接到服务端即可。
+客户端也不需要开启 NFS 服务，因为不共享目录。</p>
+  </blockquote>
+
+  <h3 id="客户端连接-nfs">客户端连接 NFS</h3>
+
+  <p>先查服务端的共享目录</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>$ showmount -e 192.168.0.110
+Export list for 192.168.0.110:
+/data 192.168.0.0/24
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <p>在客户端创建目录</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>$ sudo mkdir /data
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <p>挂载</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>$ sudo mount -t nfs 192.168.0.101:/data /data
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <p>挂载之后，可以使用 <code class="language-plaintext highlighter-rouge">mount</code> 命令查看一下</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre>$ mount
+...
+...
+192.168.0.110:/data on /data type nfs4 (rw,relatime,sync,vers=4.1,rsize=131072,wsize=131072,namlen=255,hard,proto=tcp,port=0,timeo=600,retrans=2,sec=sys,clientaddr=192.168.0.100,local_lock=none,addr=192.168.0.101)
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <p>这说明已经挂载成功了。</p>
+
+  <h3 id="测试-nfs">测试 NFS</h3>
+
+  <p>测试一下，在客户端向共享目录创建一个文件</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre>$ cd /data
+$ sudo touch a
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <p>之后取 NFS 服务端 <code class="language-plaintext highlighter-rouge">192.168.0.101</code> 查看一下</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre>$ cd /data
+$ ll
+total 0
+-rw-r--r--. 1 root root 0 Aug  8 18:46 a
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <p>可以看到，共享目录已经写入了。</p>
+
+  <h3 id="客户端自动挂载">客户端自动挂载</h3>
+
+  <p>自动挂载很常用，客户端设置一下即可。</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>$ sudo vi /etc/fstab
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <p>在结尾添加类似如下配置</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+</pre></td><td class="rouge-code"><pre>#
+# /etc/fstab
+# Created by anaconda on Thu May 25 13:11:52 2017
+#
+# Accessible filesystems, by reference, are maintained under '/dev/disk'
+# See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info
+#
+/dev/mapper/cl-root     /                       xfs     defaults        0 0
+UUID=414ee961-c1cb-4715-b321-241dbe2e9a32 /boot                   xfs     defaults        0 0
+/dev/mapper/cl-home     /home                   xfs     defaults        0 0
+/dev/mapper/cl-swap     swap                    swap    defaults        0 0
+192.168.0.110:/data     /data                   nfs     defaults        0 0
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <p>由于修改了 <code class="language-plaintext highlighter-rouge">/etc/fstab</code>，需要重新加载 <code class="language-plaintext highlighter-rouge">systemctl</code>。</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>$ sudo systemctl daemon-reload
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <p>之后查看一下</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+</pre></td><td class="rouge-code"><pre>$ mount
+...
+...
+192.168.0.110:/data on /data type nfs4 (rw,relatime,vers=4.1,rsize=131072,wsize=131072,namlen=255,hard,proto=tcp,port=0,timeo=600,retrans=2,sec=sys,clientaddr=192.168.0.100,local_lock=none,addr=192.168.0.101)
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <p>此时已经启动好了。如果实在不放心，可以重启一下客户端的操作系统，之后再查看一下。</p>
+
+  <h2 id="windows-客户端">Windows 客户端</h2>
+
+  <p>Windows 安装 NFS 客户端，不同的 Windows 版本，安装方式不大一样，本例列举几个。</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Windows</th>
+        <th>步骤</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Windows Server 2008</td>
+        <td>servermanagercmd.exe -install FS-NFS-Services</td>
+      </tr>
+      <tr>
+        <td>Windows 7</td>
+        <td>程序和功能 - 启动或关闭 Widnows 功能 - NFS 服务</td>
+      </tr>
+      <tr>
+        <td>Windows Server 2012</td>
+        <td>添加功能角色 - 添加文件打印服务 - NFS 客户端</td>
+      </tr>
+      <tr>
+        <td>Windows 10</td>
+        <td>程序和功能 - 启动或关闭 Widnows 功能 - NFS 服务</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 id="客户端安装-1">客户端安装</h3>
+
+  <p>本例的 Windows 为 <code class="language-plaintext highlighter-rouge">Windows Server 2008 R2</code></p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>C:&gt; servermanagercmd.exe -install FS-NFS-Services
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <h3 id="客户端配置-1">客户端配置</h3>
+
+  <p>首先要了解服务端的文件夹权限，本例服务端 <code class="language-plaintext highlighter-rouge">/data</code> 目录的所有者为 <code class="language-plaintext highlighter-rouge">root</code>，查看一下 root 用户的信息</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre></td><td class="rouge-code"><pre>$ sudo id root
+uid=0(root) gid=0(root) groups=0(root)
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <p>可以看到 <code class="language-plaintext highlighter-rouge">uid=0</code>, <code class="language-plaintext highlighter-rouge">gid=0</code>，需要在 Windows 客户端上进行配置，参考 <a href="https://blogs.msdn.microsoft.com/sfu/2009/03/27/can-i-set-up-user-name-mapping-in-windows-vista/">UID/GID using the registry entries</a></p>
+
+  <blockquote>
+    <p><strong><code class="language-plaintext highlighter-rouge">注意</code></strong>
+本例以 root 为例，生产环境要考虑安全因素，请修改为相应的有权限的用户</p>
+  </blockquote>
+
+  <p>回到 Windows 进行配置</p>
+
+  <p>首先，启动注册表编辑器</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>C:&gt; regedit
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <p>然后，进行如下步骤</p>
+
+  <ol>
+    <li>定位到这一项 <code class="language-plaintext highlighter-rouge">HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ClientForNFS\CurrentVersion\Default</code></li>
+    <li>创建两个 DWORD 值，名称分别为 <code class="language-plaintext highlighter-rouge">AnonymousUid</code> 和 <code class="language-plaintext highlighter-rouge">AnonymousGid</code></li>
+    <li>设置 UID 和 GID 的值，本例设置为 <code class="language-plaintext highlighter-rouge">0</code></li>
+    <li>重启 Windows 操作系统 (或者重启 NFS Client 服务)</li>
+  </ol>
+
+  <p>服务器重启之后，挂载文件夹，在 DOS 命令窗口输入命令</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>C:&gt; mount 192.168.0.110:/data X:
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <p>这样，就将 NFS 服务端的共享文件夹挂载到了本地的 <code class="language-plaintext highlighter-rouge">X:</code> 盘，</p>
+
+  <p>也可以卸载掉这个驱动器，使用如下命令：</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>C:&gt; umount X:
+</pre></td></tr></tbody></table></code></pre></div>  </div>
+
+  <p><em><code class="language-plaintext highlighter-rouge">注意</code></em></p>
+
+  <blockquote>
+    <p>通过此命令操作挂载，当服务器重启时，不会自动挂载。</p>
+  </blockquote>
+
+  <p>登录时自动挂载，进行如下步骤</p>
+
+  <ol>
+    <li>点击此电脑</li>
+    <li>在弹出的计算机对话框中，在工具栏找到 <code class="language-plaintext highlighter-rouge">映射网络驱动器</code></li>
+    <li>驱动器地址输入 <code class="language-plaintext highlighter-rouge">X:</code></li>
+    <li>文件夹输入 <code class="language-plaintext highlighter-rouge">192.168.0.110:/data</code></li>
+    <li>确认 <code class="language-plaintext highlighter-rouge">登录时重新连接</code> 是勾选的，这个配置表示登录时自动挂载共享目录。</li>
+  </ol>
+
+  <h3 id="客户端测试">客户端测试</h3>
+
+  <p>Windows 操作都是有界面的，本例不做具体截图，可以点击进入 X 盘，创建文件夹试试，然后新建文件试试。</p>
+
+  <p>如果有问题，请确认一下服务端的文件加权限。</p>
+</blockquote>
+
+<p>/opt/share *(rw,sync,no_root_squash)</p>
+
+
+                <hr style="visibility: hidden;">
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2018/11/11/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" data-toggle="tooltip" data-placement="top" title="设计模式">
+                        Previous<br>
+                        <span>设计模式</span>
+                        </a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2019/02/04/git%E6%89%93tag%E6%A0%87%E7%AD%BE/" data-toggle="tooltip" data-placement="top" title="git打标签">
+                        Next<br>
+                        <span>git打标签</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+                <hr style="visibility: hidden;">
+
+                <!-- Gitalk 评论 start  -->
+                
+                <!-- Link Gitalk 的支持文件  -->
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+                <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+
+                <div id="gitalk-container"></div>
+                <script type="text/javascript">
+                    var gitalk = new Gitalk({
+
+                        // gitalk的主要参数
+                        clientID: '2542452a44c3a8034a35',
+                        clientSecret: '3119b189eb567a7a89c2440917078889d1689226',
+                        repo: 'xprocon.github.io',
+                        owner: 'xprocon',
+                        admin: ['xprocon'],
+                        id: 'post',
+                        distractionFreeMode: true,  //是否启用评论全屏遮罩.
+                        createIssueManually: true, //如果当前页面没有相应的 isssue ，且登录的用户属于 admin，则会自动创建 issue。如果设置为 true，则显示一个初始化页面，创建 issue 需要点击 init 按钮。
+                        perPage: 15 //每页多少个评论
+                    });
+                    gitalk.render('gitalk-container');
+                </script>
+                
+                <!-- Gitalk end -->
+
+                
+
+                
+            </div>  
+
+    <!-- Side Catalog Container -->
+        
+            <div class="
+                col-lg-2 col-lg-offset-0
+                visible-lg-block
+                sidebar-container
+                catalog-container">
+                <div class="side-catalog">
+                    <hr class="hidden-sm hidden-xs">
+                    <h5>
+                        <a class="catalog-toggle" href="#">CATALOG</a>
+                    </h5>
+                    <ul class="catalog-body"></ul>
+                </div>
+            </div>
+        
+
+    <!-- Sidebar Container -->
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+
+
+<section>
+    
+        <hr class="hidden-sm hidden-xs">
+    
+    <h5><a href="/archive/">FEATURED TAGS</a></h5>
+    <div class="tags">
+        
+        
+        
+        
+        
+        
+                <a data-sort="0042" 
+                    href="/archive/?tag=Java"
+                    title="Java"
+                    rel="6">Java</a>
+        
+                <a data-sort="0032" 
+                    href="/archive/?tag=linux"
+                    title="linux"
+                    rel="16">linux</a>
+        
+                <a data-sort="0035" 
+                    href="/archive/?tag=%E8%BF%90%E7%BB%B4"
+                    title="运维"
+                    rel="13">运维</a>
+        
+                <a data-sort="0036" 
+                    href="/archive/?tag=%E5%AD%A6%E4%B9%A0"
+                    title="学习"
+                    rel="12">学习</a>
+        
+                <a data-sort="0037" 
+                    href="/archive/?tag=java"
+                    title="java"
+                    rel="11">java</a>
+        
+                <a data-sort="0039" 
+                    href="/archive/?tag=centos"
+                    title="centos"
+                    rel="9">centos</a>
+        
+                <a data-sort="0043" 
+                    href="/archive/?tag=%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"
+                    title="开发环境"
+                    rel="5">开发环境</a>
+        
+                <a data-sort="0043" 
+                    href="/archive/?tag=nginx"
+                    title="nginx"
+                    rel="5">nginx</a>
+        
+                <a data-sort="0044" 
+                    href="/archive/?tag=%E5%AE%B9%E5%99%A8%E5%8C%96"
+                    title="容器化"
+                    rel="4">容器化</a>
+        
+                <a data-sort="0044" 
+                    href="/archive/?tag=git"
+                    title="git"
+                    rel="4">git</a>
+        
+                <a data-sort="0044" 
+                    href="/archive/?tag=spring"
+                    title="spring"
+                    rel="4">spring</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=%E4%BA%91%E5%8E%9F%E7%94%9F"
+                    title="云原生"
+                    rel="3">云原生</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=%E5%9F%BA%E7%A1%80"
+                    title="基础"
+                    rel="3">基础</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=jetbrains"
+                    title="jetbrains"
+                    rel="3">jetbrains</a>
+        
+                <a data-sort="0045" 
+                    href="/archive/?tag=python"
+                    title="python"
+                    rel="3">python</a>
+    </div>
+</section>
+
+
+                <!-- Friends Blog -->
+                
+<hr>
+<h5>FRIENDS</h5>
+<ul class="list-inline">
+  
+  <li><a href="https://www.baidu.com/">百度（baidu）</a></li>
+  
+  <li><a href="http://10.175.194.215:8080/">IT工具箱（ittools）</a></li>
+  
+  <li><a href="https://www.emojiall.com/zh-hans">emoji（emoji搜索）</a></li>
+  
+  <li><a href="https://www.v2ex.com/">v2ex（v2ex论坛）</a></li>
+  
+  <li><a href="https://www.reddit.com/r/China_irl/">reddit（流浪防区）</a></li>
+  
+</ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+<!-- add support for mathjax by voleking-->
+
+
+
+
+
+
+
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'hover',
+          placement: 'right',
+          // icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <!-- SNS Link -->
+                
+
+
+<ul class="list-inline text-center">
+
+
+  
+  
+  <li>
+    <a href="https://twitter.com/xprocon">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+  <li>
+    <a target="_blank" href="https://www.zhihu.com/people/procon">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa  fa-stack-1x fa-inverse">知</i>
+      </span>
+    </a>
+  </li>
+  
+  
+  <li>
+    <a target="_blank" href="http://weibo.com/huangpuguang1ni">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+  
+  <li>
+    <a target="_blank" href="https://github.com/xprocon">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  
+  
+</ul>
+
+                <p class="copyright text-muted">
+                    Copyright &copy; Procon's Tech Life Blog 2024
+                    <br>
+                    Powered by <a href="https://blog.procon.cc">Procon Blog</a>
+<!--                    <iframe style="margin-left: 2px; margin-bottom:-5px;" frameborder="0" scrolling="0" width="100px"-->
+<!--                        height="20px"-->
+<!--                        src="https://ghbtns.com/github-btn.html?user=huxpro&repo=huxpro.github.io&type=star&count=true">-->
+<!--                    </iframe>-->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js "></script>
+
+<!-- Bootstrap Core JavaScript -->
+<!-- Currently, only navbar scroll-down effect at desktop still depends on this -->
+<script src="/js/bootstrap.min.js "></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/hux-blog.min.js "></script>
+
+<!-- Simple Jekyll Search -->
+<script src="/js/simple-jekyll-search.min.js"></script>
+
+<!-- Service Worker -->
+
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+        var d = document, t = 'script',
+            o = d.createElement(t),
+            s = d.getElementsByTagName(t)[0];
+        o.src = u;
+        if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+        s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!--
+     Because of the native support for backtick-style fenced code blocks
+     right within the Markdown is landed in Github Pages,
+     From V1.6, There is no need for Highlight.js,
+     so Huxblog drops it officially.
+
+     - https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0
+     - https://help.github.com/articles/creating-and-highlighting-code-blocks/
+     - https://github.com/jneen/rouge/wiki/list-of-supported-languages-and-lexers
+-->
+<!--
+    <script>
+        async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js", function(){
+            hljs.initHighlightingOnLoad();
+        })
+    </script>
+    <link href="http://cdn.bootcss.com/highlight.js/8.6/styles/github.min.css" rel="stylesheet">
+-->
+
+
+
+
+
+
+
+<!--fastClick.js -->
+<script>
+    async("//cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js", function () {
+        var $nav = document.querySelector("nav");
+        if ($nav) FastClick.attach($nav);
+    })
+</script>
+
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+
+<!-- Side Catalog -->
+
+<script type="text/javascript">
+    function generateCatalog(selector) {
+
+        // interop with multilangual 
+        if ('' == 'true') {
+            _containerSelector = 'div.post-container.active'
+        } else {
+            _containerSelector = 'div.post-container'
+        }
+
+        // init
+        var P = $(_containerSelector), a, n, t, l, i, c;
+        a = P.find('h1,h2,h3,h4,h5,h6');
+
+        // clean
+        $(selector).html('')
+
+        // appending
+        a.each(function () {
+            n = $(this).prop('tagName').toLowerCase();
+            i = "#" + $(this).prop('id');
+            t = $(this).text();
+            c = $('<a href="' + i + '" rel="nofollow">' + t + '</a>');
+            l = $('<li class="' + n + '_nav"></li>').append(c);
+            $(selector).append(l);
+        });
+        return true;
+    }
+
+    generateCatalog(".catalog-body");
+
+    // toggle side catalog
+    $(".catalog-toggle").click((function (e) {
+        e.preventDefault();
+        $('.side-catalog').toggleClass("fold")
+    }))
+
+    /*
+     * Doc: https://github.com/davist11/jQuery-One-Page-Nav
+     * Fork by Hux to support padding
+     */
+    async("/js/jquery.nav.js", function () {
+        $('.catalog-body').onePageNav({
+            currentClass: "active",
+            changeHash: !1,
+            easing: "swing",
+            filter: "",
+            scrollSpeed: 700,
+            scrollOffset: 0,
+            scrollThreshold: .2,
+            begin: null,
+            end: null,
+            scrollChange: null,
+            padding: 80
+        });
+    });
+</script>
+
+
+
+<!-- Multi-Lingual -->
+
+
+<!-- Simple Jekyll Search -->
+<script>
+    // https://stackoverflow.com/questions/1912501/unescape-html-entities-in-javascript
+    function htmlDecode(input) {
+        var e = document.createElement('textarea');
+        e.innerHTML = input;
+        // handle case of empty input
+        return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+    }
+
+    SimpleJekyllSearch({
+        searchInput: document.getElementById('search-input'),
+        resultsContainer: document.getElementById('search-results'),
+        json: '/search.json',
+        searchResultTemplate: '<div class="post-preview item"><a href="{url}"><h2 class="post-title">{title}</h2><h3 class="post-subtitle">{subtitle}</h3><hr></a></div>',
+        noResultsText: 'No results',
+        limit: 50,
+        fuzzy: false,
+        // a hack to get escaped subtitle unescaped. for some reason, 
+        // post.subtitle w/o escape filter nuke entire search.
+        templateMiddleware: function (prop, value, template) {
+            if (prop === 'subtitle' || prop === 'title') {
+                if (value.indexOf("code")) {
+                    return htmlDecode(value);
+                } else {
+                    return value;
+                }
+            }
+        }
+    });
+
+    $(document).ready(function () {
+        var $searchPage = $('.search-page');
+        var $searchOpen = $('.search-icon');
+        var $searchClose = $('.search-icon-close');
+        var $searchInput = $('#search-input');
+        var $body = $('body');
+
+        $searchOpen.on('click', function (e) {
+            e.preventDefault();
+            $searchPage.toggleClass('search-active');
+            var prevClasses = $body.attr('class') || '';
+            setTimeout(function () {
+                $body.addClass('no-scroll');
+            }, 400)
+
+            if ($searchPage.hasClass('search-active')) {
+                $searchClose.on('click', function (e) {
+                    e.preventDefault();
+                    $searchPage.removeClass('search-active');
+                    $body.attr('class', prevClasses);  // from closure 
+                });
+                $searchInput.focus();
+            }
+        });
+    });
+</script>
+
+
+<!-- Image to hack wechat -->
+<img src="/img/icon_wechat.png" width="0" height="0" />
+<!-- Migrate from head to bottom, no longer block render and still work -->
+
+</body>
+
+</html>
